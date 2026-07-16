@@ -84,6 +84,73 @@ function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+/* ---------- Shared card/pill/modal components ----------
+   Each recurring structural block (pill, simple card, portfolio/event/
+   library entry, modal shell) has exactly one implementation here. Every
+   page that shows that kind of block — home preview or full list — calls
+   the same function, so a future edit can't drift between the two. */
+
+function pillHtml(label, { icon, solid } = {}) {
+  const iconHtml = icon ? `<span aria-hidden="true">${icon}</span>` : '';
+  return `<span class="pill${solid ? ' solid' : ''}">${iconHtml}<span>${esc(label)}</span></span>`;
+}
+
+function simpleCardHtml({ title, desc }) {
+  return `<div class="card card-simple"><h3>${esc(title)}</h3><p>${esc(desc)}</p></div>`;
+}
+
+// Portfolio entry: compact (home preview) shows date · category; detailed (full list) also shows location.
+function portfolioCardHtml(p, { detailed = false } = {}) {
+  const meta = detailed
+    ? `<div class="card-meta">
+        <span class="meta-strong">${esc(p.date)}</span><span>·</span>
+        <span class="eyebrow" style="margin:0">${esc(p.category)}</span><span>·</span>
+        <span>${esc(p.location)}</span>
+      </div>`
+    : `<span class="eyebrow">${esc(p.date)} · ${esc(p.category)}</span>`;
+  return `
+    <a class="list-card" href="${p.href}">
+      ${meta}
+      <h3>${esc(p.title)}</h3>
+      <p class="desc">${esc(p.short)}</p>
+    </a>`;
+}
+
+// Event/Termin entry: linked (home preview + upcoming list) or plain (past events); muted dims it.
+function eventCardHtml(tm, { linked = true, muted = false } = {}) {
+  const tag = linked ? 'a' : 'div';
+  const hrefAttr = linked ? ` href="${tm.href}"` : '';
+  return `
+    <${tag} class="list-card${muted ? ' past' : ''}"${hrefAttr}>
+      <span class="eyebrow-plain">${esc(tm.date)} · ${esc(tm.category)}</span>
+      <h3>${esc(tm.title)}</h3>
+      <p class="desc">${esc(tm.location)}</p>
+    </${tag}>`;
+}
+
+function libraryCardHtml(l) {
+  return `
+    <div class="card card-simple">
+      <span class="eyebrow">${esc(l.type)}</span>
+      <h3>${esc(l.title)}</h3>
+      <p>${esc(l.desc)}</p>
+    </div>`;
+}
+
+// Shared overlay/dialog/close-button shell for the portfolio and event detail modals.
+function modalShell({ labelledBy, closeLabel, bodyHtml }) {
+  return `
+  <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="${labelledBy}">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal" tabindex="-1">
+      <button type="button" class="modal-close" data-close-modal aria-label="${esc(closeLabel)}">
+        <span aria-hidden="true">${ICONS.close}</span>
+      </button>
+      ${bodyHtml}
+    </div>
+  </div>`;
+}
+
 /* ---------- State ---------- */
 let storedLang = null, storedTheme = null;
 try { storedLang = localStorage.getItem('tilapfel-lang'); } catch (e) {}
@@ -134,7 +201,7 @@ function computeVals() {
     homeTermine: termineLocalized.slice(0, 1),
     visibleTermine,
     hasMoreTermine: remaining > 0 && !expanded,
-    moreEventsLabel: locale.code === 'en' ? ('Show ' + remaining + ' more events') : ('Weitere ' + remaining + ' Termine anzeigen'),
+    moreEventsLabel: t.moreEventsTemplate.replace('{n}', remaining),
     pastTermine: locale.pastTermine,
     hasPastTermine: locale.pastTermine.length > 0,
     currentPortfolio, currentTermin,
@@ -166,38 +233,23 @@ function renderHeader(v) {
       <div class="header-top-row">
         <a href="#/" class="brand">Til Apfel</a>
       </div>
-      <nav class="nav-full" aria-label="Hauptnavigation">${navHtml}</nav>
+      <nav class="nav-full" aria-label="${esc(v.t.navAriaLabel)}">${navHtml}</nav>
     </div>
   </header>`;
 }
 
 function renderHome(v) {
   const t = v.t;
-  const roles = v.roles.map(r => `<span class="pill"><span aria-hidden="true">${r.icon}</span><span>${esc(r.label)}</span></span>`).join('');
-  const portfolioCards = v.homePortfolio.map(p => `
-    <a class="list-card" href="${p.href}">
-      <span class="eyebrow">${esc(p.date)} · ${esc(p.category)}</span>
-      <span class="block-title" style="display:block;font-size:18px;font-weight:600;margin-bottom:6px">${esc(p.title)}</span>
-      <span class="desc">${esc(p.short)}</span>
-    </a>`).join('');
-  const focusPills = v.focusItems.map(f => `<span class="pill solid">${esc(f.title)}</span>`).join('');
-  const eventCards = v.homeTermine.map(tm => `
-    <a class="list-card" href="${tm.href}">
-      <span class="eyebrow-plain">${esc(tm.date)} · ${esc(tm.category)}</span>
-      <span class="block-title" style="display:block;font-size:18px;font-weight:600;margin-bottom:4px">${esc(tm.title)}</span>
-      <span class="loc">${esc(tm.location)}</span>
-    </a>`).join('');
-  const libraryCards = v.homeLibrary.map(l => `
-    <div class="card">
-      <span class="eyebrow">${esc(l.type)}</span>
-      <span class="block-title" style="display:block;font-size:18px;font-weight:600;margin-bottom:4px">${esc(l.title)}</span>
-      <span class="loc">${esc(l.desc)}</span>
-    </div>`).join('');
+  const roles = v.roles.map(r => pillHtml(r.label, { icon: r.icon })).join('');
+  const portfolioCards = v.homePortfolio.map(p => portfolioCardHtml(p)).join('');
+  const focusPills = v.focusItems.map(f => pillHtml(f.title, { solid: true })).join('');
+  const eventCards = v.homeTermine.map(tm => eventCardHtml(tm)).join('');
+  const libraryCards = v.homeLibrary.map(l => libraryCardHtml(l)).join('');
 
   return `
   <div data-screen-label="Start">
     <section class="section-hero">
-      <img src="./assets/profilfoto.png" alt="Portrait von Til Apfel" class="avatar">
+      <img src="./assets/profilfoto.png" alt="${esc(t.portraitAlt)}" class="avatar">
       <div>
         <h1>${esc(t.heroTagline)}</h1>
         <div class="pill-row" style="margin-top:18px">${roles}</div>
@@ -250,7 +302,7 @@ function renderAbout(v) {
       <span class="role-icon" aria-hidden="true">${r.icon}</span>
       <div class="role-text"><span class="role-title">${esc(r.title)}</span><span class="role-desc">${esc(r.desc)}</span></div>
     </div>`).join('');
-  const werte = v.werte.map(w => `<span class="pill solid">${esc(w)}</span>`).join('');
+  const werte = v.werte.map(w => pillHtml(w, { solid: true })).join('');
 
   return `
   <div data-screen-label="About">
@@ -260,9 +312,9 @@ function renderAbout(v) {
     </section>
     <hr class="divider">
     <section class="about-body">
-      <p style="font-size:17px;line-height:1.7;color:var(--text-primary)">${esc(t.aboutP1)}</p>
-      <p style="font-size:17px;line-height:1.7;color:var(--text-primary)">${esc(t.aboutP2)}</p>
-      <p style="font-size:17px;line-height:1.7;color:var(--text-primary)">${esc(t.aboutP3)}</p>
+      <p>${esc(t.aboutP1)}</p>
+      <p>${esc(t.aboutP2)}</p>
+      <p>${esc(t.aboutP3)}</p>
 
       <div class="card">
         <h2 class="heading-sm" style="margin-bottom:14px">${esc(t.haltungHeading)}</h2>
@@ -284,18 +336,7 @@ function renderAbout(v) {
 
 function renderPortfolioList(v) {
   const t = v.t;
-  const cards = v.portfolio.map(p => `
-    <a class="list-card" href="${p.href}">
-      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px">
-        <span style="font-size:12px;font-weight:700;color:var(--text-tertiary)">${esc(p.date)}</span>
-        <span style="font-size:12px;color:var(--text-tertiary)">·</span>
-        <span class="eyebrow" style="margin:0">${esc(p.category)}</span>
-        <span style="font-size:12px;color:var(--text-tertiary)">·</span>
-        <span style="font-size:12px;color:var(--text-tertiary)">${esc(p.location)}</span>
-      </div>
-      <h3>${esc(p.title)}</h3>
-      <p class="desc">${esc(p.short)}</p>
-    </a>`).join('');
+  const cards = v.portfolio.map(p => portfolioCardHtml(p, { detailed: true })).join('');
   return `
   <div data-screen-label="Portfolio">
     <section class="page-hero">
@@ -308,30 +349,24 @@ function renderPortfolioList(v) {
 }
 
 function renderPortfolioModal(v) {
-  const t = v.t;
   const p = v.currentPortfolio;
   if (!p) return '';
-  return `
-  <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pf-modal-title" data-modal="portfolio">
-    <div class="modal-backdrop" data-close-modal></div>
-    <div class="modal" tabindex="-1">
-      <button type="button" class="modal-close" data-close-modal aria-label="${esc(t.closeDialog)}">
-        <span aria-hidden="true">${ICONS.close}</span>
-      </button>
+  return modalShell({
+    labelledBy: 'pf-modal-title',
+    closeLabel: v.t.closeDialog,
+    bodyHtml: `
       <div class="modal-eyebrow-row">
         <span>${esc(p.date)}</span><span>·</span><span class="cat">${esc(p.category)}</span><span>·</span><span>${esc(p.location)}</span>
       </div>
       <h2 id="pf-modal-title">${esc(p.title)}</h2>
       <p>${esc(p.full)}</p>
-      <p>${esc(p.approach)}</p>
-    </div>
-  </div>`;
+      <p>${esc(p.approach)}</p>`
+  });
 }
 
 function renderFocus(v) {
   const t = v.t;
-  const cards = v.focusItems.map(f => `
-    <div class="card card-simple"><h3>${esc(f.title)}</h3><p>${esc(f.desc)}</p></div>`).join('');
+  const cards = v.focusItems.map(simpleCardHtml).join('');
   return `
   <div data-screen-label="Focus">
     <section class="page-hero">
@@ -348,26 +383,15 @@ function renderFocus(v) {
 
 function renderEventsList(v) {
   const t = v.t;
-  const bookable = v.bookableFormats.map(b => `
-    <div class="card card-simple"><h3>${esc(b.title)}</h3><p>${esc(b.desc)}</p></div>`).join('');
-  const upcoming = v.visibleTermine.map(tm => `
-    <a class="list-card" href="${tm.href}">
-      <span class="eyebrow-plain">${esc(tm.date)} · ${esc(tm.category)}</span>
-      <h3>${esc(tm.title)}</h3>
-      <span class="loc">${esc(tm.location)}</span>
-    </a>`).join('');
+  const bookable = v.bookableFormats.map(simpleCardHtml).join('');
+  const upcoming = v.visibleTermine.map(tm => eventCardHtml(tm)).join('');
   const showMore = v.hasMoreTermine
     ? `<button type="button" class="btn-outline" data-action="show-more-events">${esc(v.moreEventsLabel)}</button>` : '';
   const pastSection = v.hasPastTermine ? `
     <hr class="divider">
     <section class="section card-list">
       <h2 class="heading-sm">${esc(t.pastHeading)}</h2>
-      ${v.pastTermine.map(pt => `
-        <div class="list-card past">
-          <span class="eyebrow-plain">${esc(pt.date)} · ${esc(pt.category)}</span>
-          <h3>${esc(pt.title)}</h3>
-          <span class="loc">${esc(pt.location)}</span>
-        </div>`).join('')}
+      ${v.pastTermine.map(pt => eventCardHtml(pt, { linked: false, muted: true })).join('')}
     </section>` : '';
 
   return `
@@ -396,35 +420,26 @@ function renderEventModal(v) {
   const t = v.t;
   const tm = v.currentTermin;
   if (!tm) return '';
-  return `
-  <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="ev-modal-title" data-modal="event">
-    <div class="modal-backdrop" data-close-modal></div>
-    <div class="modal" tabindex="-1">
-      <button type="button" class="modal-close" data-close-modal aria-label="${esc(t.closeDialog)}">
-        <span aria-hidden="true">${ICONS.close}</span>
-      </button>
+  return modalShell({
+    labelledBy: 'ev-modal-title',
+    closeLabel: t.closeDialog,
+    bodyHtml: `
       <span class="modal-eyebrow-row">${esc(tm.date)} · ${esc(tm.category)}</span>
       <h2 id="ev-modal-title">${esc(tm.title)}</h2>
       <p class="modal-location">${esc(tm.location)}</p>
       <p>${esc(tm.detail)}</p>
       <p>${esc(tm.info)}</p>
-      <a href="${tm.rsvpHref}" class="cta-button compact">${esc(t.registerBtn)}</a>
-    </div>
-  </div>`;
+      <a href="${tm.rsvpHref}" class="cta-button compact">${esc(t.registerBtn)}</a>`
+  });
 }
 
 function renderLibrary(v) {
   const t = v.t;
-  const items = v.library.map(l => `
-    <div class="card card-simple">
-      <span class="eyebrow">${esc(l.type)}</span>
-      <h3>${esc(l.title)}</h3>
-      <p>${esc(l.desc)}</p>
-    </div>`).join('');
+  const items = v.library.map(libraryCardHtml).join('');
   const press = v.press.map(p => `
-    <div class="card" style="padding:clamp(16px,3vw,20px)">
-      <span style="display:block;font-size:12px;color:var(--text-tertiary);margin-bottom:4px">${esc(p.outlet)} · ${esc(p.date)}</span>
-      <h3 style="font-size:16px;font-weight:600;color:var(--text-primary);margin:0">${esc(p.title)}</h3>
+    <div class="card press-item">
+      <span class="press-meta">${esc(p.outlet)} · ${esc(p.date)}</span>
+      <h3>${esc(p.title)}</h3>
     </div>`).join('');
   return `
   <div data-screen-label="Library">
@@ -498,7 +513,7 @@ function renderBio(v) {
   return `
   <div data-screen-label="Bio">
     <section class="bio-page">
-      <img src="./assets/profilfoto.png" alt="Portrait von Til Apfel" class="avatar-lg">
+      <img src="./assets/profilfoto.png" alt="${esc(t.portraitAlt)}" class="avatar-lg">
       <div>
         <h1 class="bio-name">Til Apfel</h1>
         <p class="bio-intro">${esc(t.bioIntro)}</p>
@@ -538,9 +553,7 @@ function renderFooter(v) {
           <span>${esc(LOCALE_META[code].nativeName)}</span>${v.lang === code ? '<span aria-hidden="true">✓</span>' : ''}
         </button>`).join('')}
     </div>` : '';
-  const themeLabel = state.theme === 'dark'
-    ? (v.lang === 'en' ? 'Switch to light mode' : 'Zu Hell wechseln')
-    : (v.lang === 'en' ? 'Switch to dark mode' : 'Zu Dunkel wechseln');
+  const themeLabel = state.theme === 'dark' ? t.themeToLight : t.themeToDark;
 
   return `
   <footer class="site-footer">
@@ -568,6 +581,7 @@ function renderFooter(v) {
 const appEl = document.getElementById('app');
 const headerSlot = document.getElementById('header-slot');
 const footerSlot = document.getElementById('footer-slot');
+const skipLinkEl = document.querySelector('.skip-link');
 
 function titleFor(section, t) {
   const map = {
@@ -585,6 +599,7 @@ function render() {
   document.documentElement.setAttribute('data-theme', state.theme);
   document.documentElement.setAttribute('lang', v.lang);
   document.title = titleFor(v.section, v.t);
+  if (skipLinkEl) skipLinkEl.textContent = v.t.skip;
 
   headerSlot.innerHTML = renderHeader(v);
 

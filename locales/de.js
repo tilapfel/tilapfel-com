@@ -22,7 +22,10 @@ export default {
     alleProjekte: 'Alle Portfolio-Einträge ansehen →', alleTermine: 'Alle Events ansehen →',
     footerKontakt: 'Kontakt', footerImpressum: 'Impressum', closeDialog: 'Schließen',
     bioIntro: 'Taubblind-Aktivist. Ich setze mich für digitale und gesellschaftliche Teilhabe taubblinder Menschen ein.',
-    emailSubjectRegistration: 'Anmeldung: ', emailSubjectContact: 'Nachricht über Kontaktformular', emailSubjectQuote: 'Kostenvoranschlag-Anfrage: '
+    emailSubjectRegistration: 'Anmeldung: ', emailSubjectContact: 'Nachricht über Kontaktformular', emailSubjectQuote: 'Kostenvoranschlag-Anfrage: ',
+    navAriaLabel: 'Hauptnavigation', portraitAlt: 'Portrait von Til Apfel',
+    themeToLight: 'Zu Hell wechseln', themeToDark: 'Zu Dunkel wechseln',
+    moreEventsTemplate: 'Weitere {n} Termine anzeigen'
   },
 
   nav: { about: 'About', portfolio: 'Portfolio', focus: 'Focus', events: 'Events', library: 'Library' },

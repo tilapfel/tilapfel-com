@@ -22,7 +22,10 @@ export default {
     alleProjekte: 'View all portfolio entries →', alleTermine: 'View all events →',
     footerKontakt: 'Contact', footerImpressum: 'Legal Notice', closeDialog: 'Close',
     bioIntro: 'Deafblind activist and advocate. I work for the digital and social participation of deafblind people.',
-    emailSubjectRegistration: 'Registration: ', emailSubjectContact: 'Contact form message', emailSubjectQuote: 'Quote request: '
+    emailSubjectRegistration: 'Registration: ', emailSubjectContact: 'Contact form message', emailSubjectQuote: 'Quote request: ',
+    navAriaLabel: 'Main navigation', portraitAlt: 'Portrait of Til Apfel',
+    themeToLight: 'Switch to light mode', themeToDark: 'Switch to dark mode',
+    moreEventsTemplate: 'Show {n} more events'
   },
 
   nav: { about: 'About', portfolio: 'Portfolio', focus: 'Focus', events: 'Events', library: 'Library' },

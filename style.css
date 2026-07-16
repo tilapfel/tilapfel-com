@@ -129,10 +129,15 @@ h1 { font-size: clamp(30px, 6vw, 44px); line-height: 1.1; font-weight: 800; lett
 .eyebrow-plain { display: block; font-size: 13px; font-weight: 700; color: var(--text-tertiary); margin-bottom: 8px; }
 .list-card h3 { font-size: 19px; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
 .list-card .desc { display: block; font-size: 15px; line-height: 1.55; color: var(--text-secondary); }
-.list-card .loc { display: block; font-size: 15px; color: var(--text-secondary); }
+.card-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; font-size: 12px; color: var(--text-tertiary); }
+.card-meta .meta-strong { font-weight: 700; }
 
 .card-simple h3 { font-size: 19px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
 .card-simple p { font-size: 15px; line-height: 1.6; color: var(--text-secondary); }
+
+.press-item { padding: clamp(16px, 3vw, 20px); }
+.press-item h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin: 0; }
+.press-meta { display: block; font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px; }
 
 .more-link { display: inline-block; margin-top: 16px; font-size: 16px; font-weight: 600; text-decoration: underline; }
 
@@ -148,6 +153,7 @@ h1 { font-size: clamp(30px, 6vw, 44px); line-height: 1.1; font-weight: 800; lett
 }
 
 .about-body { padding: clamp(24px, 5vw, 40px) 0; display: flex; flex-direction: column; gap: 20px; }
+.about-body > p { font-size: 17px; line-height: 1.7; color: var(--text-primary); }
 .principle-item { display: flex; align-items: flex-start; gap: 10px; }
 .principle-dot { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--text-tertiary); margin-top: 9px; }
 .principle-item span.body-text { font-size: 16px; line-height: 1.5; color: var(--text-primary); }
