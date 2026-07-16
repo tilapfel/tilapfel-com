@@ -28,7 +28,10 @@ export default {
     moreEventsTemplate: 'Show {n} more events', aboutBioLink: 'All links at a glance →',
     share: 'Share', copyLink: 'Copy link', linkCopied: 'Link copied!',
     search: 'Search', searchPlaceholder: 'Search the site…', searchNoResults: 'No results',
-    easyLanguage: 'Easy language'
+    easyLanguage: 'Easy language', easyLanguageOn: 'On', easyLanguageOff: 'Off',
+    onboardingTitle: 'Welcome', onboardingIntro: 'Before you start: how would you like to use the site?',
+    onboardingLangLabel: 'Language', onboardingThemeLabel: 'Brightness',
+    onboardingLight: 'Light', onboardingDark: 'Dark', onboardingDone: 'Get started'
   },
 
   nav: { about: 'About', portfolio: 'Portfolio', focus: 'Focus', events: 'Events', library: 'Library' },

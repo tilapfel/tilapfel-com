@@ -28,7 +28,10 @@ export default {
     moreEventsTemplate: 'Weitere {n} Termine anzeigen', aboutBioLink: 'Alle Links auf einen Blick →',
     share: 'Teilen', copyLink: 'Link kopieren', linkCopied: 'Link kopiert!',
     search: 'Suche', searchPlaceholder: 'Seite durchsuchen…', searchNoResults: 'Keine Treffer',
-    easyLanguage: 'Leichte Sprache'
+    easyLanguage: 'Leichte Sprache', easyLanguageOn: 'An', easyLanguageOff: 'Aus',
+    onboardingTitle: 'Willkommen', onboardingIntro: 'Bevor es losgeht: Wie möchten Sie die Seite nutzen?',
+    onboardingLangLabel: 'Sprache', onboardingThemeLabel: 'Helligkeit',
+    onboardingLight: 'Hell', onboardingDark: 'Dunkel', onboardingDone: 'Los geht’s'
   },
 
   nav: { about: 'About', portfolio: 'Portfolio', focus: 'Focus', events: 'Events', library: 'Library' },

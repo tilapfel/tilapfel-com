@@ -1,11 +1,8 @@
 'use strict';
 
-/* ---------- Icons (language-independent) ---------- */
-const ICON_ROLE_ACTIVIST = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4a1 1 0 0 0 1 1h2l7 4V5L6 9H4a1 1 0 0 0-1 1z"/><path d="M17 9a4 4 0 0 1 0 6"/></svg>';
-const ICON_ROLE_BOARD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
-const ICON_ROLE_LECTURER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-4 10 4-10 4-10-4z"/><path d="M6 11v4c0 1.2 2.7 2 6 2s6-.8 6-2v-4"/></svg>';
-const ROLE_ICONS = [ICON_ROLE_ACTIVIST, ICON_ROLE_BOARD, ICON_ROLE_LECTURER];
-
+/* ---------- Icon root ----------
+   Every SVG glyph in the app lives here, once. Nothing else defines an
+   icon constant — add new icons as a key on this object. */
 const ICONS = {
   about: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c0-4 3.5-6.5 7.5-6.5s7.5 2.5 7.5 6.5"/></svg>',
   portfolio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M6 4h11l-3 4 3 4H6"/></svg>',
@@ -19,18 +16,22 @@ const ICONS = {
   share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M4 13v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/></svg>',
   search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>',
   easyLanguage: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h8l3 3v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1z"/><path d="M9 12.5h6"/><circle cx="17" cy="17.5" r="4.5" fill="var(--bg-card)"/><path d="m15.1 17.5 1.3 1.3 2.4-2.6"/></svg>',
-  paragraph: '<svg viewBox="0 0 24 24"><text x="12" y="18.5" font-size="19" font-weight="700" fill="currentColor" text-anchor="middle" font-family="Georgia, \'Times New Roman\', serif">§</text></svg>'
+  paragraph: '<svg viewBox="0 0 24 24"><text x="12" y="18.5" font-size="19" font-weight="700" fill="currentColor" text-anchor="middle" font-family="Georgia, \'Times New Roman\', serif">§</text></svg>',
+  roleActivist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11V6.5a1.5 1.5 0 0 1 3 0V6a1.5 1.5 0 0 1 3 0v.5a1.5 1.5 0 0 1 3 0V11"/><path d="M16 11a1.5 1.5 0 0 1 3 0v3.5A6.5 6.5 0 0 1 12.5 21h-1A6.5 6.5 0 0 1 5 14.5v-1.6c0-.5.2-1 .6-1.3L7 10.5"/></svg>',
+  roleBoard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c2.8 1.8 4.5 5.5 4.5 9 0 2-.8 3.8-1.8 5l-2.7 2.8-2.7-2.8c-1-1.2-1.8-3-1.8-5 0-3.5 1.7-7.2 4.5-9z"/><circle cx="12" cy="9.5" r="1.8"/><path d="M8.3 15.5 5.5 17l1-3M15.7 15.5l2.8 1.5-1-3"/></svg>',
+  roleLecturer: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="m8.5 12 2.5-3 2 2 3-3.5"/></svg>',
+  grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>',
+  heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9C1 8 2 4 6 4c2 0 4 1.2 6 4 2-2.8 4-4 6-4 4 0 5 4 3.5 7-2.5 4.6-9.5 9-9.5 9z"/></svg>',
+  network: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M7.8 7.6 10.4 16M16.2 7.6 13.6 16M8.4 6h7.2"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 7.5v9l7-4.5z" fill="currentColor" stroke="none"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.3" cy="7.7" r="0.9" fill="currentColor" stroke="none"/></svg>',
+  github: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6.5 4.5 12l4.5 5.5M15 6.5l4.5 5.5-4.5 5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  facebook: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.2 19v-6.2h2.1l.3-2.6h-2.4V8.5c0-.7.2-1.2 1.2-1.2h1.3V5c-.2 0-1-.1-1.9-.1-2 0-3.3 1.2-3.3 3.4v2h-2.2v2.6h2.2V19z" fill="currentColor" stroke="none"/></svg>',
+  linkedin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7.5" cy="7" r="1.3" fill="currentColor" stroke="none"/><path d="M7.5 10.2V19" stroke-linecap="round" stroke-width="2.2"/><path d="M12 10.2V19M12 13.8c0-2.4 1.4-3.6 3-3.6s3 1.2 3 3.6V19" stroke-linecap="round" stroke-width="2.2"/></svg>',
+  doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h8l3 3v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1z"/><path d="M9 10h6M9 13.5h6M9 17h4"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 6.5l8 6 8-6"/></svg>'
 };
-const ICON_GRID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>';
-const ICON_HEART_GLYPH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9C1 8 2 4 6 4c2 0 4 1.2 6 4 2-2.8 4-4 6-4 4 0 5 4 3.5 7-2.5 4.6-9.5 9-9.5 9z"/></svg>';
-const ICON_NETWORK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M7.8 7.6 10.4 16M16.2 7.6 13.6 16M8.4 6h7.2"/></svg>';
-const ICON_YOUTUBE_GLYPH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 7.5v9l7-4.5z" fill="currentColor" stroke="none"/></svg>';
-const ICON_INSTAGRAM_GLYPH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.3" cy="7.7" r="0.9" fill="currentColor" stroke="none"/></svg>';
-const ICON_GITHUB_GLYPH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6.5 4.5 12l4.5 5.5M15 6.5l4.5 5.5-4.5 5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const ICON_FACEBOOK_SHARED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.2 19v-6.2h2.1l.3-2.6h-2.4V8.5c0-.7.2-1.2 1.2-1.2h1.3V5c-.2 0-1-.1-1.9-.1-2 0-3.3 1.2-3.3 3.4v2h-2.2v2.6h2.2V19z" fill="currentColor" stroke="none"/></svg>';
-const ICON_LINKEDIN_SHARED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7.5" cy="7" r="1.3" fill="currentColor" stroke="none"/><path d="M7.5 10.2V19" stroke-linecap="round" stroke-width="2.2"/><path d="M12 10.2V19M12 13.8c0-2.4 1.4-3.6 3-3.6s3 1.2 3 3.6V19" stroke-linecap="round" stroke-width="2.2"/></svg>';
-const ICON_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h8l3 3v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1z"/><path d="M9 10h6M9 13.5h6M9 17h4"/></svg>';
-const ICON_MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 6.5l8 6 8-6"/></svg>';
+const ROLE_ICONS = [ICONS.roleActivist, ICONS.roleBoard, ICONS.roleLecturer];
 
 /* ---------- Nav structure (route + icon are language-independent; labels come from the active locale) ---------- */
 const NAV = [
@@ -45,16 +46,16 @@ const NAV = [
    Primary links render as neutral full-width tiles; social links render as
    small brand-colored circular icons in a row (linktr.ee-style). */
 const BIO_PRIMARY_LINKS = [
-  { label: 'Website', href: '#/', url: 'tilapfel.com', icon: ICON_NETWORK },
-  { label: 'Stiftung', href: 'https://stiftung.tilapfel.com', url: 'stiftung.tilapfel.com', icon: ICON_HEART_GLYPH },
-  { label: 'Apps', href: 'https://apps.tilapfel.com', url: 'apps.tilapfel.com', icon: ICON_GRID }
+  { label: 'Website', href: '#/', url: 'tilapfel.com', icon: ICONS.network },
+  { label: 'Stiftung', href: 'https://stiftung.tilapfel.com', url: 'stiftung.tilapfel.com', icon: ICONS.heart },
+  { label: 'Apps', href: 'https://apps.tilapfel.com', url: 'apps.tilapfel.com', icon: ICONS.grid }
 ];
 const BIO_SOCIAL_LINKS = [
-  { label: 'YouTube', href: 'https://www.youtube.com/@tilapfel', bg: 'oklch(52% 0.09 25)', icon: ICON_YOUTUBE_GLYPH },
-  { label: 'Instagram', href: 'https://www.instagram.com/tilapfel', bg: 'oklch(52% 0.09 340)', icon: ICON_INSTAGRAM_GLYPH },
-  { label: 'Facebook', href: 'https://www.facebook.com/tilapfel', bg: 'oklch(52% 0.09 255)', icon: ICON_FACEBOOK_SHARED },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tilapfel', bg: 'oklch(52% 0.09 230)', icon: ICON_LINKEDIN_SHARED },
-  { label: 'GitHub', href: 'https://github.com/tilapfel', bg: 'oklch(30% 0 0)', icon: ICON_GITHUB_GLYPH }
+  { label: 'YouTube', href: 'https://www.youtube.com/@tilapfel', bg: 'oklch(52% 0.09 25)', icon: ICONS.youtube },
+  { label: 'Instagram', href: 'https://www.instagram.com/tilapfel', bg: 'oklch(52% 0.09 340)', icon: ICONS.instagram },
+  { label: 'Facebook', href: 'https://www.facebook.com/tilapfel', bg: 'oklch(52% 0.09 255)', icon: ICONS.facebook },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tilapfel', bg: 'oklch(52% 0.09 230)', icon: ICONS.linkedin },
+  { label: 'GitHub', href: 'https://github.com/tilapfel', bg: 'oklch(30% 0 0)', icon: ICONS.github }
 ];
 
 const CONTACT_EMAIL = 'info@tilapfel.com';
@@ -91,11 +92,25 @@ function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-// Only one utility popover (language/share/search) should be open at a time.
+// Only one utility popover (language/easy-language/share/search) should be open at a time.
 function closeMenus() {
   state.langMenuOpen = false;
+  state.easyLangMenuOpen = false;
   state.shareMenuOpen = false;
   state.searchOpen = false;
+}
+
+function dismissOnboarding() {
+  state.onboardingOpen = false;
+  try { localStorage.setItem('tilapfel-onboarded', '1'); } catch (e) {}
+  render();
+}
+
+// Whichever overlay is currently showing (onboarding, search, or a portfolio/event detail) closes itself.
+function closeActiveModal(v) {
+  if (state.onboardingOpen) { dismissOnboarding(); return; }
+  if (state.searchOpen) { state.searchOpen = false; state.searchQuery = ''; render(); return; }
+  location.hash = '#/' + (v.section === 'portfolio' ? 'portfolio' : 'events');
 }
 
 // Fallback when navigator.clipboard is unavailable/denied: select the URL text so the user can copy it manually.
@@ -206,6 +221,28 @@ function langToggleHtml(v, { dropDown = false } = {}) {
     </div>`;
 }
 
+// Toggle only — no simplified-language content exists yet, this just remembers the visitor's preference.
+function easyLangToggleHtml(v) {
+  const t = v.t;
+  const menu = state.easyLangMenuOpen ? `
+    <div class="lang-menu-backdrop" data-close-easylang-menu></div>
+    <div class="lang-menu">
+      <button type="button" class="${state.easyLanguage ? 'active' : ''}" data-set-easylang="on" aria-pressed="${state.easyLanguage}">
+        <span>${esc(t.easyLanguageOn)}</span>${state.easyLanguage ? '<span aria-hidden="true">✓</span>' : ''}
+      </button>
+      <button type="button" class="${!state.easyLanguage ? 'active' : ''}" data-set-easylang="off" aria-pressed="${!state.easyLanguage}">
+        <span>${esc(t.easyLanguageOff)}</span>${!state.easyLanguage ? '<span aria-hidden="true">✓</span>' : ''}
+      </button>
+    </div>` : '';
+  return `
+    <div class="lang-menu-wrap">
+      <button type="button" class="icon-btn" data-action="toggle-easylang-menu" aria-expanded="${state.easyLangMenuOpen}" aria-haspopup="true" aria-label="${esc(t.easyLanguage)}" title="${esc(t.easyLanguage)}">
+        <span aria-hidden="true">${ICONS.easyLanguage}</span>
+      </button>
+      ${menu}
+    </div>`;
+}
+
 function shareToggleHtml(v, { dropDown = false } = {}) {
   const t = v.t;
   const menu = state.shareMenuOpen ? `
@@ -223,21 +260,26 @@ function shareToggleHtml(v, { dropDown = false } = {}) {
     </div>`;
 }
 
-function searchToggleHtml(v, { dropDown = false } = {}) {
+function searchButtonHtml(v) {
   const t = v.t;
-  const menu = state.searchOpen ? `
-    <div class="lang-menu-backdrop" data-close-search></div>
-    <div class="lang-menu search-menu${dropDown ? ' drop-down' : ''}">
-      <input type="search" class="search-input" id="site-search-input" placeholder="${esc(t.searchPlaceholder)}" value="${esc(state.searchQuery)}" autocomplete="off">
-      <div class="search-results" id="site-search-results">${renderSearchResults()}</div>
-    </div>` : '';
   return `
-    <div class="lang-menu-wrap">
-      <button type="button" class="icon-btn" data-action="toggle-search" aria-expanded="${state.searchOpen}" aria-label="${esc(t.search)}" title="${esc(t.search)}">
-        <span aria-hidden="true">${ICONS.search}</span>
-      </button>
-      ${menu}
-    </div>`;
+    <button type="button" class="icon-btn" data-action="toggle-search" aria-expanded="${state.searchOpen}" aria-label="${esc(t.search)}" title="${esc(t.search)}">
+      <span aria-hidden="true">${ICONS.search}</span>
+    </button>`;
+}
+
+// Search uses the same classic overlay modal as the Portfolio/Event detail dialogs, not a corner popover.
+function searchModalHtml(v) {
+  if (!state.searchOpen) return '';
+  const t = v.t;
+  return modalShell({
+    labelledBy: 'search-modal-title',
+    closeLabel: t.closeDialog,
+    bodyHtml: `
+      <h2 id="search-modal-title">${esc(t.search)}</h2>
+      <input type="search" class="search-input" id="site-search-input" placeholder="${esc(t.searchPlaceholder)}" value="${esc(state.searchQuery)}" autocomplete="off">
+      <div class="search-results" id="site-search-results">${renderSearchResults()}</div>`
+  });
 }
 
 /* ---------- Site search ----------
@@ -272,20 +314,69 @@ function renderSearchResults() {
     </a>`).join('');
 }
 
+/* ---------- First-visit onboarding ----------
+   Shown once until dismissed (tilapfel-onboarded in localStorage). Lets a
+   new visitor pick language, easy language, and theme up front, each as a
+   labelled choice — not icon-only, since this is the one place explaining
+   what the icons mean. Reuses the same setLang / easy-language / theme
+   state changes as the footer controls, just triggered from different
+   buttons, so there is exactly one source of truth for each preference. */
+function onboardingModalHtml(v) {
+  if (!state.onboardingOpen) return '';
+  const t = v.t;
+  const langChoices = AVAILABLE_LOCALES.map(code => `
+    <button type="button" class="onboarding-choice${v.lang === code ? ' active' : ''}" data-set-lang="${code}">${esc(LOCALE_META[code].nativeName)}</button>`).join('');
+  return modalShell({
+    labelledBy: 'onboarding-title',
+    closeLabel: t.closeDialog,
+    bodyHtml: `
+      <h2 id="onboarding-title">${esc(t.onboardingTitle)}</h2>
+      <p class="onboarding-intro">${esc(t.onboardingIntro)}</p>
+
+      <div class="onboarding-group">
+        <h3 class="onboarding-group-title">${esc(t.onboardingLangLabel)}</h3>
+        <div class="onboarding-choice-row">${langChoices}</div>
+      </div>
+
+      <div class="onboarding-group">
+        <h3 class="onboarding-group-title">${esc(t.easyLanguage)}</h3>
+        <div class="onboarding-choice-row">
+          <button type="button" class="onboarding-choice${state.easyLanguage ? ' active' : ''}" data-set-easylang="on">${esc(t.easyLanguageOn)}</button>
+          <button type="button" class="onboarding-choice${!state.easyLanguage ? ' active' : ''}" data-set-easylang="off">${esc(t.easyLanguageOff)}</button>
+        </div>
+      </div>
+
+      <div class="onboarding-group">
+        <h3 class="onboarding-group-title">${esc(t.onboardingThemeLabel)}</h3>
+        <div class="onboarding-choice-row">
+          <button type="button" class="onboarding-choice${state.theme === 'light' ? ' active' : ''}" data-set-theme="light">${esc(t.onboardingLight)}</button>
+          <button type="button" class="onboarding-choice${state.theme === 'dark' ? ' active' : ''}" data-set-theme="dark">${esc(t.onboardingDark)}</button>
+        </div>
+      </div>
+
+      <button type="button" class="cta-button compact" data-action="close-onboarding">${esc(t.onboardingDone)}</button>`
+  });
+}
+
 /* ---------- State ---------- */
-let storedLang = null, storedTheme = null;
+let storedLang = null, storedTheme = null, storedEasyLang = null, storedOnboarded = null;
 try { storedLang = localStorage.getItem('tilapfel-lang'); } catch (e) {}
 try { storedTheme = localStorage.getItem('tilapfel-theme'); } catch (e) {}
+try { storedEasyLang = localStorage.getItem('tilapfel-easy-lang'); } catch (e) {}
+try { storedOnboarded = localStorage.getItem('tilapfel-onboarded'); } catch (e) {}
 
 const state = {
   lang: (storedLang && AVAILABLE_LOCALES.includes(storedLang)) ? storedLang : detectSystemLocale(),
   theme: storedTheme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'),
+  easyLanguage: storedEasyLang === '1',
   eventsExpanded: false,
   langMenuOpen: false,
+  easyLangMenuOpen: false,
   shareMenuOpen: false,
   shareCopied: false,
   searchOpen: false,
-  searchQuery: ''
+  searchQuery: '',
+  onboardingOpen: !storedOnboarded
 };
 let locale = null;
 
@@ -612,7 +703,7 @@ function renderKontakt(v) {
   return `
   <div data-screen-label="Kontakt">
     <section class="page-hero">
-      <h1 class="page-title">${ICON_MAIL}<span>${esc(t.kontaktTitle)}</span></h1>
+      <h1 class="page-title">${ICONS.mail}<span>${esc(t.kontaktTitle)}</span></h1>
       <p class="subtitle">${esc(t.kontaktSubtitle)}</p>
     </section>
     <hr class="divider">
@@ -667,7 +758,7 @@ function renderImpressum(v) {
   return `
   <div data-screen-label="Impressum">
     <section class="page-hero">
-      <h1 class="page-title">${ICON_DOC}<span>Impressum</span></h1>
+      <h1 class="page-title">${ICONS.paragraph}<span>Impressum</span></h1>
       <p class="subtitle">${esc(t.impressumSubtitle)}</p>
     </section>
     <hr class="divider">
@@ -686,12 +777,10 @@ function renderFooter(v) {
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-row">
-        ${themeToggleHtml(v)}
         ${langToggleHtml(v)}
-        ${searchToggleHtml(v)}
-        <button type="button" class="icon-btn" aria-label="${esc(t.easyLanguage)}" title="${esc(t.easyLanguage)}">
-          <span aria-hidden="true">${ICONS.easyLanguage}</span>
-        </button>
+        ${easyLangToggleHtml(v)}
+        ${themeToggleHtml(v)}
+        ${searchButtonHtml(v)}
         <a class="icon-btn" href="#/impressum" aria-label="${esc(t.footerImpressum)}" title="${esc(t.footerImpressum)}"><span aria-hidden="true">${ICONS.paragraph}</span></a>
       </div>
       <span class="footer-copy">© 2026 Til Apfel</span>
@@ -739,13 +828,13 @@ function render() {
     case 'impressum': mainHtml = renderImpressum(v); break;
     default: mainHtml = renderHome(v);
   }
-  appEl.innerHTML = mainHtml;
+  appEl.innerHTML = mainHtml + searchModalHtml(v) + onboardingModalHtml(v);
   footerSlot.innerHTML = v.isBio ? '' : renderFooter(v);
 
-  document.body.style.overflow = (v.currentPortfolio || v.currentTermin) ? 'hidden' : '';
+  document.body.style.overflow = (v.currentPortfolio || v.currentTermin || state.searchOpen || state.onboardingOpen) ? 'hidden' : '';
   attachListeners(v);
 
-  const modal = document.querySelector('.modal');
+  const modal = appEl.querySelector('.modal');
   if (modal) modal.focus();
   if (state.searchOpen) {
     const searchInput = document.getElementById('site-search-input');
@@ -768,9 +857,7 @@ function setLang(code) {
 /* ---------- Event wiring ---------- */
 function attachListeners(v) {
   document.querySelectorAll('[data-close-modal]').forEach(el => {
-    el.addEventListener('click', () => {
-      location.hash = '#/' + (v.section === 'portfolio' ? 'portfolio' : 'events');
-    });
+    el.addEventListener('click', closeActiveModal.bind(null, v));
   });
 
   const themeBtn = document.querySelector('[data-action="toggle-theme"]');
@@ -792,6 +879,34 @@ function attachListeners(v) {
   document.querySelectorAll('[data-set-lang]').forEach(el => {
     el.addEventListener('click', () => setLang(el.getAttribute('data-set-lang')));
   });
+
+  const easyLangBtn = document.querySelector('[data-action="toggle-easylang-menu"]');
+  if (easyLangBtn) easyLangBtn.addEventListener('click', () => {
+    const next = !state.easyLangMenuOpen;
+    closeMenus();
+    state.easyLangMenuOpen = next;
+    render();
+  });
+  const easyLangBackdrop = document.querySelector('[data-close-easylang-menu]');
+  if (easyLangBackdrop) easyLangBackdrop.addEventListener('click', () => { state.easyLangMenuOpen = false; render(); });
+  document.querySelectorAll('[data-set-easylang]').forEach(el => {
+    el.addEventListener('click', () => {
+      state.easyLanguage = el.getAttribute('data-set-easylang') === 'on';
+      state.easyLangMenuOpen = false;
+      try { localStorage.setItem('tilapfel-easy-lang', state.easyLanguage ? '1' : '0'); } catch (e) {}
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-set-theme]').forEach(el => {
+    el.addEventListener('click', () => {
+      state.theme = el.getAttribute('data-set-theme');
+      try { localStorage.setItem('tilapfel-theme', state.theme); } catch (e) {}
+      render();
+    });
+  });
+  const onboardingDoneBtn = document.querySelector('[data-action="close-onboarding"]');
+  if (onboardingDoneBtn) onboardingDoneBtn.addEventListener('click', dismissOnboarding);
 
   const showMoreBtn = document.querySelector('[data-action="show-more-events"]');
   if (showMoreBtn) showMoreBtn.addEventListener('click', () => { state.eventsExpanded = true; render(); });
@@ -825,8 +940,6 @@ function attachListeners(v) {
     state.searchOpen = next;
     render();
   });
-  const searchBackdrop = document.querySelector('[data-close-search]');
-  if (searchBackdrop) searchBackdrop.addEventListener('click', () => { state.searchOpen = false; state.searchQuery = ''; render(); });
   const searchInput = document.getElementById('site-search-input');
   if (searchInput) searchInput.addEventListener('input', e => {
     state.searchQuery = e.target.value;
@@ -861,11 +974,12 @@ function attachListeners(v) {
 /* ---------- Global listeners ---------- */
 window.addEventListener('hashchange', render);
 window.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    const segs = parseRoute().split('/').filter(Boolean);
-    if ((segs[0] === 'portfolio' || segs[0] === 'events') && segs[1]) {
-      location.hash = '#/' + segs[0];
-    }
+  if (e.key !== 'Escape') return;
+  if (state.onboardingOpen) { dismissOnboarding(); return; }
+  if (state.searchOpen) { state.searchOpen = false; state.searchQuery = ''; render(); return; }
+  const segs = parseRoute().split('/').filter(Boolean);
+  if ((segs[0] === 'portfolio' || segs[0] === 'events') && segs[1]) {
+    location.hash = '#/' + segs[0];
   }
 });
 try {
