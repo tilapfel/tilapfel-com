@@ -20,12 +20,12 @@ export default {
     kontaktTitle: 'Kontakt', kontaktSubtitle: 'Schreiben Sie mir eine Nachricht.', labelNachricht: 'Nachricht', kontaktSubmitBtn: 'Nachricht senden',
     labelName: 'Name', labelEmail: 'E-Mail', labelArt: 'Art des Anliegens', labelBeschreibung: 'Beschreibung', labelZeitrahmen: 'Gewünschter Zeitrahmen', submitBtn: 'Anfrage senden',
     alleProjekte: 'Alle Portfolio-Einträge ansehen →', alleTermine: 'Alle Events ansehen →',
-    footerKontakt: 'Kontakt', footerImpressum: 'Impressum', closeDialog: 'Schließen',
+    footerImpressum: 'Impressum', closeDialog: 'Schließen',
     bioIntro: 'Taubblind-Aktivist. Ich setze mich für digitale und gesellschaftliche Teilhabe taubblinder Menschen ein.',
     emailSubjectRegistration: 'Anmeldung: ', emailSubjectContact: 'Nachricht über Kontaktformular', emailSubjectQuote: 'Kostenvoranschlag-Anfrage: ',
     navAriaLabel: 'Hauptnavigation', portraitAlt: 'Portrait von Til Apfel',
     themeToLight: 'Zu Hell wechseln', themeToDark: 'Zu Dunkel wechseln',
-    moreEventsTemplate: 'Weitere {n} Termine anzeigen'
+    moreEventsTemplate: 'Weitere {n} Termine anzeigen', aboutBioLink: 'Alle Links auf einen Blick →'
   },
 
   nav: { about: 'About', portfolio: 'Portfolio', focus: 'Focus', events: 'Events', library: 'Library' },

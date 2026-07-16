@@ -203,18 +203,21 @@ form.stack-form { display: flex; flex-direction: column; gap: 18px; }
   background: var(--text-primary); color: var(--bg-base); cursor: pointer; width: fit-content;
 }
 
-/* Bio page */
-.bio-page { padding: clamp(32px, 8vw, 56px) 0 clamp(20px, 4vw, 32px); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+/* Bio page (linktr.ee-style link-in-bio: no header/footer chrome) */
+.bio-page { padding: clamp(40px, 10vw, 64px) 0 clamp(20px, 4vw, 32px); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .bio-name { font-size: clamp(28px, 5vw, 36px); font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); margin-bottom: 10px; }
 .bio-intro { font-size: 16px; line-height: 1.6; color: var(--text-secondary); max-width: 440px; margin: 0 auto; }
-.bio-links { padding: clamp(12px, 3vw, 20px) 0 clamp(24px, 5vw, 40px); display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.bio-grid { display: grid; grid-template-columns: min(440px, 100%); gap: 14px; max-width: 100%; }
-.bio-tile { display: flex; align-items: center; justify-content: flex-start; gap: 18px; text-align: left; border-radius: 18px; padding: 20px 26px; text-decoration: none; }
+.bio-links { padding: clamp(12px, 3vw, 20px) 0 clamp(40px, 10vw, 64px); display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.bio-grid { display: grid; grid-template-columns: min(440px, 100%); gap: 10px; max-width: 100%; }
+.bio-tile { display: flex; align-items: center; justify-content: flex-start; gap: 14px; text-align: left; border-radius: 14px; padding: 13px 18px; text-decoration: none; }
 .bio-tile:hover { filter: brightness(0.92); }
-.bio-tile-icon { display: flex; align-items: center; justify-content: center; flex: none; width: 42px; height: 42px; }
+.bio-tile-icon { display: flex; align-items: center; justify-content: center; flex: none; width: 32px; height: 32px; }
 .bio-tile-text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
-.bio-tile-label { font-size: 17px; font-weight: 600; }
-.bio-tile-url { font-size: 13px; }
+.bio-tile-label { font-size: 16px; font-weight: 600; }
+.bio-tile-url { font-size: 12px; }
+
+.bio-social-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+.icon-btn.circle { border-radius: 50%; }
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--divider); }

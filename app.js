@@ -27,7 +27,6 @@ const ICON_FACEBOOK_SHARED = '<svg viewBox="0 0 24 24" fill="none" stroke="curre
 const ICON_LINKEDIN_SHARED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7.5" cy="7" r="1.3" fill="currentColor" stroke="none"/><path d="M7.5 10.2V19" stroke-linecap="round" stroke-width="2.2"/><path d="M12 10.2V19M12 13.8c0-2.4 1.4-3.6 3-3.6s3 1.2 3 3.6V19" stroke-linecap="round" stroke-width="2.2"/></svg>';
 const ICON_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h8l3 3v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1z"/><path d="M9 10h6M9 13.5h6M9 17h4"/></svg>';
 const ICON_MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 6.5l8 6 8-6"/></svg>';
-const ICON_LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(12 12) scale(1.4) translate(-12 -12)"><path d="M9.5 14.5 14.5 9.5"/><path d="M11 8l1.5-1.5a3 3 0 0 1 4.2 4.2L15 12.2M13 16l-1.5 1.5a3 3 0 0 1-4.2-4.2L8.7 11.8"/></g></svg>';
 
 /* ---------- Nav structure (route + icon are language-independent; labels come from the active locale) ---------- */
 const NAV = [
@@ -38,16 +37,19 @@ const NAV = [
   { route: 'library', icon: 'library' }
 ];
 
-/* ---------- Bio links: proper nouns / brand names, identical across languages ---------- */
-const BIO_LINKS = [
+/* ---------- Bio page links: proper nouns / brand names, identical across languages ----------
+   Primary links render as big tiles; social links render as a small icon row (linktr.ee-style). */
+const BIO_PRIMARY_LINKS = [
   { label: 'Website', href: '#/', url: 'tilapfel.com', bg: 'oklch(52% 0.09 200)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_NETWORK },
   { label: 'Stiftung', href: 'https://stiftung.tilapfel.com', url: 'stiftung.tilapfel.com', bg: 'oklch(52% 0.09 60)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_HEART_GLYPH },
-  { label: 'Apps', href: 'https://apps.tilapfel.com', url: 'apps.tilapfel.com', bg: 'oklch(52% 0.09 140)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_GRID },
-  { label: 'YouTube', href: 'https://www.youtube.com/@tilapfel', url: 'youtube.com/@tilapfel', bg: 'oklch(52% 0.09 25)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_YOUTUBE_GLYPH },
-  { label: 'Instagram', href: 'https://www.instagram.com/tilapfel', url: 'instagram.com/tilapfel', bg: 'oklch(52% 0.09 340)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_INSTAGRAM_GLYPH },
-  { label: 'Facebook', href: 'https://www.facebook.com/tilapfel', url: 'facebook.com/tilapfel', bg: 'oklch(52% 0.09 255)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_FACEBOOK_SHARED },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tilapfel', url: 'linkedin.com/in/tilapfel', bg: 'oklch(52% 0.09 230)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_LINKEDIN_SHARED },
-  { label: 'GitHub', href: 'https://github.com/tilapfel', url: 'github.com/tilapfel', bg: 'oklch(30% 0 0)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_GITHUB_GLYPH }
+  { label: 'Apps', href: 'https://apps.tilapfel.com', url: 'apps.tilapfel.com', bg: 'oklch(52% 0.09 140)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_GRID }
+];
+const BIO_SOCIAL_LINKS = [
+  { label: 'YouTube', href: 'https://www.youtube.com/@tilapfel', icon: ICON_YOUTUBE_GLYPH },
+  { label: 'Instagram', href: 'https://www.instagram.com/tilapfel', icon: ICON_INSTAGRAM_GLYPH },
+  { label: 'Facebook', href: 'https://www.facebook.com/tilapfel', icon: ICON_FACEBOOK_SHARED },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tilapfel', icon: ICON_LINKEDIN_SHARED },
+  { label: 'GitHub', href: 'https://github.com/tilapfel', icon: ICON_GITHUB_GLYPH }
 ];
 
 const CONTACT_EMAIL = 'info@tilapfel.com';
@@ -214,7 +216,8 @@ function computeVals() {
     bookableFormats: locale.bookable,
     roles: locale.roleLabels.map((label, i) => ({ label, icon: ROLE_ICONS[i] })),
     aboutRoles: locale.roleLabels.map((title, i) => ({ title, desc: locale.roleDescs[i], icon: ROLE_ICONS[i] })),
-    bioLinks: BIO_LINKS,
+    bioPrimaryLinks: BIO_PRIMARY_LINKS,
+    bioSocialLinks: BIO_SOCIAL_LINKS,
     auftragArten: locale.auftragArten
   };
 }
@@ -330,6 +333,7 @@ function renderAbout(v) {
       </div>
 
       <a href="#/kontakt" class="cta-button">${esc(t.aboutCtaText)} — ${esc(t.aboutCtaLink)}</a>
+      <a href="#/bio" class="more-link">${esc(t.aboutBioLink)}</a>
     </section>
   </div>`;
 }
@@ -502,13 +506,17 @@ function renderKontakt(v) {
 
 function renderBio(v) {
   const t = v.t;
-  const tiles = v.bioLinks.map(l => `
+  const tiles = v.bioPrimaryLinks.map(l => `
     <a class="bio-tile" href="${l.href}" style="background:${l.bg}">
       <span class="bio-tile-icon" aria-hidden="true" style="color:${l.fg}">${l.icon}</span>
       <span class="bio-tile-text">
         <span class="bio-tile-label" style="color:${l.fg}">${esc(l.label)}</span>
         <span class="bio-tile-url" style="color:${l.fgMuted}">${esc(l.url)}</span>
       </span>
+    </a>`).join('');
+  const socials = v.bioSocialLinks.map(l => `
+    <a class="icon-btn circle" href="${l.href}" aria-label="${esc(l.label)}" title="${esc(l.label)}">
+      <span aria-hidden="true">${l.icon}</span>
     </a>`).join('');
   return `
   <div data-screen-label="Bio">
@@ -521,6 +529,7 @@ function renderBio(v) {
     </section>
     <section class="bio-links">
       <div class="bio-grid">${tiles}</div>
+      <div class="bio-social-row">${socials}</div>
     </section>
   </div>`;
 }
@@ -569,8 +578,6 @@ function renderFooter(v) {
           ${langMenu}
         </div>
         <a class="icon-btn" href="#/impressum" aria-label="${esc(t.footerImpressum)}" title="${esc(t.footerImpressum)}"><span aria-hidden="true">${ICON_DOC}</span></a>
-        <a class="icon-btn" href="#/kontakt" aria-label="${esc(t.footerKontakt)}" title="${esc(t.footerKontakt)}"><span aria-hidden="true">${ICON_MAIL}</span></a>
-        <a class="icon-btn" href="#/bio" aria-label="Bio" title="Bio"><span aria-hidden="true">${ICON_LINK}</span></a>
       </div>
       <span class="footer-copy">© 2026 Til Apfel</span>
     </div>
@@ -618,7 +625,7 @@ function render() {
     default: mainHtml = renderHome(v);
   }
   appEl.innerHTML = mainHtml;
-  footerSlot.innerHTML = renderFooter(v);
+  footerSlot.innerHTML = v.isBio ? '' : renderFooter(v);
 
   document.body.style.overflow = (v.currentPortfolio || v.currentTermin) ? 'hidden' : '';
   attachListeners(v);
