@@ -1,14 +1,20 @@
 # tilapfel.com
 
-Statische Website für Til Apfel (Selbstständigkeit als Dozent, Berater und Aktivist für digitale Barrierefreiheit). Reines HTML/CSS/JavaScript, kein Build-Schritt, keine Abhängigkeiten.
+Statische Website für Til Apfel (Selbstständigkeit als Dozent, Berater und Aktivist für digitale Barrierefreiheit). Reines HTML/CSS/JavaScript über native ES-Module, kein Build-Schritt zum Deployen, keine Laufzeit-Abhängigkeiten. Prettier/ESLint sind reine Dev-Tools (siehe unten).
 
 ## Struktur
 
-- `index.html` – Seitengerüst
-- `style.css` – Design (Farben, Layout, Komponenten; Hell-/Dunkelmodus über `[data-theme]`)
-- `app.js` – Inhalte (Portfolio, Events, Übersetzungen DE/EN), Hash-Router, Rendering, Theme-/Sprachumschalter
+Inhalt, Struktur, Styling und Logik sind bewusst getrennt gehalten:
+
+- `content/` – **Inhalt.** Ein Modul pro Sprache (`de.js`, `en.js`), jedes mit identischem Schema (Übersetzungen, Portfolio, Events, Library, …). Eine neue Sprache = eine neue Datei nach diesem Schema + Eintrag in `app/data.js`.
+- `pages/` – **Struktur.** Ein Renderer pro Route/Bildschirm (`home.js`, `about.js`, `portfolio.js`, …) plus `header.js`, `footer.js`, `onboarding.js`. Jede Datei exportiert eine `render*()`-Funktion, die Komponenten + Inhalt zu einer Seite zusammensetzt.
+- `components/` – **Wiederverwendbare Bausteine.** Karten, Pills, Modal-Grundgerüst, Icon-Root, Toggle-Buttons (Theme/Sprache/Leichte Sprache/Teilen), Suche. Jedes Muster existiert genau einmal und wird von mehreren Seiten aufgerufen.
+- `styles/` – **Styling.** `base.css` (Reset, Farbvariablen, Typografie), `layout.css` (Seitengerüst, Header/Footer/Nav), `components.css` (alle wiederkehrenden UI-Muster).
+- `app/` – **Kernlogik.** `main.js` (Einstiegspunkt), `state.js` (Zustand, Locale-Laden), `router.js` (Rendering-Engine, Event-Wiring), `data.js` (sprachunabhängige Daten wie Navigation, Bio-Links), `storage.js` (zentrale localStorage-Zugriffe), `utils.js`.
 - `assets/` – Bilder
 - `favicon.svg`
+
+Jede Seite lädt nur die aktive Sprachdatei aus `content/` (dynamisches `import()`); weitere Sprachen werden erst bei Umschaltung nachgeladen.
 
 ## Lokal testen
 
@@ -18,7 +24,17 @@ Ganz einfach ein statisches Verzeichnis servieren, z.B.:
 python3 -m http.server 8000
 ```
 
-und dann `http://localhost:8000` öffnen.
+und dann `http://localhost:8000` öffnen. Wichtig: Der Server muss `type="module"`-Skripte korrekt ausliefern (Python `http.server` tut das automatisch).
+
+## Code-Qualität (Dev-Tools)
+
+Prettier (Formatierung) und ESLint (Linting) sind als Dev-Dependencies eingerichtet – rein für die Entwicklung, ohne Einfluss auf das deployte Ergebnis:
+
+```bash
+npm install       # einmalig
+npm run format    # Prettier automatisch anwenden
+npm run lint      # ESLint prüfen
+```
 
 ## Deployment (Netlify / Vercel)
 

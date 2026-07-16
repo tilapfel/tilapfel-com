@@ -1,0 +1,93 @@
+/* Design tokens (dark is the default palette; [data-theme="light"] overrides it) */
+:root {
+  --bg-base: #000000;
+  --bg-card: #1c1c1e;
+  --bg-card-2: #242426;
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --text-tertiary: #6e6e73;
+  --divider: rgba(255, 255, 255, 0.14);
+  --focus-ring: #ffffff;
+  --link: #e5e5e7;
+}
+[data-theme='light'] {
+  --bg-base: #ffffff;
+  --bg-card: #ececef;
+  --bg-card-2: #dfdfe3;
+  --text-primary: #1c1c1e;
+  --text-secondary: #5a5a5e;
+  --text-tertiary: #7a7a7f;
+  --divider: rgba(0, 0, 0, 0.16);
+  --focus-ring: #1c1c1e;
+  --link: #1c1c1e;
+}
+
+/* Reset + global element defaults */
+* {
+  box-sizing: border-box;
+}
+html {
+  color-scheme: dark light;
+}
+body {
+  margin: 0;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+h1 {
+  font-size: clamp(30px, 6vw, 44px);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+a {
+  color: var(--link);
+}
+a:hover {
+  color: var(--text-secondary);
+}
+button {
+  font-family: inherit;
+}
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+img {
+  display: block;
+  max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .site-header,
+  .site-footer,
+  .btn-outline {
+    display: none;
+  }
+}
