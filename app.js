@@ -1,11 +1,10 @@
 'use strict';
 
-/* ---------- Icons ---------- */
+/* ---------- Icons (language-independent) ---------- */
 const ICON_ROLE_ACTIVIST = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4a1 1 0 0 0 1 1h2l7 4V5L6 9H4a1 1 0 0 0-1 1z"/><path d="M17 9a4 4 0 0 1 0 6"/></svg>';
 const ICON_ROLE_BOARD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
 const ICON_ROLE_LECTURER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-4 10 4-10 4-10-4z"/><path d="M6 11v4c0 1.2 2.7 2 6 2s6-.8 6-2v-4"/></svg>';
-const ROLE_ICONS = { activist: ICON_ROLE_ACTIVIST, board: ICON_ROLE_BOARD, lecturer: ICON_ROLE_LECTURER };
-const ROLE_ICON_KEYS = ['activist', 'board', 'lecturer'];
+const ROLE_ICONS = [ICON_ROLE_ACTIVIST, ICON_ROLE_BOARD, ICON_ROLE_LECTURER];
 
 const ICONS = {
   about: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c0-4 3.5-6.5 7.5-6.5s7.5 2.5 7.5 6.5"/></svg>',
@@ -16,7 +15,7 @@ const ICONS = {
   sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>',
   moon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.8A8.2 8.2 0 0 1 9.2 4a8.2 8.2 0 1 0 10.8 10.8z"/></svg>',
   close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
-  lang: '<svg viewBox="0 0 24 24"><text x="4" y="16" font-size="11" font-weight="700" fill="currentColor" font-family="Georgia, serif">文</text><text x="13" y="19" font-size="11" font-weight="700" fill="currentColor" font-family="Arial, sans-serif">A</text></svg>'
+  globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z"/></svg>'
 };
 const ICON_GRID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>';
 const ICON_HEART_GLYPH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9C1 8 2 4 6 4c2 0 4 1.2 6 4 2-2.8 4-4 6-4 4 0 5 4 3.5 7-2.5 4.6-9.5 9-9.5 9z"/></svg>';
@@ -28,95 +27,18 @@ const ICON_FACEBOOK_SHARED = '<svg viewBox="0 0 24 24" fill="none" stroke="curre
 const ICON_LINKEDIN_SHARED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7.5" cy="7" r="1.3" fill="currentColor" stroke="none"/><path d="M7.5 10.2V19" stroke-linecap="round" stroke-width="2.2"/><path d="M12 10.2V19M12 13.8c0-2.4 1.4-3.6 3-3.6s3 1.2 3 3.6V19" stroke-linecap="round" stroke-width="2.2"/></svg>';
 const ICON_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h8l3 3v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1z"/><path d="M9 10h6M9 13.5h6M9 17h4"/></svg>';
 const ICON_MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 6.5l8 6 8-6"/></svg>';
-const ICON_LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5 14.5 9.5"/><path d="M11 8l1.5-1.5a3 3 0 0 1 4.2 4.2L15 12.2M13 16l-1.5 1.5a3 3 0 0 1-4.2-4.2L8.7 11.8"/></svg>';
+const ICON_LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(12 12) scale(1.4) translate(-12 -12)"><path d="M9.5 14.5 14.5 9.5"/><path d="M11 8l1.5-1.5a3 3 0 0 1 4.2 4.2L15 12.2M13 16l-1.5 1.5a3 3 0 0 1-4.2-4.2L8.7 11.8"/></g></svg>';
 
-/* ---------- Nav ---------- */
+/* ---------- Nav structure (route + icon are language-independent; labels come from the active locale) ---------- */
 const NAV = [
-  { route: 'about', icon: 'about', label: { de: 'About', en: 'About' } },
-  { route: 'portfolio', icon: 'portfolio', label: { de: 'Portfolio', en: 'Portfolio' } },
-  { route: 'focus', icon: 'focus', label: { de: 'Focus', en: 'Focus' } },
-  { route: 'events', icon: 'events', label: { de: 'Events', en: 'Events' } },
-  { route: 'library', icon: 'library', label: { de: 'Library', en: 'Library' } }
+  { route: 'about', icon: 'about' },
+  { route: 'portfolio', icon: 'portfolio' },
+  { route: 'focus', icon: 'focus' },
+  { route: 'events', icon: 'events' },
+  { route: 'library', icon: 'library' }
 ];
 
-/* ---------- Content data ---------- */
-const PORTFOLIO = [
-  { slug: 'studium', date: 'Seit 2010', date_en: 'Since 2010', category: 'Ausbildung', category_en: 'Education', location: 'Platzhalter', location_en: 'Placeholder', title: 'Studium & Ausbildung', title_en: 'Studies & Training', short: 'Grundlegende Ausbildung, auf der die heutige Arbeit aufbaut.', short_en: 'Foundational education underlying the current work.', full: 'Details zu Studiengang und Ausbildungsstationen folgen hier in Kürze.', full_en: 'Details on degree program and training stages will be added here soon.', approach: '(Platzhalter – wird ergänzt)', approach_en: '(Placeholder – to be added)' },
-  { slug: 'dozent-aufbau', date: 'Seit 2019', date_en: 'Since 2019', category: 'Werdegang', category_en: 'Career Path', location: 'Selbständig', location_en: 'Self-employed', title: 'Aufbau der Selbständigkeit als Dozent', title_en: 'Building a Career as a Lecturer', short: 'Entwicklung einer eigenständigen Vortrags- und Lehrtätigkeit.', short_en: 'Developing independent speaking and teaching work.', full: 'Seit mehreren Jahren baue ich eine selbständige Tätigkeit als Dozent und Referent auf – von ersten Einzelvorträgen bis zu regelmäßigen Lehraufträgen.', full_en: 'For several years I have been building independent work as a lecturer and speaker – from first individual talks to regular teaching assignments.', approach: 'Der Weg führte über ehrenamtliche Vorträge zu bezahlten Aufträgen bei Bildungseinrichtungen, Verbänden und Unternehmen.', approach_en: 'The path led from volunteer talks to paid assignments with educational institutions, associations and companies.' },
-  { slug: 'verbandsarbeit-tbv', date: 'Seit 2021', date_en: 'Since 2021', category: 'NGO-Engagement', category_en: 'NGO Engagement', location: 'Taubblinden-Verband', location_en: 'Deafblind Association', title: 'Vorstandsarbeit im Taubblinden-Verband', title_en: 'Board Work at the Deafblind Association', short: 'Interessenvertretung taubblinder Menschen auf Verbandsebene.', short_en: 'Representing deafblind people at the association level.', full: 'Als Vorstandsmitglied vertrete ich die Interessen taubblinder Menschen gegenüber Politik, Kostenträgern und Öffentlichkeit.', full_en: 'As a board member, I represent the interests of deafblind people to policymakers, funding bodies and the public.', approach: 'Dazu gehören Positionspapiere, Gespräche mit Ministerien und die Begleitung von Gesetzesvorhaben zur Teilhabe.', approach_en: 'This includes position papers, talks with ministries and following legislation on participation.' },
-  { slug: 'edbu-engagement', date: 'Seit 2022', date_en: 'Since 2022', category: 'NGO-Engagement', category_en: 'NGO Engagement', location: 'European Deafblind Union', location_en: 'European Deafblind Union', title: 'Mitarbeit in der European Deafblind Union', title_en: 'Work with the European Deafblind Union', short: 'Engagement für gemeinsame europäische Standards.', short_en: 'Engagement for shared European standards.', full: 'Mitarbeit in einer europäischen Arbeitsgruppe zu Standards und Empfehlungen für assistive Technologien für taubblinde Menschen.', full_en: 'Contributing to a European working group on standards and recommendations for assistive technology for deafblind people.', approach: 'Die Arbeitsgruppe bringt Vertreter:innen aus mehreren europäischen Ländern zusammen, um gemeinsame Mindeststandards zu erarbeiten.', approach_en: 'The working group brings together representatives from several European countries to develop shared minimum standards.' },
-  { slug: 'digitalisierung-beratung', date: 'Seit 2023', date_en: 'Since 2023', category: 'Eigenes Projekt', category_en: 'Own Project', location: 'Bundesweit', location_en: 'Nationwide', title: 'Barrierefreie Digitalisierung', title_en: 'Accessible Digitalization', short: 'Laufendes Beratungsprojekt für Behörden und Unternehmen.', short_en: 'Ongoing consulting project for public bodies and companies.', full: 'Beratung für Behörden und Unternehmen zur Umsetzung barrierefreier Software und Websites – von der ersten Konzeption bis zum Screenreader-Test.', full_en: 'Consulting for public bodies and companies implementing accessible software and websites – from initial concept to screen reader testing.', approach: 'Ich arbeite eng mit Entwicklungsteams zusammen und prüfe bestehende Anwendungen mit eigener Screenreader- und Braillezeilen-Praxis.', approach_en: 'I work closely with development teams and audit existing applications using my own screen reader and braille display practice.' },
-  { slug: 'programmieren-lernen', date: '2015–2018', date_en: '2015–2018', category: 'Eigener Weg', category_en: 'Personal Path', location: 'Selbststudium', location_en: 'Self-taught', title: 'Programmieren als taubblinder Mensch', title_en: 'Programming as a Deafblind Person', short: 'Aneignung von Softwareentwicklung trotz fehlender barrierefreier Lernwege.', short_en: 'Learning software development despite a lack of accessible learning paths.', full: 'Ich habe mir Programmierung weitgehend selbst beigebracht – mit Screenreader und Braillezeile, oft ohne barrierefreie Lernmaterialien.', full_en: 'I largely taught myself programming – using a screen reader and braille display, often without accessible learning materials.', approach: 'Dieser Weg prägt bis heute, wie ich Software für andere taubblinde Nutzer:innen gestalte.', approach_en: 'This path still shapes how I design software for other deafblind users today.' }
-];
-
-const TERMINE = [
-  { slug: 'digitale-teilhabe-heute', date: '22. Juli 2026', date_en: 'July 22, 2026', category: 'Vortrag', category_en: 'Talk', title: 'Digitale Teilhabe heute', title_en: 'Digital Participation Today', location: 'Fachtagung Inklusion, Berlin', location_en: 'Inclusion Conference, Berlin', detail: 'Ein Vortrag über den aktuellen Stand digitaler Teilhabe in Deutschland, mit Fokus auf öffentliche Verwaltung und Bildungseinrichtungen.', detail_en: 'A talk on the current state of digital participation in Germany, focused on public administration and education.', info: 'Zielgruppe: Fachpublikum aus Verwaltung und Bildung. Dauer: 45 Minuten inkl. Fragerunde.', info_en: 'Audience: professionals from administration and education. Duration: 45 minutes incl. Q&A.' },
-  { slug: 'vorstandssitzung-august', date: '5. August 2026', date_en: 'August 5, 2026', category: 'Vorstand', category_en: 'Board', title: 'Vorstandssitzung Taubblinden-Verband', title_en: 'Deafblind Association Board Meeting', location: 'Verbandsbüro, Köln', location_en: 'Association Office, Cologne', detail: 'Reguläre Vorstandssitzung zu laufenden Anträgen, Haushalt und anstehenden Veranstaltungen des Verbands.', detail_en: 'Regular board meeting covering ongoing applications, budget and upcoming association events.', info: 'Verbandsintern – Teilnahme nach Absprache mit der Geschäftsstelle.', info_en: 'Internal to the association – attendance by arrangement with the office.' },
-  { slug: 'barrierefreie-software-workshop', date: '14. September 2026', date_en: 'September 14, 2026', category: 'Workshop', category_en: 'Workshop', title: 'Barrierefreie Software gestalten', title_en: 'Designing Accessible Software', location: 'Online', location_en: 'Online', detail: 'Praxisworkshop für Entwicklungsteams: gemeinsames Testen eigener Anwendungen mit Screenreader und Braillezeile.', detail_en: 'Hands-on workshop for engineering teams: testing your own applications together with a screen reader and braille display.', info: 'Zielgruppe: Entwickler:innen und Produktteams. Dauer: 3 Stunden, max. 15 Teilnehmende.', info_en: 'Audience: developers and product teams. Duration: 3 hours, max. 15 participants.' },
-  { slug: 'taubblind-leben-wien', date: '2. Oktober 2026', date_en: 'October 2, 2026', category: 'Vortrag', category_en: 'Talk', title: 'Taubblind leben – Erfahrungsbericht', title_en: 'Living Deafblind – A First-Hand Account', location: 'Universität Wien', location_en: 'University of Vienna', detail: 'Persönlicher Erfahrungsbericht über Alltag, Kommunikation und Selbstbestimmung als taubblinder Mensch.', detail_en: 'A personal account of everyday life, communication and self-determination as a deafblind person.', info: 'Zielgruppe: Studierende und Öffentlichkeit. Dauer: 60 Minuten.', info_en: 'Audience: students and the public. Duration: 60 minutes.' },
-  { slug: 'edbu-treffen-bruessel', date: '20. Oktober 2026', date_en: 'October 20, 2026', category: 'International', category_en: 'International', title: 'EDBU Arbeitsgruppentreffen', title_en: 'EDBU Working Group Meeting', location: 'Brüssel', location_en: 'Brussels', detail: 'Zweitägiges Treffen der europäischen Arbeitsgruppe Technologie zur Abstimmung gemeinsamer Standards.', detail_en: 'Two-day meeting of the European technology working group to align on shared standards.', info: 'Teilnahme auf Einladung der European Deafblind Union.', info_en: 'By invitation of the European Deafblind Union.' },
-  { slug: 'screenreader-testing-hamburg', date: '11. November 2026', date_en: 'November 11, 2026', category: 'Workshop', category_en: 'Workshop', title: 'Screenreader-Testing für Entwicklerteams', title_en: 'Screen Reader Testing for Dev Teams', location: 'Hamburg', location_en: 'Hamburg', detail: 'Hands-on-Workshop zum systematischen Testen von Web- und App-Oberflächen mit gängigen Screenreadern.', detail_en: 'Hands-on workshop on systematically testing web and app interfaces with common screen readers.', info: 'Zielgruppe: QA und Entwicklung. Dauer: ganztägig.', info_en: 'Audience: QA and engineering. Duration: full day.' }
-];
-
-const PAST_TERMINE_DE = [
-  { date: '8. Mai 2025', category: 'International', title: 'EDBU Generalversammlung', location: 'Kopenhagen' },
-  { date: '12. November 2025', category: 'Vortrag', title: 'Inklusionstage Frankfurt', location: 'Frankfurt am Main' }
-];
-const PAST_TERMINE_EN = [
-  { date: 'May 8, 2025', category: 'International', title: 'EDBU General Assembly', location: 'Copenhagen' },
-  { date: 'November 12, 2025', category: 'Talk', title: 'Inclusion Days Frankfurt', location: 'Frankfurt am Main' }
-];
-
-const LIBRARY_DE = [
-  { type: 'App', title: 'AccessNav', desc: 'Navigations-App mit taktiler und akustischer Rückmeldung für taubblinde Nutzer:innen.' },
-  { type: 'Essay', title: 'Doppelte Sinnesbeeinträchtigung', desc: 'Fachbeitrag über die besonderen Anforderungen an digitale Barrierefreiheit.' },
-  { type: 'Podcast', title: 'Zwischentöne', desc: 'Interviewreihe mit Aktivist:innen aus der Behindertenbewegung.' }
-];
-const LIBRARY_EN = [
-  { type: 'App', title: 'AccessNav', desc: 'Navigation app with tactile and audio feedback for deafblind users.' },
-  { type: 'Essay', title: 'Dual Sensory Impairment', desc: 'An article on the specific accessibility requirements involved.' },
-  { type: 'Podcast', title: 'Zwischentöne', desc: 'An interview series with activists from the disability rights movement.' }
-];
-
-const PRESS_DE = [
-  { outlet: 'Deutschlandfunk', date: 'April 2025', title: 'Wenn zwei Sinne fehlen, wächst die Stimme' },
-  { outlet: 'Süddeutsche Zeitung', date: 'November 2024', title: 'Der Mann, der Barrieren programmiert' },
-  { outlet: 'taz', date: 'Februar 2026', title: 'Teilhabe ist keine Frage der Technik allein' }
-];
-const PRESS_EN = [
-  { outlet: 'Deutschlandfunk', date: 'April 2025', title: 'When Two Senses Are Missing, the Voice Grows Louder' },
-  { outlet: 'Süddeutsche Zeitung', date: 'November 2024', title: 'The Man Who Codes Away Barriers' },
-  { outlet: 'taz', date: 'February 2026', title: 'Participation Is Not a Question of Technology Alone' }
-];
-
-const FOCUS_ITEMS_DE = [
-  { title: 'Verbandsarbeit bei TBV und EDBU', desc: 'Interessenvertretung auf nationaler und europäischer Ebene.' },
-  { title: 'Aufbau der Selbständigkeit als Dozent', desc: 'Eigenständige Vortrags- und Lehrtätigkeit rund um Barrierefreiheit.' },
-  { title: 'Programmieren lernen als Taubblinder', desc: 'Zugang zu Softwareentwicklung trotz fehlender barrierefreier Lernwege.' }
-];
-const FOCUS_ITEMS_EN = [
-  { title: 'Association Work at TBV and EDBU', desc: 'Advocacy at the national and European level.' },
-  { title: 'Building a Career as a Lecturer', desc: 'Independent speaking and teaching work around accessibility.' },
-  { title: 'Learning to Program as Deafblind', desc: 'Access to software development despite a lack of accessible learning paths.' }
-];
-
-const WERTE_DE = ['Softwareentwicklung (Programmieren)', 'Pflanzlich kochen (Vegan)', 'Psychische Gesundheit (Psychologie)', 'Naturaktivitäten (Natursport)', 'Menschenrechte (Gerechtigkeit)'];
-const WERTE_EN = ['Software Development (Programming)', 'Plant-Based Cooking (Vegan)', 'Mental Health (Psychology)', 'Outdoor Activities (Nature Sports)', 'Human Rights (Justice)'];
-
-const PRINCIPLES_DE = ['Barrierefreiheit ist kein Extra, sondern die Grundlage.', 'Teilhabe entsteht durch Zugang, nicht durch Rücksicht.', 'Ich zeige, was mit den richtigen Werkzeugen möglich ist.'];
-const PRINCIPLES_EN = ['Accessibility is not an extra, it is the foundation.', 'Participation comes from access, not from pity.', 'I show what is possible with the right tools.'];
-
-const BOOKABLE_DE = [
-  { title: 'Vortrag', desc: 'Vorträge zu Taubblindheit, Barrierefreiheit und digitaler Teilhabe für Fachpublikum und Bildungseinrichtungen.' },
-  { title: 'Beratung', desc: 'Barrierefreiheits-Audits und Beratung für Behörden, Verbände und Unternehmen.' },
-  { title: 'Dozententätigkeit', desc: 'Lehrveranstaltungen und Workshops zu barrierefreier Softwaregestaltung.' }
-];
-const BOOKABLE_EN = [
-  { title: 'Talk', desc: 'Talks on deafblindness, accessibility and digital participation for professionals and schools.' },
-  { title: 'Consulting', desc: 'Accessibility audits and consulting for public bodies, associations and companies.' },
-  { title: 'Lecturing', desc: 'Courses and workshops on accessible software design.' }
-];
-
+/* ---------- Bio links: proper nouns / brand names, identical across languages ---------- */
 const BIO_LINKS = [
   { label: 'Website', href: '#/', url: 'tilapfel.com', bg: 'oklch(52% 0.09 200)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_NETWORK },
   { label: 'Stiftung', href: 'https://stiftung.tilapfel.com', url: 'stiftung.tilapfel.com', bg: 'oklch(52% 0.09 60)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_HEART_GLYPH },
@@ -128,70 +50,36 @@ const BIO_LINKS = [
   { label: 'GitHub', href: 'https://github.com/tilapfel', url: 'github.com/tilapfel', bg: 'oklch(30% 0 0)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_GITHUB_GLYPH }
 ];
 
-const SOCIAL_FOOTER = [
-  { label: 'YouTube', href: 'https://www.youtube.com/@tilapfel', icon: ICON_YOUTUBE_GLYPH },
-  { label: 'Instagram', href: 'https://www.instagram.com/tilapfel', icon: ICON_INSTAGRAM_GLYPH },
-  { label: 'Facebook', href: 'https://www.facebook.com/tilapfel', icon: ICON_FACEBOOK_SHARED },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tilapfel', icon: ICON_LINKEDIN_SHARED },
-  { label: 'GitHub', href: 'https://github.com/tilapfel', icon: ICON_GITHUB_GLYPH }
-];
-
-const T_DE = {
-  skip: 'Zum Inhalt springen', heroTagline: 'Taubblind-Aktivist',
-  aboutTitle: 'About', aboutSubtitle: 'Wer ich bin und woran ich arbeite.', moreAbout: 'Mehr über mich →',
-  uberMichText: 'Als taubblinder Mensch setze ich mich seit über zehn Jahren für digitale und gesellschaftliche Teilhabe ein. Ich halte Vorträge, sitze im Vorstand eines Fachverbands und engagiere mich als Dozent – aus eigener Erfahrung und mit klarem Anspruch an Zugänglichkeit für alle.',
-  aboutP1: 'Ich bin Til Apfel, taubblind seit meiner Kindheit. Diese doppelte Sinnesbeeinträchtigung hat meinen Blick auf Barrierefreiheit geschärft – nicht als Checkliste, sondern als Grundvoraussetzung für ein selbstbestimmtes Leben.',
-  aboutP2: 'Als Aktivist und Dozent spreche ich auf Fachtagungen, Kongressen und in Schulen über Taubblindheit, assistive Technologien und digitale Teilhabe. Im Vorstand eines Fachverbands vertrete ich die Interessen taubblinder Menschen gegenüber Politik und Institutionen.',
-  aboutP3: 'Mein Antrieb ist einfach: Ich will, dass niemand wegen fehlender Barrierefreiheit von Information, Bildung oder Mitbestimmung ausgeschlossen wird – und ich arbeite jeden Tag daran, das zu ändern.',
-  haltungHeading: 'Meine Haltung', rollenHeading: 'Rollen', werteHeading: 'Werte',
-  aboutCtaText: 'Interesse an einer Zusammenarbeit?', aboutCtaLink: 'Jetzt Kontakt aufnehmen',
-  portfolioTitle: 'Portfolio', portfolioSubtitle: 'Wege, die ich gegangen bin.',
-  focusTitle: 'Focus', focusSubtitle: 'Wofür ich stehe.', focusClosing: 'Zu diesen Themen bin ich grundsätzlich ansprechbar und buchbar.', moreFocus: 'Mehr zu meinen Themen →',
-  eventsTitle: 'Events', eventsSubtitle: 'Wo Sie mich treffen und buchen können.', registerBtn: 'Zu diesem Termin anmelden',
-  upcomingHeading: 'Kommende Termine', bookableHeading: 'Buchbare Formate', ctaKostenvoranschlag: 'Kostenvoranschlag anfragen', pastHeading: 'Vergangene Termine',
-  libraryTitle: 'Library', librarySubtitle: 'Was ich veröffentlicht habe.', pressHeading: 'Presse & Medien', moreLibrary: 'Zur Library →',
-  impressumSubtitle: 'Rechtliche Angaben zu meiner Person.',
-  formularTitle: 'Kostenvoranschlag anfragen', formularSubtitle: 'Fragen Sie mich nach einem Angebot.',
-  kontaktTitle: 'Kontakt', kontaktSubtitle: 'Schreiben Sie mir eine Nachricht.', labelNachricht: 'Nachricht', kontaktSubmitBtn: 'Nachricht senden',
-  labelName: 'Name', labelEmail: 'E-Mail', labelArt: 'Art des Anliegens', labelBeschreibung: 'Beschreibung', labelZeitrahmen: 'Gewünschter Zeitrahmen', submitBtn: 'Anfrage senden',
-  alleProjekte: 'Alle Portfolio-Einträge ansehen →', alleTermine: 'Alle Events ansehen →',
-  footerKontakt: 'Kontakt', footerImpressum: 'Impressum', closeDialog: 'Schließen',
-  bioIntro: 'Taubblind-Aktivist. Ich setze mich für digitale und gesellschaftliche Teilhabe taubblinder Menschen ein.'
-};
-const T_EN = {
-  skip: 'Skip to content', heroTagline: 'Deafblind Activist',
-  aboutTitle: 'About', aboutSubtitle: 'Who I am and what I work on.', moreAbout: 'More about me →',
-  uberMichText: 'As a deafblind person, I have worked for over ten years on digital and social participation. I give talks, serve on the board of a professional association, and work as a lecturer – drawing on lived experience and a clear commitment to accessibility for everyone.',
-  aboutP1: "I'm Til Apfel, deafblind since childhood. This dual sensory impairment has sharpened my view of accessibility – not as a checklist, but as a basic requirement for a self-determined life.",
-  aboutP2: 'As an activist and lecturer, I talk at conferences, congresses and schools about deafblindness, assistive technology and digital participation. As a board member of a professional association, I represent the interests of deafblind people to policymakers and institutions.',
-  aboutP3: 'My motivation is simple: no one should be excluded from information, education or participation because of missing accessibility – and I work on changing that every day.',
-  haltungHeading: 'My Approach', rollenHeading: 'Roles', werteHeading: 'Values',
-  aboutCtaText: 'Interested in working together?', aboutCtaLink: 'Get in touch',
-  portfolioTitle: 'Portfolio', portfolioSubtitle: 'Paths I have taken.',
-  focusTitle: 'Focus', focusSubtitle: 'What I stand for.', focusClosing: "I'm generally approachable and bookable on these topics.", moreFocus: 'More on my focus →',
-  eventsTitle: 'Events', eventsSubtitle: 'Where you can meet and book me.', registerBtn: 'Register for this event',
-  upcomingHeading: 'Upcoming Events', bookableHeading: 'Bookable Formats', ctaKostenvoranschlag: 'Request a quote', pastHeading: 'Past Events',
-  libraryTitle: 'Library', librarySubtitle: 'What I have published.', pressHeading: 'Press & Media', moreLibrary: 'Go to Library →',
-  impressumSubtitle: 'Legal information about me.',
-  formularTitle: 'Request a Quote', formularSubtitle: 'Ask me for a quote.',
-  kontaktTitle: 'Contact', kontaktSubtitle: 'Send me a message.', labelNachricht: 'Message', kontaktSubmitBtn: 'Send message',
-  labelName: 'Name', labelEmail: 'Email', labelArt: 'Type of request', labelBeschreibung: 'Description', labelZeitrahmen: 'Desired timeframe', submitBtn: 'Send request',
-  alleProjekte: 'View all portfolio entries →', alleTermine: 'View all events →',
-  footerKontakt: 'Contact', footerImpressum: 'Legal Notice', closeDialog: 'Close',
-  bioIntro: 'Deafblind activist and advocate. I work for the digital and social participation of deafblind people.'
-};
-
 const CONTACT_EMAIL = 'info@tilapfel.com';
 
-/* ---------- Helpers ---------- */
-function pick(obj, lang) {
-  const out = {};
-  for (const k in obj) {
-    if (k.endsWith('_en')) continue;
-    out[k] = (lang === 'en' && obj[k + '_en'] !== undefined) ? obj[k + '_en'] : obj[k];
-  }
-  return out;
+/* ---------- Localization registry ----------
+   Every file in ./locales/ must export a default object with the exact
+   same shape (see locales/de.js). Adding a language = adding a file here
+   plus a matching entry in AVAILABLE_LOCALES / LOCALE_META. Only the
+   active locale is ever fetched; others load on demand when switched to. */
+const AVAILABLE_LOCALES = ['de', 'en'];
+const LOCALE_META = { de: { nativeName: 'Deutsch' }, en: { nativeName: 'English' } };
+const DEFAULT_LOCALE = 'de';
+
+const localeCache = new Map();
+function loadLocale(code) {
+  if (localeCache.has(code)) return Promise.resolve(localeCache.get(code));
+  return import(`./locales/${code}.js`).then(mod => {
+    localeCache.set(code, mod.default);
+    return mod.default;
+  });
 }
+
+function detectSystemLocale() {
+  const langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || DEFAULT_LOCALE];
+  for (const l of langs) {
+    const code = String(l).toLowerCase().split('-')[0];
+    if (AVAILABLE_LOCALES.includes(code)) return code;
+  }
+  return DEFAULT_LOCALE;
+}
+
+/* ---------- Helpers ---------- */
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
@@ -202,11 +90,12 @@ try { storedLang = localStorage.getItem('tilapfel-lang'); } catch (e) {}
 try { storedTheme = localStorage.getItem('tilapfel-theme'); } catch (e) {}
 
 const state = {
-  lang: storedLang || ((navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'de'),
+  lang: (storedLang && AVAILABLE_LOCALES.includes(storedLang)) ? storedLang : detectSystemLocale(),
   theme: storedTheme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'),
   eventsExpanded: false,
   langMenuOpen: false
 };
+let locale = null;
 
 function parseRoute() {
   const h = location.hash || '#/';
@@ -220,14 +109,13 @@ function computeVals() {
   const section = segs[0] || '';
   const slug = segs[1];
   const isBio = section === 'bio';
-  const lang = state.lang;
-  const t = lang === 'en' ? T_EN : T_DE;
+  const t = locale.t;
 
-  const portfolioLocalized = PORTFOLIO.map(p => ({ ...pick(p, lang), href: '#/portfolio/' + p.slug }));
-  const termineLocalized = TERMINE.map(tm => ({
-    ...pick(tm, lang),
+  const portfolioLocalized = locale.portfolio.map(p => ({ ...p, href: '#/portfolio/' + p.slug }));
+  const termineLocalized = locale.termine.map(tm => ({
+    ...tm,
     href: '#/events/' + tm.slug,
-    rsvpHref: 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent((lang === 'en' ? 'Registration: ' : 'Anmeldung: ') + (lang === 'en' ? tm.title_en : tm.title))
+    rsvpHref: 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(t.emailSubjectRegistration + tm.title)
   }));
 
   const currentPortfolio = section === 'portfolio' && slug ? portfolioLocalized.find(p => p.slug === slug) : null;
@@ -236,37 +124,31 @@ function computeVals() {
   const expanded = state.eventsExpanded;
   const visibleTermine = expanded ? termineLocalized : termineLocalized.slice(0, 3);
   const remaining = termineLocalized.length - 3;
-  const pastTermine = lang === 'en' ? PAST_TERMINE_EN : PAST_TERMINE_DE;
-  const roleLabels = lang === 'en' ? ['Activist', 'Board Member', 'Lecturer'] : ['Aktivist', 'Vorstand', 'Dozent'];
-  const roleDescs = lang === 'en'
-    ? ['Advocacy for the rights and visibility of deafblind people.', 'Advocacy in the professional association for deafblind people.', 'Teaching accessibility and participation through talks and courses.']
-    : ['Engagement für die Rechte und Sichtbarkeit taubblinder Menschen.', 'Interessenvertretung im Fachverband für taubblinde Menschen.', 'Vermittlung von Wissen zu Barrierefreiheit und Teilhabe in Vorträgen und Lehrveranstaltungen.'];
 
   return {
-    route, section, slug, isBio, lang, t,
-    navItems: NAV.map(n => ({ ...n, label: n.label[lang], href: '#/' + n.route, current: section === n.route })),
+    route, section, slug, isBio, lang: locale.code, t,
+    navItems: NAV.map(n => ({ ...n, label: locale.nav[n.route], href: '#/' + n.route, current: section === n.route })),
     portfolio: portfolioLocalized,
     homePortfolio: portfolioLocalized.slice(0, 2),
     termine: termineLocalized,
     homeTermine: termineLocalized.slice(0, 1),
     visibleTermine,
     hasMoreTermine: remaining > 0 && !expanded,
-    moreEventsLabel: lang === 'en' ? ('Show ' + remaining + ' more events') : ('Weitere ' + remaining + ' Termine anzeigen'),
-    pastTermine,
-    hasPastTermine: pastTermine.length > 0,
+    moreEventsLabel: locale.code === 'en' ? ('Show ' + remaining + ' more events') : ('Weitere ' + remaining + ' Termine anzeigen'),
+    pastTermine: locale.pastTermine,
+    hasPastTermine: locale.pastTermine.length > 0,
     currentPortfolio, currentTermin,
-    library: lang === 'en' ? LIBRARY_EN : LIBRARY_DE,
-    homeLibrary: (lang === 'en' ? LIBRARY_EN : LIBRARY_DE).slice(0, 2),
-    press: lang === 'en' ? PRESS_EN : PRESS_DE,
-    focusItems: lang === 'en' ? FOCUS_ITEMS_EN : FOCUS_ITEMS_DE,
-    werte: lang === 'en' ? WERTE_EN : WERTE_DE,
-    principles: lang === 'en' ? PRINCIPLES_EN : PRINCIPLES_DE,
-    bookableFormats: lang === 'en' ? BOOKABLE_EN : BOOKABLE_DE,
-    roles: ROLE_ICON_KEYS.map((key, i) => ({ label: roleLabels[i], icon: ROLE_ICONS[key] })),
-    aboutRoles: ROLE_ICON_KEYS.map((key, i) => ({ title: roleLabels[i], desc: roleDescs[i], icon: ROLE_ICONS[key] })),
+    library: locale.library,
+    homeLibrary: locale.library.slice(0, 2),
+    press: locale.press,
+    focusItems: locale.focusItems,
+    werte: locale.werte,
+    principles: locale.principles,
+    bookableFormats: locale.bookable,
+    roles: locale.roleLabels.map((label, i) => ({ label, icon: ROLE_ICONS[i] })),
+    aboutRoles: locale.roleLabels.map((title, i) => ({ title, desc: locale.roleDescs[i], icon: ROLE_ICONS[i] })),
     bioLinks: BIO_LINKS,
-    socialLinks: SOCIAL_FOOTER,
-    auftragArten: lang === 'en' ? ['Consulting', 'Talk', 'Software Development', 'Other'] : ['Beratung', 'Vortrag', 'Softwareentwicklung', 'Sonstiges']
+    auftragArten: locale.auftragArten
   };
 }
 
@@ -651,36 +533,31 @@ function renderFooter(v) {
   const langMenu = state.langMenuOpen ? `
     <div class="lang-menu-backdrop" data-close-lang-menu></div>
     <div class="lang-menu">
-      <button type="button" class="${v.lang === 'de' ? 'active' : ''}" data-set-lang="de" aria-pressed="${v.lang === 'de'}"><span>Deutsch</span>${v.lang === 'de' ? '<span aria-hidden="true">✓</span>' : ''}</button>
-      <button type="button" class="${v.lang === 'en' ? 'active' : ''}" data-set-lang="en" aria-pressed="${v.lang === 'en'}"><span>English</span>${v.lang === 'en' ? '<span aria-hidden="true">✓</span>' : ''}</button>
+      ${AVAILABLE_LOCALES.map(code => `
+        <button type="button" class="${v.lang === code ? 'active' : ''}" data-set-lang="${code}" aria-pressed="${v.lang === code}">
+          <span>${esc(LOCALE_META[code].nativeName)}</span>${v.lang === code ? '<span aria-hidden="true">✓</span>' : ''}
+        </button>`).join('')}
     </div>` : '';
   const themeLabel = state.theme === 'dark'
     ? (v.lang === 'en' ? 'Switch to light mode' : 'Zu Hell wechseln')
     : (v.lang === 'en' ? 'Switch to dark mode' : 'Zu Dunkel wechseln');
-  const socials = v.socialLinks.map(s => `
-    <a class="icon-btn" href="${s.href}" aria-label="${esc(s.label)}" title="${esc(s.label)}" target="_blank" rel="noopener noreferrer">
-      <span aria-hidden="true">${s.icon}</span>
-    </a>`).join('');
 
   return `
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-row">
-        <div class="footer-left">
-          <button type="button" class="icon-btn" data-action="toggle-theme" aria-label="${esc(themeLabel)}" title="${esc(themeLabel)}">
-            <span aria-hidden="true">${state.theme === 'dark' ? ICONS.moon : ICONS.sun}</span>
+        <button type="button" class="icon-btn" data-action="toggle-theme" aria-label="${esc(themeLabel)}" title="${esc(themeLabel)}">
+          <span aria-hidden="true">${state.theme === 'dark' ? ICONS.moon : ICONS.sun}</span>
+        </button>
+        <div class="lang-menu-wrap">
+          <button type="button" class="icon-btn" data-action="toggle-lang-menu" aria-expanded="${state.langMenuOpen}" aria-haspopup="true" aria-label="Sprache / Language" title="Sprache / Language">
+            <span aria-hidden="true">${ICONS.globe}</span>
           </button>
-          <div class="lang-menu-wrap">
-            <button type="button" class="icon-btn" data-action="toggle-lang-menu" aria-expanded="${state.langMenuOpen}" aria-haspopup="true" aria-label="Sprache / Language" title="Sprache / Language">
-              <span aria-hidden="true">${ICONS.lang}</span>
-            </button>
-            ${langMenu}
-          </div>
-          <a class="icon-btn" href="#/impressum" aria-label="${esc(t.footerImpressum)}" title="${esc(t.footerImpressum)}"><span aria-hidden="true">${ICON_DOC}</span></a>
-          <a class="icon-btn" href="#/kontakt" aria-label="${esc(t.footerKontakt)}" title="${esc(t.footerKontakt)}"><span aria-hidden="true">${ICON_MAIL}</span></a>
-          <a class="icon-btn" href="#/bio" aria-label="Bio" title="Bio"><span aria-hidden="true">${ICON_LINK}</span></a>
+          ${langMenu}
         </div>
-        <div class="footer-social">${socials}</div>
+        <a class="icon-btn" href="#/impressum" aria-label="${esc(t.footerImpressum)}" title="${esc(t.footerImpressum)}"><span aria-hidden="true">${ICON_DOC}</span></a>
+        <a class="icon-btn" href="#/kontakt" aria-label="${esc(t.footerKontakt)}" title="${esc(t.footerKontakt)}"><span aria-hidden="true">${ICON_MAIL}</span></a>
+        <a class="icon-btn" href="#/bio" aria-label="Bio" title="Bio"><span aria-hidden="true">${ICON_LINK}</span></a>
       </div>
       <span class="footer-copy">© 2026 Til Apfel</span>
     </div>
@@ -703,6 +580,7 @@ function titleFor(section, t) {
 }
 
 function render() {
+  if (!locale) return;
   const v = computeVals();
   document.documentElement.setAttribute('data-theme', state.theme);
   document.documentElement.setAttribute('lang', v.lang);
@@ -734,6 +612,18 @@ function render() {
   if (modal) modal.focus();
 }
 
+/* ---------- Language switching ---------- */
+function setLang(code) {
+  if (!AVAILABLE_LOCALES.includes(code)) return;
+  loadLocale(code).then(loaded => {
+    locale = loaded;
+    state.lang = code;
+    state.langMenuOpen = false;
+    try { localStorage.setItem('tilapfel-lang', code); } catch (e) {}
+    render();
+  });
+}
+
 /* ---------- Event wiring ---------- */
 function attachListeners(v) {
   document.querySelectorAll('[data-close-modal]').forEach(el => {
@@ -754,12 +644,7 @@ function attachListeners(v) {
   const langBackdrop = document.querySelector('[data-close-lang-menu]');
   if (langBackdrop) langBackdrop.addEventListener('click', () => { state.langMenuOpen = false; render(); });
   document.querySelectorAll('[data-set-lang]').forEach(el => {
-    el.addEventListener('click', () => {
-      state.lang = el.getAttribute('data-set-lang');
-      state.langMenuOpen = false;
-      try { localStorage.setItem('tilapfel-lang', state.lang); } catch (e) {}
-      render();
-    });
+    el.addEventListener('click', () => setLang(el.getAttribute('data-set-lang')));
   });
 
   const showMoreBtn = document.querySelector('[data-action="show-more-events"]');
@@ -771,7 +656,7 @@ function attachListeners(v) {
     const fd = new FormData(auftragForm);
     const t = v.t;
     const body = `Name: ${fd.get('name')}\nE-Mail: ${fd.get('email')}\n${t.labelArt}: ${fd.get('art')}\n${t.labelZeitrahmen}: ${fd.get('zeitrahmen')}\n\n${fd.get('beschreibung')}`;
-    window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent((v.lang === 'en' ? 'Quote request: ' : 'Kostenvoranschlag-Anfrage: ') + fd.get('art')) + '&body=' + encodeURIComponent(body);
+    window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(t.emailSubjectQuote + fd.get('art')) + '&body=' + encodeURIComponent(body);
   });
 
   const kontaktForm = document.querySelector('[data-form="kontakt"]');
@@ -779,7 +664,7 @@ function attachListeners(v) {
     e.preventDefault();
     const fd = new FormData(kontaktForm);
     const body = `Name: ${fd.get('name')}\nE-Mail: ${fd.get('email')}\n\n${fd.get('nachricht')}`;
-    window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(v.lang === 'en' ? 'Contact form message' : 'Nachricht über Kontaktformular') + '&body=' + encodeURIComponent(body);
+    window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(v.t.emailSubjectContact) + '&body=' + encodeURIComponent(body);
   });
 }
 
@@ -801,4 +686,8 @@ try {
   });
 } catch (e) {}
 
-render();
+/* ---------- Boot: fetch only the active locale, then render ---------- */
+loadLocale(state.lang).then(loaded => {
+  locale = loaded;
+  render();
+});
