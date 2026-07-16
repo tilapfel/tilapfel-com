@@ -15,7 +15,11 @@ const ICONS = {
   sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>',
   moon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.8A8.2 8.2 0 0 1 9.2 4a8.2 8.2 0 1 0 10.8 10.8z"/></svg>',
   close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
-  globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z"/></svg>'
+  globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z"/></svg>',
+  share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M4 13v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>',
+  easyLanguage: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h8l3 3v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1z"/><path d="M9 12.5h6"/><circle cx="17" cy="17.5" r="4.5" fill="var(--bg-card)"/><path d="m15.1 17.5 1.3 1.3 2.4-2.6"/></svg>',
+  paragraph: '<svg viewBox="0 0 24 24"><text x="12" y="18.5" font-size="19" font-weight="700" fill="currentColor" text-anchor="middle" font-family="Georgia, \'Times New Roman\', serif">§</text></svg>'
 };
 const ICON_GRID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>';
 const ICON_HEART_GLYPH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9C1 8 2 4 6 4c2 0 4 1.2 6 4 2-2.8 4-4 6-4 4 0 5 4 3.5 7-2.5 4.6-9.5 9-9.5 9z"/></svg>';
@@ -38,18 +42,19 @@ const NAV = [
 ];
 
 /* ---------- Bio page links: proper nouns / brand names, identical across languages ----------
-   Primary links render as big tiles; social links render as a small icon row (linktr.ee-style). */
+   Primary links render as neutral full-width tiles; social links render as
+   small brand-colored circular icons in a row (linktr.ee-style). */
 const BIO_PRIMARY_LINKS = [
-  { label: 'Website', href: '#/', url: 'tilapfel.com', bg: 'oklch(52% 0.09 200)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_NETWORK },
-  { label: 'Stiftung', href: 'https://stiftung.tilapfel.com', url: 'stiftung.tilapfel.com', bg: 'oklch(52% 0.09 60)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_HEART_GLYPH },
-  { label: 'Apps', href: 'https://apps.tilapfel.com', url: 'apps.tilapfel.com', bg: 'oklch(52% 0.09 140)', fg: '#fff', fgMuted: 'rgba(255,255,255,0.72)', icon: ICON_GRID }
+  { label: 'Website', href: '#/', url: 'tilapfel.com', icon: ICON_NETWORK },
+  { label: 'Stiftung', href: 'https://stiftung.tilapfel.com', url: 'stiftung.tilapfel.com', icon: ICON_HEART_GLYPH },
+  { label: 'Apps', href: 'https://apps.tilapfel.com', url: 'apps.tilapfel.com', icon: ICON_GRID }
 ];
 const BIO_SOCIAL_LINKS = [
-  { label: 'YouTube', href: 'https://www.youtube.com/@tilapfel', icon: ICON_YOUTUBE_GLYPH },
-  { label: 'Instagram', href: 'https://www.instagram.com/tilapfel', icon: ICON_INSTAGRAM_GLYPH },
-  { label: 'Facebook', href: 'https://www.facebook.com/tilapfel', icon: ICON_FACEBOOK_SHARED },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tilapfel', icon: ICON_LINKEDIN_SHARED },
-  { label: 'GitHub', href: 'https://github.com/tilapfel', icon: ICON_GITHUB_GLYPH }
+  { label: 'YouTube', href: 'https://www.youtube.com/@tilapfel', bg: 'oklch(52% 0.09 25)', icon: ICON_YOUTUBE_GLYPH },
+  { label: 'Instagram', href: 'https://www.instagram.com/tilapfel', bg: 'oklch(52% 0.09 340)', icon: ICON_INSTAGRAM_GLYPH },
+  { label: 'Facebook', href: 'https://www.facebook.com/tilapfel', bg: 'oklch(52% 0.09 255)', icon: ICON_FACEBOOK_SHARED },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tilapfel', bg: 'oklch(52% 0.09 230)', icon: ICON_LINKEDIN_SHARED },
+  { label: 'GitHub', href: 'https://github.com/tilapfel', bg: 'oklch(30% 0 0)', icon: ICON_GITHUB_GLYPH }
 ];
 
 const CONTACT_EMAIL = 'info@tilapfel.com';
@@ -84,6 +89,24 @@ function detectSystemLocale() {
 /* ---------- Helpers ---------- */
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Only one utility popover (language/share/search) should be open at a time.
+function closeMenus() {
+  state.langMenuOpen = false;
+  state.shareMenuOpen = false;
+  state.searchOpen = false;
+}
+
+// Fallback when navigator.clipboard is unavailable/denied: select the URL text so the user can copy it manually.
+function selectShareUrl() {
+  const urlEl = document.querySelector('.share-url');
+  if (!urlEl) return;
+  const range = document.createRange();
+  range.selectNodeContents(urlEl);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
 }
 
 /* ---------- Shared card/pill/modal components ----------
@@ -153,6 +176,102 @@ function modalShell({ labelledBy, closeLabel, bodyHtml }) {
   </div>`;
 }
 
+/* ---------- Shared utility toggles (theme/language/share/search) ----------
+   Used by both the site footer and the Bio page's top-right bar, so the
+   markup and behavior exist exactly once. `dropDown` opens the popover
+   below the button instead of above, for use near the top of a page. */
+function themeToggleHtml(v) {
+  const label = state.theme === 'dark' ? v.t.themeToLight : v.t.themeToDark;
+  return `
+    <button type="button" class="icon-btn" data-action="toggle-theme" aria-label="${esc(label)}" title="${esc(label)}">
+      <span aria-hidden="true">${state.theme === 'dark' ? ICONS.moon : ICONS.sun}</span>
+    </button>`;
+}
+
+function langToggleHtml(v, { dropDown = false } = {}) {
+  const menu = state.langMenuOpen ? `
+    <div class="lang-menu-backdrop" data-close-lang-menu></div>
+    <div class="lang-menu${dropDown ? ' drop-down' : ''}">
+      ${AVAILABLE_LOCALES.map(code => `
+        <button type="button" class="${v.lang === code ? 'active' : ''}" data-set-lang="${code}" aria-pressed="${v.lang === code}">
+          <span>${esc(LOCALE_META[code].nativeName)}</span>${v.lang === code ? '<span aria-hidden="true">✓</span>' : ''}
+        </button>`).join('')}
+    </div>` : '';
+  return `
+    <div class="lang-menu-wrap">
+      <button type="button" class="icon-btn" data-action="toggle-lang-menu" aria-expanded="${state.langMenuOpen}" aria-haspopup="true" aria-label="Sprache / Language" title="Sprache / Language">
+        <span aria-hidden="true">${ICONS.globe}</span>
+      </button>
+      ${menu}
+    </div>`;
+}
+
+function shareToggleHtml(v, { dropDown = false } = {}) {
+  const t = v.t;
+  const menu = state.shareMenuOpen ? `
+    <div class="lang-menu-backdrop" data-close-share-menu></div>
+    <div class="lang-menu share-menu${dropDown ? ' drop-down' : ''}">
+      <p class="share-url">${esc(location.href)}</p>
+      <button type="button" class="btn-outline" data-action="copy-share-link">${esc(state.shareCopied ? t.linkCopied : t.copyLink)}</button>
+    </div>` : '';
+  return `
+    <div class="lang-menu-wrap">
+      <button type="button" class="icon-btn" data-action="toggle-share" aria-label="${esc(t.share)}" title="${esc(t.share)}">
+        <span aria-hidden="true">${ICONS.share}</span>
+      </button>
+      ${menu}
+    </div>`;
+}
+
+function searchToggleHtml(v, { dropDown = false } = {}) {
+  const t = v.t;
+  const menu = state.searchOpen ? `
+    <div class="lang-menu-backdrop" data-close-search></div>
+    <div class="lang-menu search-menu${dropDown ? ' drop-down' : ''}">
+      <input type="search" class="search-input" id="site-search-input" placeholder="${esc(t.searchPlaceholder)}" value="${esc(state.searchQuery)}" autocomplete="off">
+      <div class="search-results" id="site-search-results">${renderSearchResults()}</div>
+    </div>` : '';
+  return `
+    <div class="lang-menu-wrap">
+      <button type="button" class="icon-btn" data-action="toggle-search" aria-expanded="${state.searchOpen}" aria-label="${esc(t.search)}" title="${esc(t.search)}">
+        <span aria-hidden="true">${ICONS.search}</span>
+      </button>
+      ${menu}
+    </div>`;
+}
+
+/* ---------- Site search ----------
+   Index is rebuilt from the active locale (so results are language-
+   appropriate for free) and filtered on every keystroke without a full
+   page re-render, so the input never loses focus while typing. */
+function buildSearchIndex(loc) {
+  const idx = [];
+  NAV.forEach(n => idx.push({ title: loc.nav[n.route], href: '#/' + n.route }));
+  loc.portfolio.forEach(p => idx.push({ title: p.title, sub: p.short, href: '#/portfolio/' + p.slug }));
+  loc.termine.forEach(tm => idx.push({ title: tm.title, sub: tm.location, href: '#/events/' + tm.slug }));
+  loc.library.forEach(l => idx.push({ title: l.title, sub: l.desc, href: '#/library' }));
+  loc.focusItems.forEach(f => idx.push({ title: f.title, sub: f.desc, href: '#/focus' }));
+  idx.push({ title: loc.t.kontaktTitle, href: '#/kontakt' });
+  idx.push({ title: loc.t.formularTitle, href: '#/formular' });
+  idx.push({ title: 'Impressum', href: '#/impressum' });
+  idx.push({ title: 'Bio', href: '#/bio' });
+  return idx;
+}
+
+function renderSearchResults() {
+  const q = state.searchQuery.trim().toLowerCase();
+  if (!q) return '';
+  const matches = buildSearchIndex(locale)
+    .filter(item => item.title.toLowerCase().includes(q) || (item.sub && item.sub.toLowerCase().includes(q)))
+    .slice(0, 8);
+  if (!matches.length) return `<p class="search-empty">${esc(locale.t.searchNoResults)}</p>`;
+  return matches.map(m => `
+    <a class="search-result" href="${m.href}" data-action="close-search">
+      <span class="search-result-title">${esc(m.title)}</span>
+      ${m.sub ? `<span class="search-result-sub">${esc(m.sub)}</span>` : ''}
+    </a>`).join('');
+}
+
 /* ---------- State ---------- */
 let storedLang = null, storedTheme = null;
 try { storedLang = localStorage.getItem('tilapfel-lang'); } catch (e) {}
@@ -162,7 +281,11 @@ const state = {
   lang: (storedLang && AVAILABLE_LOCALES.includes(storedLang)) ? storedLang : detectSystemLocale(),
   theme: storedTheme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'),
   eventsExpanded: false,
-  langMenuOpen: false
+  langMenuOpen: false,
+  shareMenuOpen: false,
+  shareCopied: false,
+  searchOpen: false,
+  searchQuery: ''
 };
 let locale = null;
 
@@ -312,6 +435,7 @@ function renderAbout(v) {
     <section class="page-hero">
       <h1 class="page-title">${ICONS.about}<span>${esc(t.aboutTitle)}</span></h1>
       <p class="subtitle">${esc(t.aboutSubtitle)}</p>
+      <a href="#/bio" class="more-link">${esc(t.aboutBioLink)}</a>
     </section>
     <hr class="divider">
     <section class="about-body">
@@ -333,7 +457,6 @@ function renderAbout(v) {
       </div>
 
       <a href="#/kontakt" class="cta-button">${esc(t.aboutCtaText)} — ${esc(t.aboutCtaLink)}</a>
-      <a href="#/bio" class="more-link">${esc(t.aboutBioLink)}</a>
     </section>
   </div>`;
 }
@@ -507,19 +630,24 @@ function renderKontakt(v) {
 function renderBio(v) {
   const t = v.t;
   const tiles = v.bioPrimaryLinks.map(l => `
-    <a class="bio-tile" href="${l.href}" style="background:${l.bg}">
-      <span class="bio-tile-icon" aria-hidden="true" style="color:${l.fg}">${l.icon}</span>
+    <a class="bio-tile" href="${l.href}">
+      <span class="bio-tile-icon" aria-hidden="true">${l.icon}</span>
       <span class="bio-tile-text">
-        <span class="bio-tile-label" style="color:${l.fg}">${esc(l.label)}</span>
-        <span class="bio-tile-url" style="color:${l.fgMuted}">${esc(l.url)}</span>
+        <span class="bio-tile-label">${esc(l.label)}</span>
+        <span class="bio-tile-url">${esc(l.url)}</span>
       </span>
     </a>`).join('');
   const socials = v.bioSocialLinks.map(l => `
-    <a class="icon-btn circle" href="${l.href}" aria-label="${esc(l.label)}" title="${esc(l.label)}">
+    <a class="icon-btn circle" href="${l.href}" aria-label="${esc(l.label)}" title="${esc(l.label)}" style="background:${l.bg};border-color:${l.bg};color:#fff">
       <span aria-hidden="true">${l.icon}</span>
     </a>`).join('');
   return `
-  <div data-screen-label="Bio">
+  <div data-screen-label="Bio" class="bio-screen">
+    <div class="bio-utility-bar">
+      ${shareToggleHtml(v, { dropDown: true })}
+      ${langToggleHtml(v, { dropDown: true })}
+      ${themeToggleHtml(v)}
+    </div>
     <section class="bio-page">
       <img src="./assets/profilfoto.png" alt="${esc(t.portraitAlt)}" class="avatar-lg">
       <div>
@@ -554,30 +682,17 @@ function renderImpressum(v) {
 
 function renderFooter(v) {
   const t = v.t;
-  const langMenu = state.langMenuOpen ? `
-    <div class="lang-menu-backdrop" data-close-lang-menu></div>
-    <div class="lang-menu">
-      ${AVAILABLE_LOCALES.map(code => `
-        <button type="button" class="${v.lang === code ? 'active' : ''}" data-set-lang="${code}" aria-pressed="${v.lang === code}">
-          <span>${esc(LOCALE_META[code].nativeName)}</span>${v.lang === code ? '<span aria-hidden="true">✓</span>' : ''}
-        </button>`).join('')}
-    </div>` : '';
-  const themeLabel = state.theme === 'dark' ? t.themeToLight : t.themeToDark;
-
   return `
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-row">
-        <button type="button" class="icon-btn" data-action="toggle-theme" aria-label="${esc(themeLabel)}" title="${esc(themeLabel)}">
-          <span aria-hidden="true">${state.theme === 'dark' ? ICONS.moon : ICONS.sun}</span>
+        ${themeToggleHtml(v)}
+        ${langToggleHtml(v)}
+        ${searchToggleHtml(v)}
+        <button type="button" class="icon-btn" aria-label="${esc(t.easyLanguage)}" title="${esc(t.easyLanguage)}">
+          <span aria-hidden="true">${ICONS.easyLanguage}</span>
         </button>
-        <div class="lang-menu-wrap">
-          <button type="button" class="icon-btn" data-action="toggle-lang-menu" aria-expanded="${state.langMenuOpen}" aria-haspopup="true" aria-label="Sprache / Language" title="Sprache / Language">
-            <span aria-hidden="true">${ICONS.globe}</span>
-          </button>
-          ${langMenu}
-        </div>
-        <a class="icon-btn" href="#/impressum" aria-label="${esc(t.footerImpressum)}" title="${esc(t.footerImpressum)}"><span aria-hidden="true">${ICON_DOC}</span></a>
+        <a class="icon-btn" href="#/impressum" aria-label="${esc(t.footerImpressum)}" title="${esc(t.footerImpressum)}"><span aria-hidden="true">${ICONS.paragraph}</span></a>
       </div>
       <span class="footer-copy">© 2026 Til Apfel</span>
     </div>
@@ -632,6 +747,10 @@ function render() {
 
   const modal = document.querySelector('.modal');
   if (modal) modal.focus();
+  if (state.searchOpen) {
+    const searchInput = document.getElementById('site-search-input');
+    if (searchInput) { searchInput.focus(); searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length); }
+  }
 }
 
 /* ---------- Language switching ---------- */
@@ -662,7 +781,12 @@ function attachListeners(v) {
   });
 
   const langBtn = document.querySelector('[data-action="toggle-lang-menu"]');
-  if (langBtn) langBtn.addEventListener('click', () => { state.langMenuOpen = !state.langMenuOpen; render(); });
+  if (langBtn) langBtn.addEventListener('click', () => {
+    const next = !state.langMenuOpen;
+    closeMenus();
+    state.langMenuOpen = next;
+    render();
+  });
   const langBackdrop = document.querySelector('[data-close-lang-menu]');
   if (langBackdrop) langBackdrop.addEventListener('click', () => { state.langMenuOpen = false; render(); });
   document.querySelectorAll('[data-set-lang]').forEach(el => {
@@ -671,6 +795,50 @@ function attachListeners(v) {
 
   const showMoreBtn = document.querySelector('[data-action="show-more-events"]');
   if (showMoreBtn) showMoreBtn.addEventListener('click', () => { state.eventsExpanded = true; render(); });
+
+  const shareBtn = document.querySelector('[data-action="toggle-share"]');
+  if (shareBtn) shareBtn.addEventListener('click', () => {
+    if (navigator.share) { navigator.share({ title: 'Til Apfel', url: location.href }).catch(() => {}); return; }
+    const next = !state.shareMenuOpen;
+    closeMenus();
+    state.shareMenuOpen = next;
+    state.shareCopied = false;
+    render();
+  });
+  const shareBackdrop = document.querySelector('[data-close-share-menu]');
+  if (shareBackdrop) shareBackdrop.addEventListener('click', () => { state.shareMenuOpen = false; render(); });
+  const copyLinkBtn = document.querySelector('[data-action="copy-share-link"]');
+  if (copyLinkBtn) copyLinkBtn.addEventListener('click', () => {
+    const markCopied = () => { state.shareCopied = true; copyLinkBtn.textContent = v.t.linkCopied; };
+    const url = location.href;
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(url).then(markCopied).catch(() => selectShareUrl());
+    } else {
+      selectShareUrl();
+    }
+  });
+
+  const searchBtn = document.querySelector('[data-action="toggle-search"]');
+  if (searchBtn) searchBtn.addEventListener('click', () => {
+    const next = !state.searchOpen;
+    closeMenus();
+    state.searchOpen = next;
+    render();
+  });
+  const searchBackdrop = document.querySelector('[data-close-search]');
+  if (searchBackdrop) searchBackdrop.addEventListener('click', () => { state.searchOpen = false; state.searchQuery = ''; render(); });
+  const searchInput = document.getElementById('site-search-input');
+  if (searchInput) searchInput.addEventListener('input', e => {
+    state.searchQuery = e.target.value;
+    const results = document.getElementById('site-search-results');
+    if (results) results.innerHTML = renderSearchResults();
+    document.querySelectorAll('#site-search-results [data-action="close-search"]').forEach(el => {
+      el.addEventListener('click', () => { state.searchOpen = false; state.searchQuery = ''; });
+    });
+  });
+  document.querySelectorAll('#site-search-results [data-action="close-search"]').forEach(el => {
+    el.addEventListener('click', () => { state.searchOpen = false; state.searchQuery = ''; });
+  });
 
   const auftragForm = document.querySelector('[data-form="auftrag"]');
   if (auftragForm) auftragForm.addEventListener('submit', e => {

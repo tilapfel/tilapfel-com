@@ -25,7 +25,10 @@ export default {
     emailSubjectRegistration: 'Registration: ', emailSubjectContact: 'Contact form message', emailSubjectQuote: 'Quote request: ',
     navAriaLabel: 'Main navigation', portraitAlt: 'Portrait of Til Apfel',
     themeToLight: 'Switch to light mode', themeToDark: 'Switch to dark mode',
-    moreEventsTemplate: 'Show {n} more events', aboutBioLink: 'All links at a glance →'
+    moreEventsTemplate: 'Show {n} more events', aboutBioLink: 'All links at a glance →',
+    share: 'Share', copyLink: 'Copy link', linkCopied: 'Link copied!',
+    search: 'Search', searchPlaceholder: 'Search the site…', searchNoResults: 'No results',
+    easyLanguage: 'Easy language'
   },
 
   nav: { about: 'About', portfolio: 'Portfolio', focus: 'Focus', events: 'Events', library: 'Library' },

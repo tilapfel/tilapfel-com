@@ -25,7 +25,10 @@ export default {
     emailSubjectRegistration: 'Anmeldung: ', emailSubjectContact: 'Nachricht über Kontaktformular', emailSubjectQuote: 'Kostenvoranschlag-Anfrage: ',
     navAriaLabel: 'Hauptnavigation', portraitAlt: 'Portrait von Til Apfel',
     themeToLight: 'Zu Hell wechseln', themeToDark: 'Zu Dunkel wechseln',
-    moreEventsTemplate: 'Weitere {n} Termine anzeigen', aboutBioLink: 'Alle Links auf einen Blick →'
+    moreEventsTemplate: 'Weitere {n} Termine anzeigen', aboutBioLink: 'Alle Links auf einen Blick →',
+    share: 'Teilen', copyLink: 'Link kopieren', linkCopied: 'Link kopiert!',
+    search: 'Suche', searchPlaceholder: 'Seite durchsuchen…', searchNoResults: 'Keine Treffer',
+    easyLanguage: 'Leichte Sprache'
   },
 
   nav: { about: 'About', portfolio: 'Portfolio', focus: 'Focus', events: 'Events', library: 'Library' },
