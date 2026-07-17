@@ -1,25 +1,19 @@
 import { escapeHtml } from '../components/utils.js';
 import { shareToggleHtml, langToggleHtml, themeToggleHtml } from '../components/toggles.js';
+import { socialRowHtml } from '../components/social.js';
+import { newsletterBioTileHtml } from '../components/newsletter.js';
 
 export function renderBio(view) {
   const t = view.t;
   const tiles = view.bioPrimaryLinks
     .map(
       (link) => `
-    <a class="bio-tile" href="${link.href}">
+    <a class="bio-tile" href="${link.href}" target="_blank" rel="noopener noreferrer">
       <span class="bio-tile-icon" aria-hidden="true">${link.icon}</span>
       <span class="bio-tile-text">
         <span class="bio-tile-label">${escapeHtml(link.label)}</span>
         <span class="bio-tile-url">${escapeHtml(link.url)}</span>
       </span>
-    </a>`
-    )
-    .join('');
-  const socials = view.bioSocialLinks
-    .map(
-      (link) => `
-    <a class="icon-btn circle" href="${link.href}" aria-label="${escapeHtml(link.label)}" title="${escapeHtml(link.label)}" style="background:${link.bg};border-color:${link.bg};color:#fff">
-      <span aria-hidden="true">${link.icon}</span>
     </a>`
     )
     .join('');
@@ -38,8 +32,8 @@ export function renderBio(view) {
       </div>
     </section>
     <section class="bio-links">
-      <div class="bio-grid">${tiles}</div>
-      <div class="bio-social-row">${socials}</div>
+      <div class="bio-grid">${tiles}${newsletterBioTileHtml(view)}</div>
+      ${socialRowHtml(view)}
     </section>
   </div>`;
 }

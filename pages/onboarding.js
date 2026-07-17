@@ -25,6 +25,7 @@ export function renderOnboardingModal(view) {
     labelledBy: 'onboarding-title',
     closeLabel: t.closeDialog,
     bodyHtml: `
+    <div class="onboarding-body">
       <h2 id="onboarding-title">${escapeHtml(t.onboardingTitle)}</h2>
       <p class="onboarding-intro">${escapeHtml(t.onboardingIntro)}</p>
 
@@ -49,6 +50,7 @@ export function renderOnboardingModal(view) {
         </div>
       </div>
 
-      <button type="button" class="cta-button compact" data-action="close-onboarding">${escapeHtml(t.onboardingDone)}</button>`,
+      <button type="button" class="cta-button compact" data-action="close-onboarding">${escapeHtml(t.onboardingDone)}</button>
+    </div>`,
   });
 }

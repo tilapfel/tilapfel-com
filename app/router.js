@@ -1,5 +1,5 @@
 import { ROLE_ICONS } from '../components/icons.js';
-import { renderSearchResults, searchModalHtml } from '../components/search.js';
+import { renderSearchResults, searchModalHtml, searchResultCountHtml } from '../components/search.js';
 import { selectShareUrl } from './utils.js';
 import { state, locale, setLocale, loadLocale, parseRoute } from './state.js';
 import { NAV, BIO_PRIMARY_LINKS, BIO_SOCIAL_LINKS, CONTACT_EMAIL, AVAILABLE_LOCALES } from './data.js';
@@ -9,14 +9,19 @@ import { renderFooter } from '../pages/footer.js';
 import { renderHome } from '../pages/home.js';
 import { renderAbout } from '../pages/about.js';
 import { renderPortfolioList, renderPortfolioModal } from '../pages/portfolio.js';
-import { renderFocus } from '../pages/focus.js';
-import { renderEventsList, renderEventModal } from '../pages/events.js';
-import { renderLibrary } from '../pages/library.js';
+import { renderFocus, renderFeedPostModal } from '../pages/focus.js';
+import { renderEventsList, renderEventModal, renderBookableModal } from '../pages/events.js';
+import { renderLibrary, renderLibraryModal } from '../pages/library.js';
 import { renderFormular } from '../pages/formular.js';
 import { renderKontakt } from '../pages/kontakt.js';
 import { renderBio } from '../pages/bio.js';
 import { renderImpressum } from '../pages/impressum.js';
+import { renderDatenschutz } from '../pages/datenschutz.js';
+import { renderError } from '../pages/error.js';
 import { renderOnboardingModal } from '../pages/onboarding.js';
+import { newsletterSectionHtml, newsletterModalHtml } from '../components/newsletter.js';
+import { darkReaderBannerHtml } from '../components/darkreader-banner.js';
+import { dgsNoticeHtml } from '../components/dgs-notice.js';
 
 const appEl = document.getElementById('app');
 const headerSlot = document.getElementById('header-slot');
@@ -26,14 +31,15 @@ const skipLinkEl = document.querySelector('.skip-link');
 const PAGE_RENDERERS = {
   '': renderHome,
   about: renderAbout,
-  portfolio: (view) => renderPortfolioList(view) + renderPortfolioModal(view),
-  focus: renderFocus,
-  events: (view) => renderEventsList(view) + renderEventModal(view),
-  library: renderLibrary,
-  formular: renderFormular,
-  kontakt: renderKontakt,
+  projects: (view) => renderPortfolioList(view) + renderPortfolioModal(view),
+  feeds: (view) => renderFocus(view) + renderFeedPostModal(view),
+  events: (view) => renderEventsList(view) + renderEventModal(view) + renderBookableModal(view),
+  library: (view) => renderLibrary(view) + renderLibraryModal(view),
+  quote: renderFormular,
+  contact: renderKontakt,
   bio: renderBio,
-  impressum: renderImpressum,
+  legal: renderImpressum,
+  privacy: renderDatenschutz,
 };
 
 /** Derives every value a page/component needs to render from the current route + active locale. */
@@ -47,18 +53,43 @@ function computeVals() {
 
   const portfolioLocalized = locale.portfolio.map((entry) => ({
     ...entry,
-    href: `#/portfolio/${entry.slug}`,
+    href: `#/projects/${entry.tagSlug}/${entry.dateSlug}`,
   }));
   const termineLocalized = locale.termine.map((entry) => ({
     ...entry,
-    href: `#/events/${entry.slug}`,
+    href: `#/events/${entry.tagSlug}/${entry.dateSlug}`,
     rsvpHref: `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(t.emailSubjectRegistration + entry.title)}`,
   }));
 
+  const isBookableRoute = section === 'events' && segments[1] === 'format';
+  const bookableLocalized = locale.bookable.map((entry) => ({
+    ...entry,
+    href: `#/events/format/${entry.slug}`,
+  }));
+
   const currentPortfolio =
-    section === 'portfolio' && slug ? portfolioLocalized.find((entry) => entry.slug === slug) : null;
+    section === 'projects' && slug && segments[2]
+      ? portfolioLocalized.find((entry) => entry.tagSlug === slug && entry.dateSlug === segments[2])
+      : null;
   const currentTermin =
-    section === 'events' && slug ? termineLocalized.find((entry) => entry.slug === slug) : null;
+    section === 'events' && slug && segments[2] && !isBookableRoute
+      ? termineLocalized.find((entry) => entry.tagSlug === slug && entry.dateSlug === segments[2])
+      : null;
+  const currentBookable =
+    isBookableRoute && segments[2] ? bookableLocalized.find((entry) => entry.slug === segments[2]) : null;
+
+  const feedsPostsLocalized = locale.feedsPosts.map((post) => ({
+    ...post,
+    href: `#/feeds/${post.formatSlug}/${post.dateSlug}`,
+  }));
+  const currentFeedPost =
+    section === 'feeds' && slug && segments[2]
+      ? feedsPostsLocalized.find((post) => post.formatSlug === slug && post.dateSlug === segments[2])
+      : null;
+
+  const libraryLocalized = locale.library.map((entry) => ({ ...entry, href: `#/library/${entry.slug}` }));
+  const currentLibraryEntry =
+    section === 'library' && slug ? libraryLocalized.find((entry) => entry.slug === slug) : null;
 
   const expanded = state.eventsExpanded;
   const visibleTermine = expanded ? termineLocalized : termineLocalized.slice(0, 3);
@@ -69,6 +100,7 @@ function computeVals() {
     section,
     slug,
     isBio,
+    isKnownSection: Object.prototype.hasOwnProperty.call(PAGE_RENDERERS, section),
     lang: locale.code,
     t,
     navItems: NAV.map((item) => ({
@@ -88,59 +120,149 @@ function computeVals() {
     hasPastTermine: locale.pastTermine.length > 0,
     currentPortfolio,
     currentTermin,
-    library: locale.library,
-    homeLibrary: locale.library.slice(0, 2),
+    currentBookable,
+    currentFeedPost,
+    currentLibraryEntry,
+    library: libraryLocalized,
+    homeLibrary: libraryLocalized.slice(0, 2),
     press: locale.press,
     focusItems: locale.focusItems,
+    feedsTags: [
+      { value: '', label: t.feedsTagAll },
+      ...Array.from(new Set(locale.feedsPosts.flatMap((post) => post.tags))).map((tag) => ({
+        value: tag,
+        label: tag,
+      })),
+    ],
+    feedsTagFilter: state.feedsTagFilter,
+    visibleFeedsPosts: state.feedsTagFilter
+      ? feedsPostsLocalized.filter((post) => post.tags.includes(state.feedsTagFilter))
+      : feedsPostsLocalized,
     werte: locale.werte,
     principles: locale.principles,
-    bookableFormats: locale.bookable,
-    roles: locale.roleLabels.map((label, i) => ({ label, icon: ROLE_ICONS[i] })),
-    aboutRoles: locale.roleLabels.map((title, i) => ({
-      title,
-      desc: locale.roleDescs[i],
-      icon: ROLE_ICONS[i],
+    bookableFormats: bookableLocalized,
+    roles: locale.roles.map((role) => ({ label: role.label, icon: ROLE_ICONS[role.key] })),
+    aboutRoles: locale.roles.map((role) => ({
+      title: role.label,
+      desc: role.desc,
+      icon: ROLE_ICONS[role.key],
     })),
-    bioPrimaryLinks: BIO_PRIMARY_LINKS,
+    bioPrimaryLinks: BIO_PRIMARY_LINKS.map((link, i) => ({ ...link, label: locale.bioPrimary[i].label })),
     bioSocialLinks: BIO_SOCIAL_LINKS,
     auftragArten: locale.auftragArten,
+    datenschutzSections: locale.datenschutzSections,
+    impressumAddress: locale.impressumAddress,
+    impressumSections: locale.impressumSections,
   };
 }
 
-function titleFor(section, t) {
+function titleFor(view) {
+  const t = view.t;
+  if (!view.isKnownSection) return `Til Apfel – ${t.errorTitle}`;
   const titles = {
     '': t.heroTagline,
     about: t.aboutTitle,
-    portfolio: t.portfolioTitle,
-    focus: t.focusTitle,
+    projects: t.portfolioTitle,
+    feeds: t.focusTitle,
     events: t.eventsTitle,
     library: t.libraryTitle,
-    formular: t.formularTitle,
-    kontakt: t.kontaktTitle,
+    quote: t.formularTitle,
+    contact: t.kontaktTitle,
     bio: 'Bio',
-    impressum: 'Impressum',
+    legal: 'Impressum',
+    privacy: t.datenschutzTitle,
   };
-  const page = titles[section] || '';
+  const page = titles[view.section] || '';
   return page ? `Til Apfel – ${page}` : 'Til Apfel';
+}
+
+/**
+ * Fetches a one-time spam-check token from the Netlify Function for the
+ * "time trap" check (see netlify/functions/form-token.mjs) once per visit
+ * to a form page — not on every re-render, since re-renders also happen
+ * for unrelated state changes (theme, language, …) while already on the
+ * page. If the function is unreachable (e.g. testing the plain static
+ * files without Netlify running), `state.formToken` just stays null and
+ * the submit handler fails open rather than blocking the form entirely.
+ */
+async function ensureFormToken(section) {
+  if (state.formTokenSection === section && state.formToken) return;
+  state.formTokenSection = section;
+  state.formToken = null;
+  try {
+    const res = await fetch('/api/form-token');
+    if (res.ok) {
+      const data = await res.json();
+      state.formToken = data.token;
+    }
+  } catch {
+    // Function unreachable — handled as fail-open in the submit handlers below.
+  }
+}
+
+/**
+ * Gate a form submission behind the honeypot/timing/rate-limit checks in the
+ * form-submit Netlify Function. Real rejections (rate limit, invalid token)
+ * surface an error message; a network failure (function unreachable, e.g.
+ * local static-file testing) fails open so the mailto handoff still works.
+ */
+async function passesSpamCheck(form, t) {
+  const errorEl = form.querySelector('[data-form-error]');
+  if (errorEl) errorEl.hidden = true;
+  const honeypot = new FormData(form).get('website') || '';
+  try {
+    const res = await fetch('/api/form-submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: state.formToken, honeypot }),
+    });
+    const data = await res.json().catch(() => ({ ok: false }));
+    if (data.ok) return true;
+    if (errorEl) {
+      errorEl.textContent = res.status === 429 ? t.formErrorRateLimited : t.formErrorGeneric;
+      errorEl.hidden = false;
+    }
+    return false;
+  } catch {
+    return true;
+  }
 }
 
 /** Re-renders header, current page, footer, and any open overlay from scratch. Called on every state change. */
 export function render() {
   if (!locale) return;
+  const scrollY = window.scrollY;
   const view = computeVals();
   document.documentElement.setAttribute('data-theme', state.theme);
   document.documentElement.setAttribute('lang', view.lang);
-  document.title = titleFor(view.section, view.t);
+  document.title = titleFor(view);
   if (skipLinkEl) skipLinkEl.textContent = view.t.skip;
 
-  headerSlot.innerHTML = renderHeader(view);
+  if (view.section === 'contact' || view.section === 'quote') ensureFormToken(view.section);
 
-  const pageRenderer = PAGE_RENDERERS[view.section] || renderHome;
-  appEl.innerHTML = pageRenderer(view) + searchModalHtml(view) + renderOnboardingModal(view);
+  headerSlot.innerHTML = darkReaderBannerHtml(view) + renderHeader(view);
+
+  const pageRenderer = view.isKnownSection ? PAGE_RENDERERS[view.section] : renderError;
+  appEl.innerHTML =
+    (view.lang === 'dgs' && !view.isBio ? dgsNoticeHtml(view) : '') +
+    pageRenderer(view) +
+    (view.isBio ? '' : newsletterSectionHtml(view)) +
+    searchModalHtml(view) +
+    renderOnboardingModal(view) +
+    newsletterModalHtml(view);
   footerSlot.innerHTML = view.isBio ? '' : renderFooter(view);
 
   document.body.style.overflow =
-    view.currentPortfolio || view.currentTermin || state.searchOpen || state.onboardingOpen ? 'hidden' : '';
+    view.currentPortfolio ||
+    view.currentTermin ||
+    view.currentBookable ||
+    view.currentFeedPost ||
+    view.currentLibraryEntry ||
+    state.searchOpen ||
+    state.onboardingOpen ||
+    state.newsletterOpen
+      ? 'hidden'
+      : '';
   attachListeners(view);
 
   const modal = appEl.querySelector('.modal');
@@ -152,6 +274,7 @@ export function render() {
       searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
     }
   }
+  window.scrollTo(0, scrollY);
 }
 
 export function setLang(code) {
@@ -161,6 +284,10 @@ export function setLang(code) {
     state.lang = code;
     state.langMenuOpen = false;
     writeStorage(STORAGE_KEYS.lang, code);
+    if (code === 'dgs' && state.easyLanguage) {
+      state.easyLanguage = false;
+      writeStorage(STORAGE_KEYS.easyLanguage, '0');
+    }
     render();
   });
 }
@@ -191,7 +318,12 @@ export function closeActiveModal(view) {
     render();
     return;
   }
-  location.hash = `#/${view.section === 'portfolio' ? 'portfolio' : 'events'}`;
+  if (state.newsletterOpen) {
+    state.newsletterOpen = false;
+    render();
+    return;
+  }
+  location.hash = `#/${view.section}`;
 }
 
 function attachListeners(view) {
@@ -258,8 +390,31 @@ function attachListeners(view) {
       render();
     });
   });
+  const dismissDarkReaderBtn = document.querySelector('[data-action="dismiss-darkreader"]');
+  if (dismissDarkReaderBtn) {
+    dismissDarkReaderBtn.addEventListener('click', () => {
+      state.darkReaderDismissed = true;
+      render();
+    });
+  }
+
+  const newsletterBtn = document.querySelector('[data-action="toggle-newsletter"]');
+  if (newsletterBtn) {
+    newsletterBtn.addEventListener('click', () => {
+      state.newsletterOpen = true;
+      render();
+    });
+  }
+
   const onboardingDoneBtn = document.querySelector('[data-action="close-onboarding"]');
   if (onboardingDoneBtn) onboardingDoneBtn.addEventListener('click', dismissOnboarding);
+
+  document.querySelectorAll('[data-set-feed-tag]').forEach((el) => {
+    el.addEventListener('click', () => {
+      state.feedsTagFilter = el.getAttribute('data-set-feed-tag') || null;
+      render();
+    });
+  });
 
   const showMoreBtn = document.querySelector('[data-action="show-more-events"]');
   if (showMoreBtn)
@@ -319,33 +474,52 @@ function attachListeners(view) {
   if (searchInput) {
     searchInput.addEventListener('input', (event) => {
       state.searchQuery = event.target.value;
-      const results = document.getElementById('site-search-results');
-      if (results) results.innerHTML = renderSearchResults();
-      wireSearchResultLinks();
+      updateSearchResults();
     });
   }
   wireSearchResultLinks();
 
   const auftragForm = document.querySelector('[data-form="auftrag"]');
   if (auftragForm) {
-    auftragForm.addEventListener('submit', (event) => {
+    auftragForm.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const formData = new FormData(auftragForm);
       const t = view.t;
+      if (!(await passesSpamCheck(auftragForm, t))) return;
+      const formData = new FormData(auftragForm);
       const body = `Name: ${formData.get('name')}\nE-Mail: ${formData.get('email')}\n${t.labelArt}: ${formData.get('art')}\n${t.labelZeitrahmen}: ${formData.get('zeitrahmen')}\n\n${formData.get('beschreibung')}`;
       window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(t.emailSubjectQuote + formData.get('art'))}&body=${encodeURIComponent(body)}`;
     });
   }
 
-  const kontaktForm = document.querySelector('[data-form="kontakt"]');
-  if (kontaktForm) {
-    kontaktForm.addEventListener('submit', (event) => {
+  const newsletterForm = document.querySelector('[data-form="newsletter"]');
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      const formData = new FormData(kontaktForm);
-      const body = `Name: ${formData.get('name')}\nE-Mail: ${formData.get('email')}\n\n${formData.get('nachricht')}`;
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(view.t.emailSubjectContact)}&body=${encodeURIComponent(body)}`;
+      const formData = new FormData(newsletterForm);
+      const body = `${view.t.newsletterFirstNameLabel}: ${formData.get('firstname')}\n${view.t.newsletterEmailLabel}: ${formData.get('email')}`;
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(view.t.newsletterEmailSubject)}&body=${encodeURIComponent(body)}`;
     });
   }
+
+  const kontaktForm = document.querySelector('[data-form="kontakt"]');
+  if (kontaktForm) {
+    kontaktForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const t = view.t;
+      if (!(await passesSpamCheck(kontaktForm, t))) return;
+      const formData = new FormData(kontaktForm);
+      const body = `Name: ${formData.get('name')}\nE-Mail: ${formData.get('email')}\n\n${formData.get('nachricht')}`;
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(t.emailSubjectContact)}&body=${encodeURIComponent(body)}`;
+    });
+  }
+}
+
+function updateSearchResults() {
+  const results = document.getElementById('site-search-results');
+  if (results) results.innerHTML = renderSearchResults();
+  const count = document.getElementById('site-search-result-count');
+  if (count) count.innerHTML = searchResultCountHtml();
+  wireSearchResultLinks();
 }
 
 function wireSearchResultLinks() {

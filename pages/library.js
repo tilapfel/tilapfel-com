@@ -1,6 +1,8 @@
 import { escapeHtml } from '../components/utils.js';
 import { ICONS } from '../components/icons.js';
 import { libraryCardHtml } from '../components/card.js';
+import { modalHtml } from '../components/modal.js';
+import { shareToggleHtml } from '../components/toggles.js';
 
 export function renderLibrary(view) {
   const t = view.t;
@@ -21,11 +23,28 @@ export function renderLibrary(view) {
       <p class="subtitle">${escapeHtml(t.librarySubtitle)}</p>
     </section>
     <hr class="divider">
-    <section class="section card-list">${items}</section>
+    <section class="section card-list">
+      <h2 class="heading-sm">${escapeHtml(t.publicationsHeading)}</h2>
+      ${items}
+    </section>
     <hr class="divider">
     <section class="section card-list">
       <h2 class="heading-sm">${escapeHtml(t.pressHeading)}</h2>
       ${press}
     </section>
   </div>`;
+}
+
+export function renderLibraryModal(view) {
+  const entry = view.currentLibraryEntry;
+  if (!entry) return '';
+  return modalHtml({
+    labelledBy: 'lib-modal-title',
+    closeLabel: view.t.closeDialog,
+    shareHtml: shareToggleHtml(view, { dropDown: true }),
+    bodyHtml: `
+      <span class="modal-eyebrow-row">${escapeHtml(entry.type)}</span>
+      <h2 id="lib-modal-title">${escapeHtml(entry.title)}</h2>
+      <p>${escapeHtml(entry.desc)}</p>`,
+  });
 }

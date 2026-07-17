@@ -16,6 +16,14 @@ export default [
     },
   },
   {
-    ignores: ['node_modules/**'],
+    files: ['netlify/functions/**'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    ignores: ['node_modules/**', 'vendor/**'],
   },
 ];

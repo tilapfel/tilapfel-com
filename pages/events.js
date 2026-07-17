@@ -1,11 +1,12 @@
 import { escapeHtml } from '../components/utils.js';
 import { ICONS } from '../components/icons.js';
-import { simpleCardHtml, eventCardHtml } from '../components/card.js';
+import { bookableCardHtml, eventCardHtml } from '../components/card.js';
 import { modalHtml } from '../components/modal.js';
+import { shareToggleHtml } from '../components/toggles.js';
 
 export function renderEventsList(view) {
   const t = view.t;
-  const bookable = view.bookableFormats.map(simpleCardHtml).join('');
+  const bookable = view.bookableFormats.map(bookableCardHtml).join('');
   const upcoming = view.visibleTermine.map((entry) => eventCardHtml(entry)).join('');
   const showMore = view.hasMoreTermine
     ? `<button type="button" class="btn-outline" data-action="show-more-events">${escapeHtml(view.moreEventsLabel)}</button>`
@@ -29,7 +30,7 @@ export function renderEventsList(view) {
     <section class="section card-list">
       <h2 class="heading-sm">${escapeHtml(t.bookableHeading)}</h2>
       ${bookable}
-      <a href="#/formular" class="cta-button compact">${escapeHtml(t.ctaKostenvoranschlag)}</a>
+      <a href="#/quote" class="cta-button compact">${escapeHtml(t.ctaKostenvoranschlag)}</a>
     </section>
     <hr class="divider">
     <section class="section card-list">
@@ -48,6 +49,7 @@ export function renderEventModal(view) {
   return modalHtml({
     labelledBy: 'ev-modal-title',
     closeLabel: t.closeDialog,
+    shareHtml: shareToggleHtml(view, { dropDown: true }),
     bodyHtml: `
       <span class="modal-eyebrow-row">${escapeHtml(entry.date)} · ${escapeHtml(entry.category)}</span>
       <h2 id="ev-modal-title">${escapeHtml(entry.title)}</h2>
@@ -55,5 +57,20 @@ export function renderEventModal(view) {
       <p>${escapeHtml(entry.detail)}</p>
       <p>${escapeHtml(entry.info)}</p>
       <a href="${entry.rsvpHref}" class="cta-button compact">${escapeHtml(t.registerBtn)}</a>`,
+  });
+}
+
+export function renderBookableModal(view) {
+  const entry = view.currentBookable;
+  if (!entry) return '';
+  return modalHtml({
+    labelledBy: 'bf-modal-title',
+    closeLabel: view.t.closeDialog,
+    shareHtml: shareToggleHtml(view, { dropDown: true }),
+    bodyHtml: `
+      <h2 id="bf-modal-title">${escapeHtml(entry.title)}</h2>
+      <p>${escapeHtml(entry.desc)}</p>
+      <p>${escapeHtml(entry.full)}</p>
+      <a href="#/quote" class="cta-button compact">${escapeHtml(view.t.ctaKostenvoranschlag)}</a>`,
   });
 }

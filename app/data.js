@@ -3,29 +3,26 @@ import { ICONS } from '../components/icons.js';
 /** Route + icon key are language-independent; the label comes from the active locale (`locale.nav[route]`). */
 export const NAV = [
   { route: 'about', icon: 'about' },
-  { route: 'portfolio', icon: 'portfolio' },
-  { route: 'focus', icon: 'focus' },
+  { route: 'projects', icon: 'rocket' },
+  { route: 'feeds', icon: 'feed' },
   { route: 'events', icon: 'events' },
   { route: 'library', icon: 'library' },
 ];
 
 /**
- * Bio page links: proper nouns / brand names, identical across languages.
- * Primary links render as neutral full-width tiles; social links render as
- * small brand-colored circular icons in a row (linktr.ee-style).
+ * Bio page primary links: structural data only (target, url, icon) — every
+ * entry's label/text comes from the matching index in `locale.bioPrimary`
+ * (see content/de.js, content/en.js) since these are now full descriptive
+ * phrases, not language-independent proper nouns.
  */
 export const BIO_PRIMARY_LINKS = [
-  { label: 'Website', href: '#/', url: 'tilapfel.com', icon: ICONS.network },
-  {
-    label: 'Stiftung',
-    href: 'https://stiftung.tilapfel.com',
-    url: 'stiftung.tilapfel.com',
-    icon: ICONS.heart,
-  },
-  { label: 'Apps', href: 'https://apps.tilapfel.com', url: 'apps.tilapfel.com', icon: ICONS.grid },
+  { href: '#/', url: 'tilapfel.com', icon: ICONS.home },
+  { href: 'https://stiftung.tilapfel.com', url: 'stiftung.tilapfel.com', icon: ICONS.heart },
+  { href: 'https://apps.tilapfel.com', url: 'apps.tilapfel.com', icon: ICONS.grid },
 ];
 
 export const BIO_SOCIAL_LINKS = [
+  { label: 'RSS', href: 'https://tilapfel.com/feed.xml', bg: 'oklch(52% 0.09 55)', icon: ICONS.rss },
   {
     label: 'YouTube',
     href: 'https://www.youtube.com/@tilapfel',
@@ -50,6 +47,18 @@ export const BIO_SOCIAL_LINKS = [
     bg: 'oklch(52% 0.09 230)',
     icon: ICONS.linkedin,
   },
+  {
+    label: 'Bluesky',
+    href: 'https://bsky.app/profile/tilapfel.bsky.social',
+    bg: 'oklch(58% 0.13 220)',
+    icon: ICONS.bluesky,
+  },
+  {
+    label: 'ResearchGate',
+    href: 'https://www.researchgate.net/profile/Til-Apfel',
+    bg: 'oklch(55% 0.1 165)',
+    icon: ICONS.researchgate,
+  },
   { label: 'GitHub', href: 'https://github.com/tilapfel', bg: 'oklch(30% 0 0)', icon: ICONS.github },
 ];
 
@@ -61,6 +70,10 @@ export const CONTACT_EMAIL = 'info@tilapfel.com';
  * means adding a content file plus a matching entry here. Only the active
  * locale is ever fetched; others load on demand when switched to.
  */
-export const AVAILABLE_LOCALES = ['de', 'en'];
-export const LOCALE_META = { de: { nativeName: 'Deutsch' }, en: { nativeName: 'English' } };
+export const AVAILABLE_LOCALES = ['dgs', 'de', 'en'];
+export const LOCALE_META = {
+  de: { nativeName: 'Deutsch' },
+  en: { nativeName: 'English' },
+  dgs: { nativeName: 'DGS' },
+};
 export const DEFAULT_LOCALE = 'de';

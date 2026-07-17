@@ -9,13 +9,16 @@ export function renderFooter(view) {
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-row">
-        ${langToggleHtml(view)}
+        ${langToggleHtml(view, { withLabel: true })}
         ${easyLangToggleHtml(view)}
-        ${themeToggleHtml(view)}
+        ${themeToggleHtml(view, { withLabel: true })}
         ${searchButtonHtml(view)}
-        <a class="icon-btn" href="#/impressum" aria-label="${escapeHtml(t.footerImpressum)}" title="${escapeHtml(t.footerImpressum)}"><span aria-hidden="true">${ICONS.paragraph}</span></a>
+        <a class="nav-link" href="#/legal" ${view.section === 'legal' ? 'aria-current="page"' : ''} aria-label="${escapeHtml(t.footerImpressum)}" title="${escapeHtml(t.footerImpressum)}" data-tooltip="${escapeHtml(t.footerImpressum)}">
+          <span class="nav-icon" aria-hidden="true">${ICONS.paragraph}</span>
+          <span class="nav-label">${escapeHtml(t.footerImpressum)}</span>
+        </a>
       </div>
-      <span class="footer-copy">© 2026 Til Apfel</span>
+      <span class="footer-copy">© 2026 · Til Apfel</span>
     </div>
   </footer>`;
 }

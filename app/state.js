@@ -9,12 +9,18 @@ export const state = {
     (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'),
   easyLanguage: readStorage(STORAGE_KEYS.easyLanguage) === '1',
   eventsExpanded: false,
+  feedsTagFilter: null,
   langMenuOpen: false,
   easyLangMenuOpen: false,
   shareMenuOpen: false,
   shareCopied: false,
   searchOpen: false,
   searchQuery: '',
+  newsletterOpen: false,
+  darkReaderDetected: false,
+  darkReaderDismissed: false,
+  formToken: null,
+  formTokenSection: null,
   onboardingOpen: !readStorage(STORAGE_KEYS.onboarded),
 };
 
@@ -58,7 +64,7 @@ function detectSystemLocale() {
   return DEFAULT_LOCALE;
 }
 
-/** Current route with the leading `#/` stripped, e.g. `location.hash` of `#/portfolio/foo` → `portfolio/foo`. */
+/** Current route with the leading `#/` stripped, e.g. `location.hash` of `#/projects/foo` → `projects/foo`. */
 export function parseRoute() {
   const hash = location.hash || '#/';
   return hash.replace(/^#\/?/, '');

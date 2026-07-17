@@ -6,7 +6,7 @@ export function renderHeader(view) {
   const navHtml = view.navItems
     .map(
       (item) => `
-    <a class="nav-link" href="${item.href}" ${item.current ? 'aria-current="page"' : ''}>
+    <a class="nav-link" href="${item.href}" ${item.current ? 'aria-current="page"' : ''} title="${escapeHtml(item.label)}" data-tooltip="${escapeHtml(item.label)}">
       <span class="nav-icon" aria-hidden="true">${ICONS[item.icon]}</span>
       <span class="nav-label">${escapeHtml(item.label)}</span>
     </a>`

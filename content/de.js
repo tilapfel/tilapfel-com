@@ -20,12 +20,16 @@ export default {
     werteHeading: 'Werte',
     aboutCtaText: 'Interesse an einer Zusammenarbeit?',
     aboutCtaLink: 'Jetzt Kontakt aufnehmen',
-    portfolioTitle: 'Portfolio',
-    portfolioSubtitle: 'Wege, die ich gegangen bin.',
-    focusTitle: 'Focus',
-    focusSubtitle: 'Wofür ich stehe.',
+    portfolioTitle: 'Projects',
+    portfolioSubtitle: 'Projekte und Stationen, an denen ich arbeite.',
+    focusTitle: 'Feeds',
+    focusSubtitle: 'Wofür ich stehe – und wo Sie mich weiterverfolgen können.',
     focusClosing: 'Zu diesen Themen bin ich grundsätzlich ansprechbar und buchbar.',
     moreFocus: 'Mehr zu meinen Themen →',
+    feedsChannelsHeading: 'Meine Kanäle',
+    feedsPostsHeading: 'Neueste Beiträge',
+    feedsTopicsHeading: 'Meine Themen',
+    feedsTagAll: 'Alle',
     eventsTitle: 'Events',
     eventsSubtitle: 'Wo Sie mich treffen und buchen können.',
     registerBtn: 'Zu diesem Termin anmelden',
@@ -35,13 +39,42 @@ export default {
     pastHeading: 'Vergangene Termine',
     libraryTitle: 'Library',
     librarySubtitle: 'Was ich veröffentlicht habe.',
+    publicationsHeading: 'Veröffentlichungen',
     pressHeading: 'Presse & Medien',
     moreLibrary: 'Zur Library →',
     impressumSubtitle: 'Rechtliche Angaben zu meiner Person.',
+    impressumPlaceholder: 'Platzhalter',
+    impressumPhoneLabel: 'Telefon',
+    impressumEmailLabel: 'E-Mail',
+    impressumDatenschutzLink: 'Siehe auch: Datenschutzerklärung →',
     formularTitle: 'Kostenvoranschlag anfragen',
     formularSubtitle: 'Fragen Sie mich nach einem Angebot.',
     kontaktTitle: 'Kontakt',
     kontaktSubtitle: 'Schreiben Sie mir eine Nachricht.',
+    datenschutzTitle: 'Datenschutzerklärung',
+    datenschutzSubtitle: 'Wie ich mit Ihren Daten umgehe.',
+    errorTitle: 'Nicht barrierefrei erreichbar',
+    errorBody:
+      'Diesmal aus gutem Grund: Diese Seite gibt es einfach nicht. Der Rest der Website schon – und zwar barrierefrei.',
+    errorHomeLink: 'Zur Startseite',
+    consentPrefix: 'Ich habe die',
+    consentLinkText: 'Datenschutzerklärung',
+    consentSuffix: 'gelesen und akzeptiere sie.',
+    formErrorRateLimited: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+    formErrorGeneric: 'Beim Absenden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+    language: 'Sprache',
+    darkReaderNotice:
+      'Diese Seite hat bereits einen eingebauten Dark Mode – die Dark-Reader-Erweiterung ist hier nicht nötig und kann die Darstellung verfälschen.',
+    newsletterHeading: 'Newsletter',
+    newsletterDesc:
+      'Neuigkeiten zu Vorträgen, Projekten und Themen rund um Barrierefreiheit – ab und zu, ohne Spam.',
+    newsletterFirstNameLabel: 'Vorname',
+    newsletterEmailLabel: 'E-Mail-Adresse',
+    newsletterPlaceholder: 'ihre@email.de',
+    newsletterSubmitBtn: 'Anmelden',
+    newsletterEmailSubject: 'Newsletter-Anmeldung',
+    newsletterBioLabel: 'Newsletter abonnieren',
+    newsletterBioDesc: 'Bleiben Sie auf dem Laufenden',
     labelNachricht: 'Nachricht',
     kontaktSubmitBtn: 'Nachricht senden',
     labelName: 'Name',
@@ -50,7 +83,7 @@ export default {
     labelBeschreibung: 'Beschreibung',
     labelZeitrahmen: 'Gewünschter Zeitrahmen',
     submitBtn: 'Anfrage senden',
-    alleProjekte: 'Alle Portfolio-Einträge ansehen →',
+    alleProjekte: 'Alle Projects ansehen →',
     alleTermine: 'Alle Events ansehen →',
     footerImpressum: 'Impressum',
     closeDialog: 'Schließen',
@@ -71,9 +104,16 @@ export default {
     search: 'Suche',
     searchPlaceholder: 'Seite durchsuchen…',
     searchNoResults: 'Keine Treffer',
+    searchLabel: 'Suchbegriff',
+    searchResultsCountSingular: '{count} Ergebnis gefunden',
+    searchResultsCountPlural: '{count} Ergebnisse gefunden',
     easyLanguage: 'Leichte Sprache',
     easyLanguageOn: 'An',
     easyLanguageOff: 'Aus',
+    easyLanguageUnavailableForDgs: 'Leichte Sprache ist für DGS nicht verfügbar.',
+    dgsNoticeTitle: 'Inhalt in Deutscher Gebärdensprache',
+    dgsNoticeBody:
+      'Ein Video in Deutscher Gebärdensprache (DGS) zu diesem Inhalt folgt in Kürze. Bis dahin steht der Text unten auf Deutsch zur Verfügung.',
     onboardingTitle: 'Willkommen',
     onboardingIntro: 'Bevor es losgeht: Wie möchten Sie die Seite nutzen?',
     onboardingLangLabel: 'Sprache',
@@ -83,20 +123,109 @@ export default {
     onboardingDone: 'Los geht’s',
   },
 
-  nav: { about: 'About', portfolio: 'Portfolio', focus: 'Focus', events: 'Events', library: 'Library' },
+  nav: { about: 'About', projects: 'Projects', feeds: 'Feeds', events: 'Events', library: 'Library' },
 
-  roleLabels: ['Aktivist', 'Vorstand', 'Dozent'],
-  roleDescs: [
-    'Engagement für die Rechte und Sichtbarkeit taubblinder Menschen.',
-    'Interessenvertretung im Fachverband für taubblinde Menschen.',
-    'Vermittlung von Wissen zu Barrierefreiheit und Teilhabe in Vorträgen und Lehrveranstaltungen.',
+  bioPrimary: [
+    { label: 'Alle Infos zu Til Apfel' },
+    { label: 'Til Apfel Stiftung' },
+    { label: 'Entwickelte Apps von Til Apfel' },
+  ],
+
+  impressumAddress: {
+    name: 'Til Apfel',
+    street: 'Musterstraße 12',
+    city: '12345 Musterstadt',
+    phone: '+49 (0) 123 456789',
+  },
+
+  impressumSections: [
+    {
+      heading: 'Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV',
+      body: 'Til Apfel, Anschrift wie oben.',
+    },
+    {
+      heading: 'EU-Streitschlichtung',
+      body: 'Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: https://ec.europa.eu/consumers/odr/. Ich bin nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.',
+    },
+    {
+      heading: 'Haftung für Inhalte',
+      body: 'Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.',
+    },
+    {
+      heading: 'Haftung für Links',
+      body: 'Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.',
+    },
+    {
+      heading: 'Urheberrecht',
+      body: 'Die durch mich erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung.',
+    },
+  ],
+
+  datenschutzSections: [
+    {
+      heading: 'Verantwortlicher',
+      body: 'Verantwortlich für die Datenverarbeitung auf dieser Website ist Til Apfel (Kontaktdaten siehe Impressum).',
+    },
+    {
+      heading: 'Hosting',
+      body: 'Diese Website wird bei einem externen Hosting-Anbieter gehostet. Beim Aufruf der Seite werden automatisch technische Zugriffsdaten (z. B. IP-Adresse, Datum und Uhrzeit, aufgerufene Seite) in Server-Logfiles erfasst. Diese Daten dienen der technischen Bereitstellung und Sicherheit der Website (Art. 6 Abs. 1 lit. f DSGVO).',
+    },
+    {
+      heading: 'Kontaktformulare',
+      body: 'Die Formulare auf dieser Website (Kontakt, Kostenvoranschlag) übermitteln Ihre Eingaben nicht an einen Server, sondern öffnen Ihr lokales E-Mail-Programm mit einer vorausgefüllten Nachricht. Die eigentliche Übermittlung erfolgt erst, wenn Sie diese E-Mail selbst versenden; es findet keine Speicherung Ihrer Eingaben auf dieser Website statt.',
+    },
+    {
+      heading: 'Spam-Schutz',
+      body: 'Vor dem Absenden der Formulare prüft eine Funktion auf unserem Server automatisiert, ob eine Anfrage von einem Bot statt einem Menschen stammt (z. B. anhand der Ausfüllzeit und der Anzahl Anfragen von derselben IP-Adresse). Dabei wird Ihre IP-Adresse kurzzeitig verarbeitet, jedoch nicht dauerhaft gespeichert. Es kommt bewusst kein CAPTCHA zum Einsatz, damit das Formular für alle Nutzer:innen zugänglich bleibt. Rechtsgrundlage ist unser berechtigtes Interesse an der Absicherung unserer Formulare vor Spam und Missbrauch (Art. 6 Abs. 1 lit. f DSGVO).',
+    },
+    {
+      heading: 'Google Fonts',
+      body: 'Diese Website nutzt die Schriftart „Inter“ von Google Fonts, die beim Seitenaufruf von Servern von Google geladen wird. Dabei wird Ihre IP-Adresse an Google übertragen. Rechtsgrundlage ist unser berechtigtes Interesse an einer einheitlichen Darstellung der Website (Art. 6 Abs. 1 lit. f DSGVO).',
+    },
+    {
+      heading: 'Lokale Speicherung im Browser',
+      body: 'Ihre Einstellungen zu Sprache, Helligkeit und Leichter Sprache werden ausschließlich lokal in Ihrem Browser gespeichert (localStorage) und nicht an uns oder Dritte übermittelt.',
+    },
+    {
+      heading: 'Ihre Rechte',
+      body: 'Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung Ihrer personenbezogenen Daten sowie ein Widerspruchsrecht gegen die Verarbeitung. Zudem steht Ihnen ein Beschwerderecht bei der zuständigen Datenschutz-Aufsichtsbehörde zu.',
+    },
+  ],
+
+  roles: [
+    {
+      key: 'activist',
+      label: 'Aktivismus',
+      desc: 'Engagement für die Rechte und Sichtbarkeit taubblinder Menschen.',
+    },
+    {
+      key: 'board',
+      label: 'Vorstand',
+      desc: 'Interessenvertretung im Fachverband für taubblinde Menschen.',
+    },
+    {
+      key: 'lecturer',
+      label: 'Dozentur',
+      desc: 'Vermittlung von Wissen zu Barrierefreiheit und Teilhabe in Vorträgen und Lehrveranstaltungen.',
+    },
+    {
+      key: 'consulting',
+      label: 'Beratung',
+      desc: 'Beratung zu barrierefreier Softwaregestaltung für Behörden, Verbände und Unternehmen.',
+    },
+    {
+      key: 'projectManagement',
+      label: 'Projektmanagement',
+      desc: 'Steuerung von Projekten rund um digitale Barrierefreiheit von der Konzeption bis zur Umsetzung.',
+    },
   ],
 
   auftragArten: ['Beratung', 'Vortrag', 'Softwareentwicklung', 'Sonstiges'],
 
   portfolio: [
     {
-      slug: 'studium',
+      tagSlug: 'education',
+      dateSlug: '2010',
       date: 'Seit 2010',
       category: 'Ausbildung',
       location: 'Platzhalter',
@@ -106,7 +235,8 @@ export default {
       approach: '(Platzhalter – wird ergänzt)',
     },
     {
-      slug: 'dozent-aufbau',
+      tagSlug: 'career',
+      dateSlug: '2019',
       date: 'Seit 2019',
       category: 'Werdegang',
       location: 'Selbständig',
@@ -117,7 +247,8 @@ export default {
         'Der Weg führte über ehrenamtliche Vorträge zu bezahlten Aufträgen bei Bildungseinrichtungen, Verbänden und Unternehmen.',
     },
     {
-      slug: 'verbandsarbeit-tbv',
+      tagSlug: 'ngo',
+      dateSlug: '2021',
       date: 'Seit 2021',
       category: 'NGO-Engagement',
       location: 'Taubblinden-Verband',
@@ -128,7 +259,8 @@ export default {
         'Dazu gehören Positionspapiere, Gespräche mit Ministerien und die Begleitung von Gesetzesvorhaben zur Teilhabe.',
     },
     {
-      slug: 'edbu-engagement',
+      tagSlug: 'ngo',
+      dateSlug: '2022',
       date: 'Seit 2022',
       category: 'NGO-Engagement',
       location: 'European Deafblind Union',
@@ -139,7 +271,8 @@ export default {
         'Die Arbeitsgruppe bringt Vertreter:innen aus mehreren europäischen Ländern zusammen, um gemeinsame Mindeststandards zu erarbeiten.',
     },
     {
-      slug: 'digitalisierung-beratung',
+      tagSlug: 'project',
+      dateSlug: '2023',
       date: 'Seit 2023',
       category: 'Eigenes Projekt',
       location: 'Bundesweit',
@@ -150,7 +283,8 @@ export default {
         'Ich arbeite eng mit Entwicklungsteams zusammen und prüfe bestehende Anwendungen mit eigener Screenreader- und Braillezeilen-Praxis.',
     },
     {
-      slug: 'programmieren-lernen',
+      tagSlug: 'journey',
+      dateSlug: '2015',
       date: '2015–2018',
       category: 'Eigener Weg',
       location: 'Selbststudium',
@@ -163,7 +297,8 @@ export default {
 
   termine: [
     {
-      slug: 'digitale-teilhabe-heute',
+      tagSlug: 'talk',
+      dateSlug: '2026-07-22',
       date: '22. Juli 2026',
       category: 'Vortrag',
       title: 'Digitale Teilhabe heute',
@@ -173,7 +308,8 @@ export default {
       info: 'Zielgruppe: Fachpublikum aus Verwaltung und Bildung. Dauer: 45 Minuten inkl. Fragerunde.',
     },
     {
-      slug: 'vorstandssitzung-august',
+      tagSlug: 'board',
+      dateSlug: '2026-08-05',
       date: '5. August 2026',
       category: 'Vorstand',
       title: 'Vorstandssitzung Taubblinden-Verband',
@@ -183,7 +319,8 @@ export default {
       info: 'Verbandsintern – Teilnahme nach Absprache mit der Geschäftsstelle.',
     },
     {
-      slug: 'barrierefreie-software-workshop',
+      tagSlug: 'workshop',
+      dateSlug: '2026-09-14',
       date: '14. September 2026',
       category: 'Workshop',
       title: 'Barrierefreie Software gestalten',
@@ -193,7 +330,8 @@ export default {
       info: 'Zielgruppe: Entwickler:innen und Produktteams. Dauer: 3 Stunden, max. 15 Teilnehmende.',
     },
     {
-      slug: 'taubblind-leben-wien',
+      tagSlug: 'talk',
+      dateSlug: '2026-10-02',
       date: '2. Oktober 2026',
       category: 'Vortrag',
       title: 'Taubblind leben – Erfahrungsbericht',
@@ -203,7 +341,8 @@ export default {
       info: 'Zielgruppe: Studierende und Öffentlichkeit. Dauer: 60 Minuten.',
     },
     {
-      slug: 'edbu-treffen-bruessel',
+      tagSlug: 'international',
+      dateSlug: '2026-10-20',
       date: '20. Oktober 2026',
       category: 'International',
       title: 'EDBU Arbeitsgruppentreffen',
@@ -213,7 +352,8 @@ export default {
       info: 'Teilnahme auf Einladung der European Deafblind Union.',
     },
     {
-      slug: 'screenreader-testing-hamburg',
+      tagSlug: 'workshop',
+      dateSlug: '2026-11-11',
       date: '11. November 2026',
       category: 'Workshop',
       title: 'Screenreader-Testing für Entwicklerteams',
@@ -241,16 +381,19 @@ export default {
 
   library: [
     {
+      slug: 'accessnav',
       type: 'App',
       title: 'AccessNav',
       desc: 'Navigations-App mit taktiler und akustischer Rückmeldung für taubblinde Nutzer:innen.',
     },
     {
+      slug: 'dual-sensory-impairment',
       type: 'Essay',
       title: 'Doppelte Sinnesbeeinträchtigung',
       desc: 'Fachbeitrag über die besonderen Anforderungen an digitale Barrierefreiheit.',
     },
     {
+      slug: 'zwischentoene',
       type: 'Podcast',
       title: 'Zwischentöne',
       desc: 'Interviewreihe mit Aktivist:innen aus der Behindertenbewegung.',
@@ -278,6 +421,54 @@ export default {
     },
   ],
 
+  feedsPosts: [
+    {
+      formatSlug: 'youtube',
+      dateSlug: '2026-06',
+      date: 'Juni 2026',
+      source: 'YouTube',
+      tags: ['Vortrag'],
+      title: 'Ausschnitt: Digitale Teilhabe heute',
+      desc: 'Kurzer Videoausschnitt aus einem aktuellen Vortrag zu digitaler Teilhabe. (Platzhalter – echter Link folgt)',
+    },
+    {
+      formatSlug: 'blog',
+      dateSlug: '2026-05',
+      date: 'Mai 2026',
+      source: 'Blog',
+      tags: ['Barrierefreiheit'],
+      title: 'Warum Barrierefreiheit kein Extra ist',
+      desc: 'Ein Blogbeitrag darüber, warum Barrierefreiheit von Anfang an mitgedacht werden muss. (Platzhalter – echter Link folgt)',
+    },
+    {
+      formatSlug: 'podcast',
+      dateSlug: '2026-04',
+      date: 'April 2026',
+      source: 'Podcast',
+      tags: ['Interview'],
+      title: 'Zu Gast bei Zwischentöne',
+      desc: 'Interview über Taubblindheit und digitale Teilhabe im Podcast Zwischentöne. (Platzhalter – echter Link folgt)',
+    },
+    {
+      formatSlug: 'linkedin',
+      dateSlug: '2026-03',
+      date: 'März 2026',
+      source: 'LinkedIn',
+      tags: ['Verband'],
+      title: 'Rückblick: EDBU Arbeitsgruppentreffen',
+      desc: 'Kurzer Rückblick auf das letzte Arbeitsgruppentreffen der European Deafblind Union. (Platzhalter – echter Link folgt)',
+    },
+    {
+      formatSlug: 'blog',
+      dateSlug: '2026-02',
+      date: 'Februar 2026',
+      source: 'Blog',
+      tags: ['Programmierung'],
+      title: 'Programmieren mit Screenreader – ein Werkstattbericht',
+      desc: 'Einblicke in meinen Alltag als Softwareentwickler mit Screenreader und Braillezeile. (Platzhalter – echter Link folgt)',
+    },
+  ],
+
   werte: [
     'Softwareentwicklung (Programmieren)',
     'Pflanzlich kochen (Vegan)',
@@ -294,16 +485,22 @@ export default {
 
   bookable: [
     {
+      slug: 'vortrag',
       title: 'Vortrag',
       desc: 'Vorträge zu Taubblindheit, Barrierefreiheit und digitaler Teilhabe für Fachpublikum und Bildungseinrichtungen.',
+      full: 'Vorträge richten sich an Fachpublikum, Bildungseinrichtungen und Kongresse. Themen reichen von Taubblindheit und assistiven Technologien bis zu digitaler Teilhabe im Alltag. Vorträge sind sowohl in Präsenz als auch online möglich, Dauer und inhaltlicher Zuschnitt werden individuell abgestimmt.',
     },
     {
+      slug: 'beratung',
       title: 'Beratung',
       desc: 'Barrierefreiheits-Audits und Beratung für Behörden, Verbände und Unternehmen.',
+      full: 'Die Beratung umfasst Barrierefreiheits-Audits bestehender Websites und Anwendungen, Empfehlungen zur Umsetzung sowie Begleitung bei der praktischen Prüfung mit Screenreader und Braillezeile. Geeignet für Behörden, Verbände und Unternehmen, die digitale Angebote barrierefrei gestalten möchten.',
     },
     {
+      slug: 'dozent',
       title: 'Dozententätigkeit',
       desc: 'Lehrveranstaltungen und Workshops zu barrierefreier Softwaregestaltung.',
+      full: 'Lehrveranstaltungen und Workshops vermitteln praxisnah, wie barrierefreie Software entsteht – von der Konzeption über die Umsetzung bis zum Testing. Format und Umfang richten sich nach den Anforderungen der jeweiligen Bildungseinrichtung oder des Entwicklungsteams.',
     },
   ],
 };

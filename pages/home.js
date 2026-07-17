@@ -1,4 +1,5 @@
 import { escapeHtml } from '../components/utils.js';
+import { ICONS } from '../components/icons.js';
 import { pillHtml } from '../components/pill.js';
 import { portfolioCardHtml, eventCardHtml, libraryCardHtml } from '../components/card.js';
 
@@ -22,35 +23,35 @@ export function renderHome(view) {
 
     <hr class="divider">
     <section class="section">
-      <h2 class="section-title">${escapeHtml(t.aboutTitle)}</h2>
+      <h2 class="section-title">${ICONS.about}<span>${escapeHtml(t.aboutTitle)}</span></h2>
       <div class="card"><p>${escapeHtml(t.uberMichText)}</p></div>
       <a href="#/about" class="more-link">${escapeHtml(t.moreAbout)}</a>
     </section>
 
     <hr class="divider">
     <section class="section">
-      <h2 class="section-title">${escapeHtml(t.portfolioTitle)}</h2>
+      <h2 class="section-title">${ICONS.rocket}<span>${escapeHtml(t.portfolioTitle)}</span></h2>
       <div class="card-list">${portfolioCards}</div>
-      <a href="#/portfolio" class="more-link">${escapeHtml(t.alleProjekte)}</a>
+      <a href="#/projects" class="more-link">${escapeHtml(t.alleProjekte)}</a>
     </section>
 
     <hr class="divider">
     <section class="section">
-      <h2 class="section-title">${escapeHtml(t.focusTitle)}</h2>
+      <h2 class="section-title">${ICONS.feed}<span>${escapeHtml(t.focusTitle)}</span></h2>
       <div class="card"><div class="pill-row align-start">${focusPills}</div></div>
-      <a href="#/focus" class="more-link">${escapeHtml(t.moreFocus)}</a>
+      <a href="#/feeds" class="more-link">${escapeHtml(t.moreFocus)}</a>
     </section>
 
     <hr class="divider">
     <section class="section">
-      <h2 class="section-title">${escapeHtml(t.eventsTitle)}</h2>
+      <h2 class="section-title">${ICONS.events}<span>${escapeHtml(t.eventsTitle)}</span></h2>
       <div class="card-list">${eventCards}</div>
       <a href="#/events" class="more-link">${escapeHtml(t.alleTermine)}</a>
     </section>
 
     <hr class="divider">
     <section class="section">
-      <h2 class="section-title">${escapeHtml(t.libraryTitle)}</h2>
+      <h2 class="section-title">${ICONS.library}<span>${escapeHtml(t.libraryTitle)}</span></h2>
       <div class="card-list">${libraryCards}</div>
       <a href="#/library" class="more-link">${escapeHtml(t.moreLibrary)}</a>
     </section>

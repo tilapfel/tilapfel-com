@@ -34,10 +34,18 @@
   color: var(--text-secondary);
 }
 .section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: clamp(22px, 3.5vw, 26px);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 16px;
+}
+.section-title svg {
+  width: 0.8em;
+  height: 0.8em;
+  flex: none;
 }
 .heading-sm {
   font-size: 17px;
@@ -71,10 +79,17 @@
 .pill.solid {
   background: var(--bg-card-2);
 }
-.pill svg {
+.pill-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
   width: 15px;
   height: 15px;
-  flex: none;
+}
+.pill-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* Card */
@@ -171,6 +186,15 @@
   font-size: 15px;
   line-height: 1.6;
   color: var(--text-secondary);
+}
+a.card-simple {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+a.card-simple:hover {
+  background: var(--bg-card-2);
 }
 
 .press-item {
@@ -297,6 +321,10 @@
   margin-top: 2px;
   color: var(--text-secondary);
 }
+.role-item .role-icon svg {
+  width: 100%;
+  height: 100%;
+}
 .role-item .role-text {
   display: flex;
   flex-direction: column;
@@ -347,10 +375,15 @@
   padding: clamp(20px, 5vw, 32px);
   margin-top: clamp(20px, 6vh, 64px);
 }
-.modal-close {
+.modal-actions {
   position: absolute;
   top: 12px;
   right: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+.modal-close {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -366,12 +399,16 @@
   width: 16px;
   height: 16px;
 }
+.modal-actions .icon-btn {
+  width: 40px;
+  height: 40px;
+}
 .modal-eyebrow-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  margin: 0 40px 10px 0;
+  margin: 0 96px 10px 0;
   font-size: 12px;
   color: var(--text-tertiary);
 }
@@ -393,7 +430,7 @@
   color: var(--text-primary);
   margin-bottom: 14px;
 }
-.modal p:last-of-type {
+.modal > p:last-of-type {
   margin-bottom: 0;
 }
 .modal .modal-location {
@@ -403,14 +440,28 @@
 }
 
 /* Onboarding modal */
+.modal .onboarding-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.modal .onboarding-body h2 {
+  text-align: center;
+}
 .modal .onboarding-intro {
   font-size: 16px;
   line-height: 1.6;
   color: var(--text-secondary);
-  margin-bottom: 20px;
+  margin-bottom: 48px;
+  text-align: center;
 }
 .onboarding-group {
-  margin-bottom: 18px;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 .onboarding-group-title {
   font-size: 14px;
@@ -419,10 +470,12 @@
   letter-spacing: 0.04em;
   color: var(--text-tertiary);
   margin: 0 0 8px;
+  text-align: center;
 }
 .onboarding-choice-row {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
 }
 .onboarding-choice {
@@ -441,8 +494,8 @@
   color: var(--bg-base);
   border-color: var(--text-primary);
 }
-.modal .cta-button.compact {
-  margin-top: 6px;
+.modal .onboarding-body .cta-button.compact {
+  margin-top: 20px;
 }
 
 /* Forms */
@@ -475,6 +528,48 @@ form.stack-form {
 .form-field textarea {
   resize: vertical;
   min-height: unset;
+}
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.consent-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.consent-label input[type='checkbox'] {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  accent-color: var(--text-primary);
+}
+.consent-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--text-tertiary);
+}
+.consent-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.form-error {
+  font-size: 13px;
+  color: #c0392b;
+  margin: 8px 0 0;
 }
 .submit-btn {
   font-size: 16px;
@@ -509,6 +604,11 @@ form.stack-form {
   gap: 10px;
   width: 100%;
 }
+@media (min-width: 521px) {
+  .bio-grid {
+    width: 75%;
+  }
+}
 .bio-tile {
   display: flex;
   align-items: center;
@@ -518,10 +618,10 @@ form.stack-form {
   border-radius: 14px;
   padding: 13px 18px;
   text-decoration: none;
-  background: var(--bg-card);
+  background: var(--bg-card-soft);
 }
 .bio-tile:hover {
-  background: var(--bg-card-2);
+  background: var(--bg-card);
 }
 .bio-tile-icon {
   display: flex;
@@ -531,6 +631,10 @@ form.stack-form {
   width: 32px;
   height: 32px;
   color: var(--text-secondary);
+}
+.bio-tile-icon svg {
+  width: 100%;
+  height: 100%;
 }
 .bio-tile-text {
   display: flex;
@@ -576,6 +680,16 @@ form.stack-form {
   z-index: 30;
   min-width: 130px;
 }
+.lang-menu-title {
+  margin: 0;
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
 .lang-menu button {
   display: flex;
   align-items: center;
@@ -595,6 +709,11 @@ form.stack-form {
 .lang-menu button.active {
   background: var(--text-primary);
   color: var(--bg-base);
+}
+.lang-menu button[disabled] {
+  cursor: not-allowed;
+  color: var(--text-tertiary);
+  opacity: 0.6;
 }
 .lang-menu button + button {
   border-top: 1px solid var(--divider);
@@ -669,4 +788,56 @@ form.stack-form {
   color: var(--text-tertiary);
   margin: 0;
   padding: 4px 10px;
+}
+.search-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  margin: 0 0 6px;
+}
+.search-result-count {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin: 0 0 8px;
+}
+
+/* DGS video-placeholder notice, shown above the page when DGS is the active locale */
+.dgs-notice {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-top: clamp(20px, 5vw, 32px);
+  padding: 18px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--divider);
+  border-radius: 14px;
+}
+.dgs-notice-title {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.dgs-notice p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.dgs-notice-video {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  border: 1px dashed var(--divider);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+}
+.dgs-notice-video svg {
+  width: 30px;
+  height: 30px;
 }

@@ -6,9 +6,14 @@ import { escapeHtml } from './utils.js';
  * edit can't drift between the two.
  */
 
-/** Title + description card, used for Focus items and Bookable formats. */
+/** Title + description card, used for Focus items. */
 export function simpleCardHtml({ title, desc }) {
   return `<div class="card card-simple"><h3>${escapeHtml(title)}</h3><p>${escapeHtml(desc)}</p></div>`;
+}
+
+/** Bookable format: same look as simpleCardHtml, but a link that opens the format's detail modal. */
+export function bookableCardHtml({ href, title, desc }) {
+  return `<a class="card card-simple" href="${href}"><h3>${escapeHtml(title)}</h3><p>${escapeHtml(desc)}</p></a>`;
 }
 
 /** Portfolio entry: compact (home preview) shows date · category; detailed (full list) also shows location. */
@@ -40,12 +45,29 @@ export function eventCardHtml(entry, { linked = true, muted = false } = {}) {
     </${tag}>`;
 }
 
+/** Feed post: date + source-type meta row (styled like Portfolio's detailed meta) plus a tag row. */
+export function feedPostCardHtml(entry) {
+  const tags = entry.tags
+    .map((tag) => `<span class="pill" style="font-size:12px;padding:4px 10px">${escapeHtml(tag)}</span>`)
+    .join('');
+  return `
+    <a class="list-card" href="${entry.href}">
+      <div class="card-meta">
+        <span class="meta-strong">${escapeHtml(entry.date)}</span><span>·</span>
+        <span class="eyebrow" style="margin:0">${escapeHtml(entry.source)}</span>
+      </div>
+      <h3>${escapeHtml(entry.title)}</h3>
+      <p class="desc">${escapeHtml(entry.desc)}</p>
+      <div class="pill-row align-start" style="margin-top:10px">${tags}</div>
+    </a>`;
+}
+
 /** Library entry card (also reused for the home preview). */
 export function libraryCardHtml(entry) {
   return `
-    <div class="card card-simple">
+    <a class="card card-simple" href="${entry.href}">
       <span class="eyebrow">${escapeHtml(entry.type)}</span>
       <h3>${escapeHtml(entry.title)}</h3>
       <p>${escapeHtml(entry.desc)}</p>
-    </div>`;
+    </a>`;
 }

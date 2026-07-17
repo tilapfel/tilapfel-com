@@ -20,12 +20,16 @@ export default {
     werteHeading: 'Values',
     aboutCtaText: 'Interested in working together?',
     aboutCtaLink: 'Get in touch',
-    portfolioTitle: 'Portfolio',
-    portfolioSubtitle: 'Paths I have taken.',
-    focusTitle: 'Focus',
-    focusSubtitle: 'What I stand for.',
+    portfolioTitle: 'Projects',
+    portfolioSubtitle: 'Projects and milestones I am working on.',
+    focusTitle: 'Feeds',
+    focusSubtitle: 'What I stand for – and where you can follow along.',
     focusClosing: "I'm generally approachable and bookable on these topics.",
     moreFocus: 'More on my focus →',
+    feedsChannelsHeading: 'My Channels',
+    feedsPostsHeading: 'Latest Posts',
+    feedsTopicsHeading: 'My Topics',
+    feedsTagAll: 'All',
     eventsTitle: 'Events',
     eventsSubtitle: 'Where you can meet and book me.',
     registerBtn: 'Register for this event',
@@ -35,13 +39,41 @@ export default {
     pastHeading: 'Past Events',
     libraryTitle: 'Library',
     librarySubtitle: 'What I have published.',
+    publicationsHeading: 'Publications',
     pressHeading: 'Press & Media',
     moreLibrary: 'Go to Library →',
     impressumSubtitle: 'Legal information about me.',
+    impressumPlaceholder: 'Placeholder',
+    impressumPhoneLabel: 'Phone',
+    impressumEmailLabel: 'Email',
+    impressumDatenschutzLink: 'See also: Privacy Policy →',
     formularTitle: 'Request a Quote',
     formularSubtitle: 'Ask me for a quote.',
     kontaktTitle: 'Contact',
     kontaktSubtitle: 'Send me a message.',
+    datenschutzTitle: 'Privacy Policy',
+    datenschutzSubtitle: 'How I handle your data.',
+    errorTitle: 'Not accessible',
+    errorBody:
+      "For once, that's not a bug: this page simply doesn't exist. The rest of the site does — and it's fully accessible.",
+    errorHomeLink: 'Back to home',
+    consentPrefix: 'I have read the',
+    consentLinkText: 'Privacy Policy',
+    consentSuffix: 'and agree to it.',
+    formErrorRateLimited: 'Too many requests. Please try again later.',
+    formErrorGeneric: 'Something went wrong while sending. Please try again.',
+    language: 'Language',
+    darkReaderNotice:
+      "This site already has a built-in dark mode – the Dark Reader extension isn't needed here and may distort the display.",
+    newsletterHeading: 'Newsletter',
+    newsletterDesc: 'Updates on talks, projects and accessibility topics – every once in a while, no spam.',
+    newsletterFirstNameLabel: 'First name',
+    newsletterEmailLabel: 'Email address',
+    newsletterPlaceholder: 'you@email.com',
+    newsletterSubmitBtn: 'Subscribe',
+    newsletterEmailSubject: 'Newsletter signup',
+    newsletterBioLabel: 'Subscribe to newsletter',
+    newsletterBioDesc: 'Stay up to date',
     labelNachricht: 'Message',
     kontaktSubmitBtn: 'Send message',
     labelName: 'Name',
@@ -50,7 +82,7 @@ export default {
     labelBeschreibung: 'Description',
     labelZeitrahmen: 'Desired timeframe',
     submitBtn: 'Send request',
-    alleProjekte: 'View all portfolio entries →',
+    alleProjekte: 'View all Projects →',
     alleTermine: 'View all events →',
     footerImpressum: 'Legal Notice',
     closeDialog: 'Close',
@@ -71,9 +103,16 @@ export default {
     search: 'Search',
     searchPlaceholder: 'Search the site…',
     searchNoResults: 'No results',
+    searchLabel: 'Search term',
+    searchResultsCountSingular: '{count} result found',
+    searchResultsCountPlural: '{count} results found',
     easyLanguage: 'Easy language',
     easyLanguageOn: 'On',
     easyLanguageOff: 'Off',
+    easyLanguageUnavailableForDgs: 'Easy language is not available for DGS.',
+    dgsNoticeTitle: 'Content in German Sign Language',
+    dgsNoticeBody:
+      'A German Sign Language (DGS) video for this content is coming soon. Until then, the text below is available in German.',
     onboardingTitle: 'Welcome',
     onboardingIntro: 'Before you start: how would you like to use the site?',
     onboardingLangLabel: 'Language',
@@ -83,20 +122,109 @@ export default {
     onboardingDone: 'Get started',
   },
 
-  nav: { about: 'About', portfolio: 'Portfolio', focus: 'Focus', events: 'Events', library: 'Library' },
+  nav: { about: 'About', projects: 'Projects', feeds: 'Feeds', events: 'Events', library: 'Library' },
 
-  roleLabels: ['Activist', 'Board Member', 'Lecturer'],
-  roleDescs: [
-    'Advocacy for the rights and visibility of deafblind people.',
-    'Advocacy in the professional association for deafblind people.',
-    'Teaching accessibility and participation through talks and courses.',
+  bioPrimary: [
+    { label: 'All info about Til Apfel' },
+    { label: 'Til Apfel Foundation' },
+    { label: 'Apps developed by Til Apfel' },
+  ],
+
+  impressumAddress: {
+    name: 'Til Apfel',
+    street: 'Musterstraße 12',
+    city: '12345 Musterstadt',
+    phone: '+49 (0) 123 456789',
+  },
+
+  impressumSections: [
+    {
+      heading: 'Responsible for content under German law (§ 55 (2) RStV)',
+      body: 'Til Apfel, address as above.',
+    },
+    {
+      heading: 'EU Dispute Resolution',
+      body: 'The European Commission provides a platform for online dispute resolution (ODR): https://ec.europa.eu/consumers/odr/. I am not obliged or willing to participate in dispute resolution proceedings before a consumer arbitration board.',
+    },
+    {
+      heading: 'Liability for Content',
+      body: 'As a service provider, I am responsible for my own content on these pages under general law (§ 7 (1) TMG). Under §§ 8 to 10 TMG, however, I am not obliged as a service provider to monitor transmitted or stored third-party information or to investigate circumstances that indicate unlawful activity.',
+    },
+    {
+      heading: 'Liability for Links',
+      body: 'This website contains links to external third-party websites over whose content I have no influence. I therefore cannot accept any liability for this external content. The respective provider or operator of a linked page is always responsible for its content.',
+    },
+    {
+      heading: 'Copyright',
+      body: 'The content and works created by me on these pages are subject to German copyright law. Reproduction, editing, distribution and any kind of exploitation beyond the limits of copyright require written consent.',
+    },
+  ],
+
+  datenschutzSections: [
+    {
+      heading: 'Controller',
+      body: 'The controller responsible for data processing on this website is Til Apfel (contact details see Legal Notice).',
+    },
+    {
+      heading: 'Hosting',
+      body: 'This website is hosted with an external hosting provider. When you visit the site, technical access data (e.g. IP address, date and time, page requested) is automatically recorded in server log files. This data serves the technical provision and security of the website (Art. 6(1)(f) GDPR).',
+    },
+    {
+      heading: 'Contact forms',
+      body: 'The forms on this website (Contact, Quote request) do not submit your entries to a server; instead they open your local email client with a pre-filled message. The actual transmission only happens once you send that email yourself – no entries are stored on this website.',
+    },
+    {
+      heading: 'Spam protection',
+      body: "Before a form can be submitted, a function on our server automatically checks whether the request looks like it came from a bot rather than a person (e.g. based on how quickly the form was filled in and how many requests recently came from the same IP address). Your IP address is briefly processed for this purpose but not stored permanently. We deliberately don't use a CAPTCHA, so the form stays accessible to everyone. The legal basis is our legitimate interest in protecting our forms from spam and abuse (Art. 6(1)(f) GDPR).",
+    },
+    {
+      heading: 'Google Fonts',
+      body: 'This website uses the "Inter" typeface from Google Fonts, which is loaded from Google\'s servers when the page is visited. This transmits your IP address to Google. The legal basis is our legitimate interest in a consistent presentation of the website (Art. 6(1)(f) GDPR).',
+    },
+    {
+      heading: 'Local storage in your browser',
+      body: 'Your preferences for language, brightness and easy language are stored exclusively in your browser (localStorage) and are not transmitted to us or third parties.',
+    },
+    {
+      heading: 'Your rights',
+      body: 'You have the right to access, rectify, erase and restrict the processing of your personal data, as well as the right to object to processing. You also have the right to lodge a complaint with the competent data protection supervisory authority.',
+    },
+  ],
+
+  roles: [
+    {
+      key: 'activist',
+      label: 'Activism',
+      desc: 'Advocacy for the rights and visibility of deafblind people.',
+    },
+    {
+      key: 'board',
+      label: 'Board',
+      desc: 'Advocacy in the professional association for deafblind people.',
+    },
+    {
+      key: 'lecturer',
+      label: 'Lecturing',
+      desc: 'Teaching accessibility and participation through talks and courses.',
+    },
+    {
+      key: 'consulting',
+      label: 'Consulting',
+      desc: 'Consulting on accessible software design for public bodies, associations and companies.',
+    },
+    {
+      key: 'projectManagement',
+      label: 'Project Management',
+      desc: 'Steering accessibility projects from concept through implementation.',
+    },
   ],
 
   auftragArten: ['Consulting', 'Talk', 'Software Development', 'Other'],
 
   portfolio: [
     {
-      slug: 'studium',
+      tagSlug: 'education',
+      dateSlug: '2010',
       date: 'Since 2010',
       category: 'Education',
       location: 'Placeholder',
@@ -106,7 +234,8 @@ export default {
       approach: '(Placeholder – to be added)',
     },
     {
-      slug: 'dozent-aufbau',
+      tagSlug: 'career',
+      dateSlug: '2019',
       date: 'Since 2019',
       category: 'Career Path',
       location: 'Self-employed',
@@ -117,7 +246,8 @@ export default {
         'The path led from volunteer talks to paid assignments with educational institutions, associations and companies.',
     },
     {
-      slug: 'verbandsarbeit-tbv',
+      tagSlug: 'ngo',
+      dateSlug: '2021',
       date: 'Since 2021',
       category: 'NGO Engagement',
       location: 'Deafblind Association',
@@ -128,7 +258,8 @@ export default {
         'This includes position papers, talks with ministries and following legislation on participation.',
     },
     {
-      slug: 'edbu-engagement',
+      tagSlug: 'ngo',
+      dateSlug: '2022',
       date: 'Since 2022',
       category: 'NGO Engagement',
       location: 'European Deafblind Union',
@@ -139,7 +270,8 @@ export default {
         'The working group brings together representatives from several European countries to develop shared minimum standards.',
     },
     {
-      slug: 'digitalisierung-beratung',
+      tagSlug: 'project',
+      dateSlug: '2023',
       date: 'Since 2023',
       category: 'Own Project',
       location: 'Nationwide',
@@ -150,7 +282,8 @@ export default {
         'I work closely with development teams and audit existing applications using my own screen reader and braille display practice.',
     },
     {
-      slug: 'programmieren-lernen',
+      tagSlug: 'journey',
+      dateSlug: '2015',
       date: '2015–2018',
       category: 'Personal Path',
       location: 'Self-taught',
@@ -163,7 +296,8 @@ export default {
 
   termine: [
     {
-      slug: 'digitale-teilhabe-heute',
+      tagSlug: 'talk',
+      dateSlug: '2026-07-22',
       date: 'July 22, 2026',
       category: 'Talk',
       title: 'Digital Participation Today',
@@ -173,7 +307,8 @@ export default {
       info: 'Audience: professionals from administration and education. Duration: 45 minutes incl. Q&A.',
     },
     {
-      slug: 'vorstandssitzung-august',
+      tagSlug: 'board',
+      dateSlug: '2026-08-05',
       date: 'August 5, 2026',
       category: 'Board',
       title: 'Deafblind Association Board Meeting',
@@ -182,7 +317,8 @@ export default {
       info: 'Internal to the association – attendance by arrangement with the office.',
     },
     {
-      slug: 'barrierefreie-software-workshop',
+      tagSlug: 'workshop',
+      dateSlug: '2026-09-14',
       date: 'September 14, 2026',
       category: 'Workshop',
       title: 'Designing Accessible Software',
@@ -192,7 +328,8 @@ export default {
       info: 'Audience: developers and product teams. Duration: 3 hours, max. 15 participants.',
     },
     {
-      slug: 'taubblind-leben-wien',
+      tagSlug: 'talk',
+      dateSlug: '2026-10-02',
       date: 'October 2, 2026',
       category: 'Talk',
       title: 'Living Deafblind – A First-Hand Account',
@@ -202,7 +339,8 @@ export default {
       info: 'Audience: students and the public. Duration: 60 minutes.',
     },
     {
-      slug: 'edbu-treffen-bruessel',
+      tagSlug: 'international',
+      dateSlug: '2026-10-20',
       date: 'October 20, 2026',
       category: 'International',
       title: 'EDBU Working Group Meeting',
@@ -211,7 +349,8 @@ export default {
       info: 'By invitation of the European Deafblind Union.',
     },
     {
-      slug: 'screenreader-testing-hamburg',
+      tagSlug: 'workshop',
+      dateSlug: '2026-11-11',
       date: 'November 11, 2026',
       category: 'Workshop',
       title: 'Screen Reader Testing for Dev Teams',
@@ -239,16 +378,19 @@ export default {
 
   library: [
     {
+      slug: 'accessnav',
       type: 'App',
       title: 'AccessNav',
       desc: 'Navigation app with tactile and audio feedback for deafblind users.',
     },
     {
+      slug: 'dual-sensory-impairment',
       type: 'Essay',
       title: 'Dual Sensory Impairment',
       desc: 'An article on the specific accessibility requirements involved.',
     },
     {
+      slug: 'zwischentoene',
       type: 'Podcast',
       title: 'Zwischentöne',
       desc: 'An interview series with activists from the disability rights movement.',
@@ -277,6 +419,54 @@ export default {
     },
   ],
 
+  feedsPosts: [
+    {
+      formatSlug: 'youtube',
+      dateSlug: '2026-06',
+      date: 'June 2026',
+      source: 'YouTube',
+      tags: ['Talk'],
+      title: 'Clip: Digital Participation Today',
+      desc: 'Short video clip from a recent talk on digital participation. (Placeholder – real link to follow)',
+    },
+    {
+      formatSlug: 'blog',
+      dateSlug: '2026-05',
+      date: 'May 2026',
+      source: 'Blog',
+      tags: ['Accessibility'],
+      title: "Why Accessibility Isn't an Extra",
+      desc: 'A blog post on why accessibility needs to be designed in from the start. (Placeholder – real link to follow)',
+    },
+    {
+      formatSlug: 'podcast',
+      dateSlug: '2026-04',
+      date: 'April 2026',
+      source: 'Podcast',
+      tags: ['Interview'],
+      title: 'Guest on Zwischentöne',
+      desc: 'Interview on deafblindness and digital participation on the Zwischentöne podcast. (Placeholder – real link to follow)',
+    },
+    {
+      formatSlug: 'linkedin',
+      dateSlug: '2026-03',
+      date: 'March 2026',
+      source: 'LinkedIn',
+      tags: ['Association'],
+      title: 'Recap: EDBU Working Group Meeting',
+      desc: 'A short recap of the latest European Deafblind Union working group meeting. (Placeholder – real link to follow)',
+    },
+    {
+      formatSlug: 'blog',
+      dateSlug: '2026-02',
+      date: 'February 2026',
+      source: 'Blog',
+      tags: ['Programming'],
+      title: 'Programming with a Screen Reader – A Workshop Report',
+      desc: 'A look into my everyday work as a developer using a screen reader and braille display. (Placeholder – real link to follow)',
+    },
+  ],
+
   werte: [
     'Software Development (Programming)',
     'Plant-Based Cooking (Vegan)',
@@ -293,13 +483,22 @@ export default {
 
   bookable: [
     {
+      slug: 'vortrag',
       title: 'Talk',
       desc: 'Talks on deafblindness, accessibility and digital participation for professionals and schools.',
+      full: 'Talks are aimed at professional audiences, educational institutions and conferences. Topics range from deafblindness and assistive technology to everyday digital participation. Talks are available in person or online, with duration and content tailored individually.',
     },
     {
+      slug: 'beratung',
       title: 'Consulting',
       desc: 'Accessibility audits and consulting for public bodies, associations and companies.',
+      full: 'Consulting includes accessibility audits of existing websites and applications, implementation recommendations, and support with practical testing using a screen reader and braille display. Suited for public bodies, associations and companies looking to make their digital offerings accessible.',
     },
-    { title: 'Lecturing', desc: 'Courses and workshops on accessible software design.' },
+    {
+      slug: 'dozent',
+      title: 'Lecturing',
+      desc: 'Courses and workshops on accessible software design.',
+      full: 'Courses and workshops provide hands-on guidance on how accessible software is built – from concept through implementation to testing. Format and scope are tailored to the requirements of the educational institution or development team.',
+    },
   ],
 };

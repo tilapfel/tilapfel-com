@@ -47,7 +47,7 @@ export function renderAbout(view) {
         <div class="pill-row align-start">${werte}</div>
       </div>
 
-      <a href="#/kontakt" class="cta-button">${escapeHtml(t.aboutCtaText)} — ${escapeHtml(t.aboutCtaLink)}</a>
+      <a href="#/contact" class="cta-button">${escapeHtml(t.aboutCtaText)} – ${escapeHtml(t.aboutCtaLink)}</a>
     </section>
   </div>`;
 }
