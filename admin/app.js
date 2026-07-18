@@ -246,9 +246,8 @@ async function deleteEditorEntry() {
 function loginScreenHtml() {
   return `
     <div class="admin-login">
-      <h1>${escapeHtml(t().heading)}</h1>
       ${state.loadError ? `<p class="form-error">${escapeHtml(state.loadError)}</p>` : ''}
-      <a class="btn-outline" href="/api/auth">
+      <a class="submit-btn admin-login-btn" href="/api/auth">
         <span aria-hidden="true">${ICONS.github}</span>
         ${escapeHtml(t().login)}
       </a>
