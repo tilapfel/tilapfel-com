@@ -38,12 +38,24 @@ export function setLocale(loaded) {
 
 const localeCache = new Map();
 
-/** Fetches a locale module on first use only; later calls for the same code resolve from the cache. */
+/**
+ * Fetches a locale on first use only; later calls for the same code resolve
+ * from the cache. Each locale is assembled from two sources: the `.js`
+ * module (translations, static/legal content — code-managed) and a `.json`
+ * file (the growing content lists — CMS-managed via /admin, see
+ * admin/config.yml). DGS has no written form of its own, so it reuses the
+ * German JSON data rather than shipping a duplicate dgs.json.
+ */
 export function loadLocale(code) {
   if (localeCache.has(code)) return Promise.resolve(localeCache.get(code));
-  return import(`../content/${code}.js`).then((mod) => {
-    localeCache.set(code, mod.default);
-    return mod.default;
+  const jsonCode = code === 'dgs' ? 'de' : code;
+  return Promise.all([
+    import(`../content/${code}.js`),
+    fetch(`content/${jsonCode}.json`).then((res) => res.json()),
+  ]).then(([mod, data]) => {
+    const merged = { ...mod.default, ...data };
+    localeCache.set(code, merged);
+    return merged;
   });
 }
 
