@@ -3,6 +3,7 @@ import { escapeHtml } from '../components/utils.js';
 import { modalHtml } from '../components/modal.js';
 import { STORAGE_KEYS, readStorage, writeStorage } from '../app/storage.js';
 import { COLLECTIONS } from './collections.js';
+import { PAGES } from './pages.js';
 
 const REPO = 'tilapfel/tilapfel-com';
 const BRANCH = 'main';
@@ -11,7 +12,7 @@ const TOKEN_KEY = 'tilapfel-admin-token';
 
 const T = {
   de: {
-    heading: 'Content-Verwaltung',
+    heading: 'Dashboard',
     login: 'Mit GitHub einloggen',
     loggedInAs: 'Angemeldet als',
     logout: 'Abmelden',
@@ -27,9 +28,21 @@ const T = {
     saveError: 'Speichern fehlgeschlagen.',
     loginError: 'Anmeldung fehlgeschlagen oder abgelaufen. Bitte erneut versuchen.',
     empty: 'Noch keine Einträge.',
+    visitSite: 'Seite besuchen',
+    maintenanceTurnOn: 'Wartungsmodus einschalten',
+    maintenanceTurnOff: 'Wartungsmodus ausschalten',
+    maintenanceConfirmOn:
+      'Wartungsmodus aktivieren? Besucher sehen dann die Wartungsseite statt der normalen Seite.',
+    maintenanceConfirmOff:
+      'Wartungsmodus deaktivieren? Die Seite ist danach für alle wieder normal erreichbar.',
+    eventsHeading: 'Termine',
+    upcomingEvents: 'Kommende Termine',
+    pastEvents: 'Vergangene Termine',
+    typeUpcoming: 'Kommend',
+    typePast: 'Vergangen',
   },
   en: {
-    heading: 'Content management',
+    heading: 'Dashboard',
     login: 'Log in with GitHub',
     loggedInAs: 'Logged in as',
     logout: 'Log out',
@@ -45,6 +58,18 @@ const T = {
     saveError: 'Save failed.',
     loginError: 'Login failed or expired. Please try again.',
     empty: 'No entries yet.',
+    visitSite: 'Visit site',
+    maintenanceTurnOn: 'Turn on maintenance mode',
+    maintenanceTurnOff: 'Turn off maintenance mode',
+    maintenanceConfirmOn:
+      'Turn on maintenance mode? Visitors will see the maintenance page instead of the normal site.',
+    maintenanceConfirmOff:
+      'Turn off maintenance mode? The site will be reachable normally for everyone again.',
+    eventsHeading: 'Events',
+    upcomingEvents: 'Upcoming Events',
+    pastEvents: 'Past Events',
+    typeUpcoming: 'Upcoming',
+    typePast: 'Past',
   },
 };
 
@@ -57,9 +82,12 @@ const state = {
     (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'),
   view: 'login', // login | dashboard | list
   collectionKey: null,
-  entries: { de: null, en: null }, // { data: [...], sha } per language, for the active collection
+  isTermineGroup: false, // true when the merged Termine (termine + pastTermine) tile is open
+  entries: { de: null, en: null }, // { data: <full parsed JSON file>, sha } per language
   loadError: null,
   editor: null, // { index (null = new), lang, values: { de: {...}, en: {...} }, error, saving }
+  settings: null, // { data: { maintenanceMode }, sha }, loaded once logged in
+  maintenanceError: null,
 };
 
 function t() {
@@ -126,43 +154,133 @@ async function loadUser() {
   state.user = await res.json();
 }
 
+async function loadSettings() {
+  try {
+    state.settings = await ghGetFile('content/settings.json');
+  } catch {
+    state.settings = null;
+  }
+}
+
+async function toggleMaintenance() {
+  if (!state.settings) return;
+  const next = !state.settings.data.maintenanceMode;
+  if (!confirm(next ? t().maintenanceConfirmOn : t().maintenanceConfirmOff)) return;
+  state.maintenanceError = null;
+  try {
+    const data = { ...state.settings.data, maintenanceMode: next };
+    const put = await ghPutFile(
+      'content/settings.json',
+      data,
+      state.settings.sha,
+      next ? 'Enable maintenance mode via admin dashboard' : 'Disable maintenance mode via admin dashboard'
+    );
+    state.settings = { data, sha: put.content.sha };
+  } catch {
+    state.maintenanceError = t().saveError;
+  }
+  render();
+}
+
 async function init() {
   consumeAuthRedirect();
   state.token = sessionStorage.getItem(TOKEN_KEY);
   document.documentElement.setAttribute('data-theme', state.theme);
   if (state.token) {
     await loadUser();
-    if (state.token) state.view = 'dashboard';
+    if (state.token) {
+      state.view = 'dashboard';
+      await loadSettings();
+    }
   }
   render();
 }
 
 async function openCollection(key) {
   state.collectionKey = key;
+  state.isTermineGroup = false;
   state.view = 'list';
   state.entries = { de: null, en: null };
   state.loadError = null;
   render();
   try {
     const [de, en] = await Promise.all([ghGetFile('content/de.json'), ghGetFile('content/en.json')]);
-    state.entries.de = { data: de.data[key] || [], sha: de.sha };
-    state.entries.en = { data: en.data[key] || [], sha: en.sha };
+    state.entries.de = de;
+    state.entries.en = en;
   } catch {
     state.loadError = t().loadError;
   }
   render();
 }
 
-function openEditor(index) {
+/** The "Termine" dashboard tile merges COLLECTIONS.termine + COLLECTIONS.pastTermine into one view. */
+async function openTermineGroup() {
+  state.collectionKey = null;
+  state.isTermineGroup = true;
+  state.view = 'list';
+  state.entries = { de: null, en: null };
+  state.loadError = null;
+  render();
+  try {
+    const [de, en] = await Promise.all([ghGetFile('content/de.json'), ghGetFile('content/en.json')]);
+    state.entries.de = de;
+    state.entries.en = en;
+  } catch {
+    state.loadError = t().loadError;
+  }
+  render();
+}
+
+function blankEntryFor(collection) {
+  return Object.fromEntries(collection.fields.map((f) => [f.key, f.type === 'tags' ? [] : '']));
+}
+
+/** Drops any fields a values object picked up from a since-abandoned type (see set-editor-type). */
+function pickFields(collection, values) {
+  return Object.fromEntries(collection.fields.map((f) => [f.key, values[f.key]]));
+}
+
+/**
+ * `arrayKey` (only used for the merged Termine view) is which underlying
+ * array — 'termine' or 'pastTermine' — an existing entry was opened from.
+ * COLLECTIONS.termine.fields is a superset of COLLECTIONS.pastTermine's,
+ * so a blank new entry can always start from the termine template and grow
+ * or shrink its visible fields as the type pill is switched.
+ */
+function openEditor(index, arrayKey = null) {
+  if (state.isTermineGroup) {
+    const sourceArray = index == null ? null : arrayKey;
+    const type = sourceArray || 'termine';
+    state.editor = {
+      index,
+      lang: state.uiLang,
+      sourceArray,
+      type,
+      values: {
+        de:
+          index == null
+            ? blankEntryFor(COLLECTIONS.termine)
+            : { ...state.entries.de.data[sourceArray][index] },
+        en:
+          index == null
+            ? blankEntryFor(COLLECTIONS.termine)
+            : { ...state.entries.en.data[sourceArray][index] },
+      },
+      error: null,
+      saving: false,
+    };
+    render();
+    return;
+  }
   const collection = COLLECTIONS[state.collectionKey];
-  const blankEntry = () =>
-    Object.fromEntries(collection.fields.map((f) => [f.key, f.type === 'tags' ? [] : '']));
   state.editor = {
     index,
     lang: state.uiLang,
     values: {
-      de: index == null ? blankEntry() : { ...state.entries.de.data[index] },
-      en: index == null ? blankEntry() : { ...state.entries.en.data[index] },
+      de:
+        index == null ? blankEntryFor(collection) : { ...state.entries.de.data[state.collectionKey][index] },
+      en:
+        index == null ? blankEntryFor(collection) : { ...state.entries.en.data[state.collectionKey][index] },
     },
     error: null,
     saving: false,
@@ -176,11 +294,14 @@ function closeEditor() {
 }
 
 function slugConflict(lang, index) {
-  const collection = COLLECTIONS[state.collectionKey];
+  const collectionKey = state.isTermineGroup ? state.editor.type : state.collectionKey;
+  const collection = COLLECTIONS[collectionKey];
   if (!collection.slugFields.length) return false;
   const key = collection.slugFields.map((f) => state.editor.values[lang][f]).join('/');
-  return state.entries[lang].data.some((entry, i) => {
-    if (i === index) return false;
+  const selfArray = state.isTermineGroup ? state.editor.sourceArray : state.collectionKey;
+  const selfIndex = selfArray === collectionKey ? index : null;
+  return state.entries[lang].data[collectionKey].some((entry, i) => {
+    if (i === selfIndex) return false;
     return collection.slugFields.map((f) => entry[f]).join('/') === key;
   });
 }
@@ -201,19 +322,33 @@ async function saveEditor() {
       ['de', de],
       ['en', en],
     ]) {
-      const list = [...file.data[state.collectionKey]];
-      if (index == null) list.push(state.editor.values[lang]);
-      else list[index] = state.editor.values[lang];
-      file.data[state.collectionKey] = list;
+      if (state.isTermineGroup) {
+        const { sourceArray, type } = state.editor;
+        const moved = index != null && sourceArray !== type;
+        if (moved) file.data[sourceArray] = file.data[sourceArray].filter((_, i) => i !== index);
+        const value = pickFields(COLLECTIONS[type], state.editor.values[lang]);
+        const list = [...file.data[type]];
+        if (index == null || moved) list.push(value);
+        else list[index] = value;
+        file.data[type] = list;
+      } else {
+        const list = [...file.data[state.collectionKey]];
+        if (index == null) list.push(state.editor.values[lang]);
+        else list[index] = state.editor.values[lang];
+        file.data[state.collectionKey] = list;
+      }
     }
+    const label = state.isTermineGroup ? 'events' : state.collectionKey;
     const message =
-      index == null
-        ? `Add ${state.collectionKey} entry via admin dashboard`
-        : `Edit ${state.collectionKey} entry via admin dashboard`;
-    await ghPutFile('content/de.json', de.data, de.sha, message);
-    await ghPutFile('content/en.json', en.data, en.sha, message);
+      index == null ? `Add ${label} entry via admin dashboard` : `Edit ${label} entry via admin dashboard`;
+    const [dePut, enPut] = await Promise.all([
+      ghPutFile('content/de.json', de.data, de.sha, message),
+      ghPutFile('content/en.json', en.data, en.sha, message),
+    ]);
+    state.entries.de = { data: de.data, sha: dePut.content.sha };
+    state.entries.en = { data: en.data, sha: enPut.content.sha };
     state.editor = null;
-    await openCollection(state.collectionKey);
+    render();
   } catch {
     state.editor.saving = false;
     state.editor.error = t().saveError;
@@ -228,14 +363,20 @@ async function deleteEditorEntry() {
   render();
   try {
     const [de, en] = await Promise.all([ghGetFile('content/de.json'), ghGetFile('content/en.json')]);
+    const arrayKey = state.isTermineGroup ? state.editor.sourceArray : state.collectionKey;
     for (const file of [de, en]) {
-      file.data[state.collectionKey] = file.data[state.collectionKey].filter((_, i) => i !== index);
+      file.data[arrayKey] = file.data[arrayKey].filter((_, i) => i !== index);
     }
-    const message = `Delete ${state.collectionKey} entry via admin dashboard`;
-    await ghPutFile('content/de.json', de.data, de.sha, message);
-    await ghPutFile('content/en.json', en.data, en.sha, message);
+    const label = state.isTermineGroup ? 'events' : state.collectionKey;
+    const message = `Delete ${label} entry via admin dashboard`;
+    const [dePut, enPut] = await Promise.all([
+      ghPutFile('content/de.json', de.data, de.sha, message),
+      ghPutFile('content/en.json', en.data, en.sha, message),
+    ]);
+    state.entries.de = { data: de.data, sha: dePut.content.sha };
+    state.entries.en = { data: en.data, sha: enPut.content.sha };
     state.editor = null;
-    await openCollection(state.collectionKey);
+    render();
   } catch {
     state.editor.saving = false;
     state.editor.error = t().saveError;
@@ -255,6 +396,7 @@ function loginScreenHtml() {
 }
 
 function headerBarHtml() {
+  const maintenanceOn = state.settings?.data.maintenanceMode === true;
   return `
     <div class="admin-topbar">
       <div class="admin-topbar-user">
@@ -262,6 +404,16 @@ function headerBarHtml() {
         <span>${escapeHtml(t().loggedInAs)} ${escapeHtml(state.user?.login || '')}</span>
       </div>
       <div class="admin-topbar-actions">
+        <a class="icon-btn" href="/" target="_blank" rel="noopener" title="${escapeHtml(t().visitSite)}" data-tooltip="${escapeHtml(t().visitSite)}">
+          <span aria-hidden="true">${ICONS.home}</span>
+        </a>
+        ${
+          state.settings
+            ? `<button type="button" class="icon-btn${maintenanceOn ? ' active' : ''}" data-action="toggle-maintenance" title="${escapeHtml(maintenanceOn ? t().maintenanceTurnOff : t().maintenanceTurnOn)}" data-tooltip="${escapeHtml(maintenanceOn ? t().maintenanceTurnOff : t().maintenanceTurnOn)}">
+                <span aria-hidden="true">${ICONS.lock}</span>
+              </button>`
+            : ''
+        }
         <button type="button" class="icon-btn" data-action="toggle-theme" title="${escapeHtml(state.theme === 'dark' ? 'Hell' : 'Dunkel')}">
           <span aria-hidden="true">${state.theme === 'dark' ? ICONS.sun : ICONS.moon}</span>
         </button>
@@ -270,19 +422,28 @@ function headerBarHtml() {
         </button>
         <button type="button" class="btn-outline" data-action="logout">${escapeHtml(t().logout)}</button>
       </div>
-    </div>`;
+    </div>
+    ${state.maintenanceError ? `<p class="form-error">${escapeHtml(state.maintenanceError)}</p>` : ''}`;
 }
 
 function dashboardHtml() {
-  const tiles = Object.entries(COLLECTIONS)
-    .map(
-      ([key, c]) => `
-      <button type="button" class="admin-tile" data-action="open-collection" data-key="${key}">
-        <span class="admin-tile-icon" aria-hidden="true">${c.icon}</span>
-        <span>${escapeHtml(c.label[state.uiLang])}</span>
-      </button>`
-    )
-    .join('');
+  const tiles = PAGES.map((page) => {
+    const label = escapeHtml(page.label[state.uiLang]);
+    if (page.kind === 'preview') {
+      return `
+      <a class="admin-tile" href="/#/${page.route}" target="_blank" rel="noopener">
+        <span class="admin-tile-icon" aria-hidden="true">${page.icon}</span>
+        <span>${label} <span aria-hidden="true">↗</span></span>
+      </a>`;
+    }
+    const action = page.kind === 'termine-group' ? 'open-termine-group' : 'open-collection';
+    const dataKey = page.kind === 'collection' ? ` data-key="${page.collectionKey}"` : '';
+    return `
+      <button type="button" class="admin-tile" data-action="${action}"${dataKey}>
+        <span class="admin-tile-icon" aria-hidden="true">${page.icon}</span>
+        <span>${label}</span>
+      </button>`;
+  }).join('');
   return `
     <div class="admin-dashboard">
       <h1>${escapeHtml(t().heading)}</h1>
@@ -301,11 +462,42 @@ function listRowHtml(entry, index) {
     </li>`;
 }
 
+function termineRowHtml(entry, arrayKey, index) {
+  return `
+    <li class="admin-row">
+      <button type="button" class="admin-row-main" data-action="edit-entry" data-array="${arrayKey}" data-index="${index}">
+        <span class="admin-row-title">${escapeHtml(entry.title || '')}</span>
+        <span class="admin-row-subtitle">${escapeHtml(entry.date || '')}</span>
+      </button>
+    </li>`;
+}
+
+function termineGroupListHtml() {
+  const upcoming = state.entries[state.uiLang].data.termine;
+  const past = state.entries[state.uiLang].data.pastTermine;
+  const group = (entries, arrayKey, heading) => `
+      <h2 class="admin-group-title">${escapeHtml(heading)}</h2>
+      ${entries.length ? `<ul class="admin-row-list">${entries.map((entry, i) => termineRowHtml(entry, arrayKey, i)).join('')}</ul>` : `<p>${escapeHtml(t().empty)}</p>`}`;
+  return `
+    <div class="admin-list-view">
+      <div class="admin-list-header">
+        <button type="button" class="icon-btn" data-action="back-to-dashboard" title="${escapeHtml(t().back)}">
+          <span aria-hidden="true">${ICONS.arrowLeft}</span>
+        </button>
+        <h1>${escapeHtml(t().eventsHeading)}</h1>
+        <button type="button" class="btn-outline" data-action="new-entry">${escapeHtml(t().newEntry)}</button>
+      </div>
+      ${group(upcoming, 'termine', t().upcomingEvents)}
+      ${group(past, 'pastTermine', t().pastEvents)}
+    </div>`;
+}
+
 function listViewHtml() {
-  const collection = COLLECTIONS[state.collectionKey];
   if (state.loadError) return `<p class="form-error">${escapeHtml(state.loadError)}</p>`;
   if (!state.entries.de) return `<p>…</p>`;
-  const entries = state.entries[state.uiLang].data;
+  if (state.isTermineGroup) return termineGroupListHtml();
+  const collection = COLLECTIONS[state.collectionKey];
+  const entries = state.entries[state.uiLang].data[state.collectionKey];
   return `
     <div class="admin-list-view">
       <div class="admin-list-header">
@@ -340,7 +532,8 @@ function editorFieldHtml(field) {
 }
 
 function editorModalHtml() {
-  const collection = COLLECTIONS[state.collectionKey];
+  const collectionKey = state.isTermineGroup ? state.editor.type : state.collectionKey;
+  const collection = COLLECTIONS[collectionKey];
   const { lang, index, error, saving } = state.editor;
   const langPills = ['de', 'en']
     .map(
@@ -348,11 +541,18 @@ function editorModalHtml() {
       <button type="button" class="${code === lang ? 'active' : ''}" data-action="set-editor-lang" data-lang="${code}">${code.toUpperCase()}</button>`
     )
     .join('');
+  const typePills = state.isTermineGroup
+    ? `<div class="admin-lang-pills" role="group">
+        <button type="button" class="${state.editor.type === 'termine' ? 'active' : ''}" data-action="set-editor-type" data-type="termine">${escapeHtml(t().typeUpcoming)}</button>
+        <button type="button" class="${state.editor.type === 'pastTermine' ? 'active' : ''}" data-action="set-editor-type" data-type="pastTermine">${escapeHtml(t().typePast)}</button>
+      </div>`
+    : '';
   return modalHtml({
     labelledBy: 'admin-editor-title',
     closeLabel: t().cancel,
     bodyHtml: `
-      <h2 id="admin-editor-title">${escapeHtml(collection.label[state.uiLang])}</h2>
+      <h2 id="admin-editor-title">${escapeHtml(state.isTermineGroup ? t().eventsHeading : collection.label[state.uiLang])}</h2>
+      ${typePills}
       <div class="admin-lang-pills" role="group">${langPills}</div>
       <form data-action="editor-form">
         ${collection.fields.map(editorFieldHtml).join('')}
@@ -397,6 +597,7 @@ function attachListeners() {
   document.querySelectorAll('[data-action="logout"]').forEach((el) =>
     el.addEventListener('click', () => {
       sessionStorage.removeItem(TOKEN_KEY);
+      document.cookie = 'admin_session=; Max-Age=0; Path=/';
       state.token = null;
       state.user = null;
       state.view = 'login';
@@ -404,8 +605,14 @@ function attachListeners() {
     })
   );
   document
+    .querySelectorAll('[data-action="toggle-maintenance"]')
+    .forEach((el) => el.addEventListener('click', toggleMaintenance));
+  document
     .querySelectorAll('[data-action="open-collection"]')
     .forEach((el) => el.addEventListener('click', () => openCollection(el.getAttribute('data-key'))));
+  document
+    .querySelectorAll('[data-action="open-termine-group"]')
+    .forEach((el) => el.addEventListener('click', openTermineGroup));
   document.querySelectorAll('[data-action="back-to-dashboard"]').forEach((el) =>
     el.addEventListener('click', () => {
       state.view = 'dashboard';
@@ -417,7 +624,11 @@ function attachListeners() {
     .forEach((el) => el.addEventListener('click', () => openEditor(null)));
   document
     .querySelectorAll('[data-action="edit-entry"]')
-    .forEach((el) => el.addEventListener('click', () => openEditor(Number(el.getAttribute('data-index')))));
+    .forEach((el) =>
+      el.addEventListener('click', () =>
+        openEditor(Number(el.getAttribute('data-index')), el.getAttribute('data-array'))
+      )
+    );
   document.querySelectorAll('[data-close-modal]').forEach((el) => el.addEventListener('click', closeEditor));
   document.querySelectorAll('[data-action="set-editor-lang"]').forEach((el) =>
     el.addEventListener('click', () => {
@@ -425,10 +636,25 @@ function attachListeners() {
       render();
     })
   );
+  document.querySelectorAll('[data-action="set-editor-type"]').forEach((el) =>
+    el.addEventListener('click', () => {
+      const type = el.getAttribute('data-type');
+      state.editor.type = type;
+      for (const lang of ['de', 'en']) {
+        for (const field of COLLECTIONS[type].fields) {
+          if (state.editor.values[lang][field.key] === undefined) {
+            state.editor.values[lang][field.key] = field.type === 'tags' ? [] : '';
+          }
+        }
+      }
+      render();
+    })
+  );
   document.querySelectorAll('[data-field]').forEach((el) =>
     el.addEventListener('input', () => {
       const key = el.getAttribute('data-field');
-      const field = COLLECTIONS[state.collectionKey].fields.find((f) => f.key === key);
+      const collectionKey = state.isTermineGroup ? state.editor.type : state.collectionKey;
+      const field = COLLECTIONS[collectionKey].fields.find((f) => f.key === key);
       state.editor.values[state.editor.lang][key] =
         field.type === 'tags'
           ? el.value

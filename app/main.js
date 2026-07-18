@@ -56,8 +56,14 @@ new MutationObserver(checkDarkReader).observe(document.documentElement, {
   attributeFilter: ['data-darkreader-scheme'],
 });
 
-// Fetch only the active locale, then render.
-loadLocale(state.lang).then((loaded) => {
+// Fetch the active locale plus the (language-independent) site settings, then render.
+Promise.all([
+  loadLocale(state.lang),
+  fetch('content/settings.json')
+    .then((res) => res.json())
+    .catch(() => ({ maintenanceMode: false })),
+]).then(([loaded, settings]) => {
   setLocale(loaded);
+  state.maintenanceMode = settings.maintenanceMode === true;
   render();
 });

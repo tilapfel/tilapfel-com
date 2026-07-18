@@ -108,6 +108,24 @@
   height: 13px;
 }
 
+/* Maintenance-mode status banner (site owner only, see maintenance-banner.js) */
+.maintenance-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 10px clamp(16px, 4vw, 32px);
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--divider);
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.maintenance-banner a {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 /* Header / nav */
 .site-header {
   border-bottom: 1px solid var(--divider);

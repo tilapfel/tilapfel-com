@@ -40,18 +40,24 @@ export default async (req) => {
     return redirectToAdmin(url.origin, { error: tokenData.error_description || 'GitHub login failed.' });
   }
 
-  return redirectToAdmin(url.origin, { access_token: tokenData.access_token });
+  return redirectToAdmin(url.origin, { access_token: tokenData.access_token }, { grantSession: true });
 };
 
-function redirectToAdmin(origin, fragmentParams) {
+/**
+ * `admin_session` lets maintenance-gate.mjs recognize this browser as the
+ * site owner's and skip the maintenance page — it carries no real
+ * permission (writes still require the bearer token in sessionStorage, and
+ * the repo is public anyway), so it's deliberately not HttpOnly: the
+ * admin app's logout button clears it via document.cookie too.
+ */
+function redirectToAdmin(origin, fragmentParams, { grantSession = false } = {}) {
   const fragment = new URLSearchParams(fragmentParams).toString();
-  return new Response(null, {
-    status: 302,
-    headers: {
-      Location: `${origin}/admin/#${fragment}`,
-      'Set-Cookie': 'oauth_state=; Path=/; Max-Age=0',
-    },
-  });
+  const headers = new Headers({ Location: `${origin}/admin/#${fragment}` });
+  headers.append('Set-Cookie', 'oauth_state=; Path=/; Max-Age=0');
+  if (grantSession) {
+    headers.append('Set-Cookie', 'admin_session=1; Path=/; Max-Age=2592000; Secure; SameSite=Lax');
+  }
+  return new Response(null, { status: 302, headers });
 }
 
 export const config = { path: '/api/callback' };

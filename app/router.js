@@ -21,6 +21,7 @@ import { renderError } from '../pages/error.js';
 import { renderOnboardingModal } from '../pages/onboarding.js';
 import { newsletterSectionHtml, newsletterModalHtml } from '../components/newsletter.js';
 import { darkReaderBannerHtml } from '../components/darkreader-banner.js';
+import { maintenanceBannerHtml } from '../components/maintenance-banner.js';
 import { dgsNoticeHtml } from '../components/dgs-notice.js';
 
 const appEl = document.getElementById('app');
@@ -240,7 +241,7 @@ export function render() {
 
   if (view.section === 'contact' || view.section === 'quote') ensureFormToken(view.section);
 
-  headerSlot.innerHTML = darkReaderBannerHtml(view) + renderHeader(view);
+  headerSlot.innerHTML = maintenanceBannerHtml(view) + darkReaderBannerHtml(view) + renderHeader(view);
 
   const pageRenderer = view.isKnownSection ? PAGE_RENDERERS[view.section] : renderError;
   appEl.innerHTML =

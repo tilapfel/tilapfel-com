@@ -22,6 +22,7 @@ export const state = {
   formToken: null,
   formTokenSection: null,
   onboardingOpen: !readStorage(STORAGE_KEYS.onboarded),
+  maintenanceMode: false,
 };
 
 /**

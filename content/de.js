@@ -65,6 +65,8 @@ export default {
     language: 'Sprache',
     darkReaderNotice:
       'Diese Seite hat bereits einen eingebauten Dark Mode – die Dark-Reader-Erweiterung ist hier nicht nötig und kann die Darstellung verfälschen.',
+    maintenanceBannerNotice: 'Wartungsmodus ist aktiv – nur Sie sehen die Seite gerade so.',
+    maintenanceBannerLink: 'Zurück zum Dashboard',
     newsletterHeading: 'Newsletter',
     newsletterDesc:
       'Neuigkeiten zu Vorträgen, Projekten und Themen rund um Barrierefreiheit – ab und zu, ohne Spam.',

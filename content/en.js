@@ -65,6 +65,8 @@ export default {
     language: 'Language',
     darkReaderNotice:
       "This site already has a built-in dark mode – the Dark Reader extension isn't needed here and may distort the display.",
+    maintenanceBannerNotice: 'Maintenance mode is on – only you can currently see the site like this.',
+    maintenanceBannerLink: 'Back to dashboard',
     newsletterHeading: 'Newsletter',
     newsletterDesc: 'Updates on talks, projects and accessibility topics – every once in a while, no spam.',
     newsletterFirstNameLabel: 'First name',

@@ -6,10 +6,20 @@
     <meta name="robots" content="noindex" />
     <title>Wartungsarbeiten – tilapfel.com</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles/base.css" />
+    <link rel="stylesheet" href="./styles/components.css" />
     <style>
+      html,
       body {
-        margin: 0;
-        min-height: 100vh;
+        height: 100%;
+      }
+      body {
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
+      .maintenance-main {
+        flex: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -17,34 +27,198 @@
         gap: 16px;
         padding: 24px;
         text-align: center;
-        background: #000000;
-        color: #f5f5f7;
-        font-family:
-          'Inter',
-          system-ui,
-          -apple-system,
-          sans-serif;
       }
-      p {
+      .maintenance-main p {
         margin: 0;
         max-width: 32em;
-        color: #a1a1a6;
+        color: var(--text-secondary);
         font-size: 17px;
         line-height: 1.6;
       }
-      h1 {
-        margin: 0;
-        font-size: clamp(24px, 5vw, 32px);
-      }
-      span {
-        color: #a1a1a6;
+      .maintenance-brand {
+        color: var(--text-secondary);
         font-size: 14px;
+      }
+      .maintenance-controls {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px;
       }
     </style>
   </head>
   <body>
-    <span>Til Apfel</span>
-    <h1>Wartungsarbeiten</h1>
-    <p>Wir aktualisieren gerade die Seite. Bitte schau in Kürze wieder vorbei.</p>
+    <main class="maintenance-main">
+      <span class="maintenance-brand">Til Apfel</span>
+      <h1 data-el="title">Wartungsarbeiten</h1>
+      <p data-el="body">Wir aktualisieren gerade die Seite. Bitte schau in Kürze wieder vorbei.</p>
+    </main>
+    <div class="maintenance-controls" id="controls"></div>
+    <script type="module">
+      import { STORAGE_KEYS, readStorage, writeStorage } from './app/storage.js';
+      import { AVAILABLE_LOCALES, LOCALE_META } from './app/data.js';
+      import { ICONS } from './components/icons.js';
+
+      const T = {
+        de: {
+          title: 'Wartungsarbeiten',
+          body: 'Wir aktualisieren gerade die Seite. Bitte schau in Kürze wieder vorbei.',
+          easyTitle: 'Die Seite wird gerade repariert',
+          easyBody: 'Die Internet-Seite ist jetzt nicht da. Wir arbeiten daran. Bitte komm später wieder.',
+          language: 'Sprache',
+          easyLanguage: 'Leichte Sprache',
+          easyLanguageOn: 'An',
+          easyLanguageOff: 'Aus',
+          theme: (dark) => (dark ? 'Hell' : 'Dunkel'),
+        },
+        en: {
+          title: 'Under maintenance',
+          body: "We're currently updating the site. Please check back shortly.",
+          easyTitle: 'The website is being fixed',
+          easyBody: 'The website is not here right now. We are working on it. Please come back later.',
+          language: 'Language',
+          easyLanguage: 'Easy language',
+          easyLanguageOn: 'On',
+          easyLanguageOff: 'Off',
+          theme: (dark) => (dark ? 'Light' : 'Dark'),
+        },
+      };
+      T.dgs = T.de;
+
+      const storedLang = readStorage(STORAGE_KEYS.lang);
+      const state = {
+        lang: AVAILABLE_LOCALES.includes(storedLang) ? storedLang : 'de',
+        theme:
+          readStorage(STORAGE_KEYS.theme) ||
+          (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'),
+        easyLanguage: readStorage(STORAGE_KEYS.easyLanguage) === '1',
+        langMenuOpen: false,
+        easyLangMenuOpen: false,
+      };
+
+      function t() {
+        return T[state.lang];
+      }
+
+      function render() {
+        document.documentElement.setAttribute('lang', state.lang);
+        document.documentElement.setAttribute('data-theme', state.theme);
+        const useEasy = state.easyLanguage && state.lang !== 'dgs';
+        document.querySelector('[data-el="title"]').textContent = useEasy ? t().easyTitle : t().title;
+        document.querySelector('[data-el="body"]').textContent = useEasy ? t().easyBody : t().body;
+        document.title = `${t().title} – tilapfel.com`;
+        document.getElementById('controls').innerHTML = controlsHtml();
+        wire();
+      }
+
+      function controlsHtml() {
+        const langMenu = state.langMenuOpen
+          ? `<div class="lang-menu-backdrop" data-close="lang"></div>
+             <div class="lang-menu" role="group">
+               <p class="lang-menu-title">${t().language}</p>
+               ${AVAILABLE_LOCALES.map(
+                 (code) =>
+                   `<button type="button" class="${code === state.lang ? 'active' : ''}" data-set-lang="${code}" aria-pressed="${code === state.lang}">
+                     <span>${LOCALE_META[code].nativeName}</span>${code === state.lang ? '<span aria-hidden="true">✓</span>' : ''}
+                   </button>`
+               ).join('')}
+             </div>`
+          : '';
+        const easyMenu = state.easyLangMenuOpen
+          ? `<div class="lang-menu-backdrop" data-close="easylang"></div>
+             <div class="lang-menu" role="group">
+               <p class="lang-menu-title">${t().easyLanguage}</p>
+               <button type="button" class="${state.easyLanguage ? 'active' : ''}" data-set-easylang="on" aria-pressed="${state.easyLanguage}" ${state.lang === 'dgs' ? 'disabled aria-disabled="true"' : ''}>
+                 <span>${t().easyLanguageOn}</span>${state.easyLanguage ? '<span aria-hidden="true">✓</span>' : ''}
+               </button>
+               <button type="button" class="${!state.easyLanguage ? 'active' : ''}" data-set-easylang="off" aria-pressed="${!state.easyLanguage}">
+                 <span>${t().easyLanguageOff}</span>${!state.easyLanguage ? '<span aria-hidden="true">✓</span>' : ''}
+               </button>
+             </div>`
+          : '';
+        return `
+          <div class="lang-menu-wrap">
+            <button type="button" class="icon-btn" data-action="toggle-lang-menu" aria-expanded="${state.langMenuOpen}" aria-haspopup="true" title="${t().language}">
+              <span aria-hidden="true">${ICONS.globe}</span>
+            </button>
+            ${langMenu}
+          </div>
+          <div class="lang-menu-wrap">
+            <button type="button" class="icon-btn" data-action="toggle-easylang-menu" aria-expanded="${state.easyLangMenuOpen}" aria-haspopup="true" title="${t().easyLanguage}">
+              <span aria-hidden="true">${ICONS.easyLanguage}</span>
+            </button>
+            ${easyMenu}
+          </div>
+          <button type="button" class="icon-btn" data-action="toggle-theme" title="${t().theme(state.theme === 'dark')}">
+            <span aria-hidden="true">${state.theme === 'dark' ? ICONS.sun : ICONS.moon}</span>
+          </button>
+        `;
+      }
+
+      function wire() {
+        const langBtn = document.querySelector('[data-action="toggle-lang-menu"]');
+        if (langBtn) {
+          langBtn.addEventListener('click', () => {
+            state.langMenuOpen = !state.langMenuOpen;
+            state.easyLangMenuOpen = false;
+            render();
+          });
+        }
+        document.querySelectorAll('[data-close="lang"]').forEach((el) =>
+          el.addEventListener('click', () => {
+            state.langMenuOpen = false;
+            render();
+          })
+        );
+        document.querySelectorAll('[data-set-lang]').forEach((el) =>
+          el.addEventListener('click', () => {
+            state.lang = el.getAttribute('data-set-lang');
+            state.langMenuOpen = false;
+            writeStorage(STORAGE_KEYS.lang, state.lang);
+            if (state.lang === 'dgs' && state.easyLanguage) {
+              state.easyLanguage = false;
+              writeStorage(STORAGE_KEYS.easyLanguage, '0');
+            }
+            render();
+          })
+        );
+
+        const easyBtn = document.querySelector('[data-action="toggle-easylang-menu"]');
+        if (easyBtn) {
+          easyBtn.addEventListener('click', () => {
+            state.easyLangMenuOpen = !state.easyLangMenuOpen;
+            state.langMenuOpen = false;
+            render();
+          });
+        }
+        document.querySelectorAll('[data-close="easylang"]').forEach((el) =>
+          el.addEventListener('click', () => {
+            state.easyLangMenuOpen = false;
+            render();
+          })
+        );
+        document.querySelectorAll('[data-set-easylang]').forEach((el) =>
+          el.addEventListener('click', () => {
+            state.easyLanguage = el.getAttribute('data-set-easylang') === 'on';
+            state.easyLangMenuOpen = false;
+            writeStorage(STORAGE_KEYS.easyLanguage, state.easyLanguage ? '1' : '0');
+            render();
+          })
+        );
+
+        const themeBtn = document.querySelector('[data-action="toggle-theme"]');
+        if (themeBtn) {
+          themeBtn.addEventListener('click', () => {
+            state.theme = state.theme === 'dark' ? 'light' : 'dark';
+            writeStorage(STORAGE_KEYS.theme, state.theme);
+            render();
+          });
+        }
+      }
+
+      render();
+    </script>
   </body>
 </html>

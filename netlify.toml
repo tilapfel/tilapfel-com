@@ -2,17 +2,15 @@
   publish = "."
   functions = "netlify/functions"
 
-# Maintenance mode: shows maintenance.html (with a real 503 status, so search
-# engines know it's temporary) instead of the app. Scoped to just "/" since
-# the whole app is one hash-routed page loaded from index.html — every
-# visible route lives under that same "/", so nothing else needs excluding.
-# /admin/*, /api/*, and all asset paths are untouched by this rule.
-# To turn maintenance mode off again: delete or comment out this block.
-[[redirects]]
-  from = "/"
-  to = "/maintenance.html"
-  status = 503
-  force = true
+# Maintenance mode: netlify/edge-functions/maintenance-gate.mjs shows
+# maintenance.html (with a real 503 status, so search engines know it's
+# temporary) instead of the app when content/settings.json's
+# maintenanceMode flag is true — except for the site owner, whose browser
+# carries the admin_session cookie set at login (see oauth-callback.mjs).
+# Toggle maintenance mode from the admin dashboard, not here.
+[[edge_functions]]
+  path = "/"
+  function = "maintenance-gate"
 
 [[headers]]
   for = "/*"
