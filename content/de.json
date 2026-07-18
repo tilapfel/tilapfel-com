@@ -186,9 +186,7 @@
       "dateSlug": "2026-06",
       "date": "Juni 2026",
       "source": "YouTube",
-      "tags": [
-        "Vortrag"
-      ],
+      "tags": ["Vortrag"],
       "title": "Ausschnitt: Digitale Teilhabe heute",
       "desc": "Kurzer Videoausschnitt aus einem aktuellen Vortrag zu digitaler Teilhabe. (Platzhalter – echter Link folgt)"
     },
@@ -197,9 +195,7 @@
       "dateSlug": "2026-05",
       "date": "Mai 2026",
       "source": "Blog",
-      "tags": [
-        "Barrierefreiheit"
-      ],
+      "tags": ["Barrierefreiheit"],
       "title": "Warum Barrierefreiheit kein Extra ist",
       "desc": "Ein Blogbeitrag darüber, warum Barrierefreiheit von Anfang an mitgedacht werden muss. (Platzhalter – echter Link folgt)"
     },
@@ -208,9 +204,7 @@
       "dateSlug": "2026-04",
       "date": "April 2026",
       "source": "Podcast",
-      "tags": [
-        "Interview"
-      ],
+      "tags": ["Interview"],
       "title": "Zu Gast bei Zwischentöne",
       "desc": "Interview über Taubblindheit und digitale Teilhabe im Podcast Zwischentöne. (Platzhalter – echter Link folgt)"
     },
@@ -219,9 +213,7 @@
       "dateSlug": "2026-03",
       "date": "März 2026",
       "source": "LinkedIn",
-      "tags": [
-        "Verband"
-      ],
+      "tags": ["Verband"],
       "title": "Rückblick: EDBU Arbeitsgruppentreffen",
       "desc": "Kurzer Rückblick auf das letzte Arbeitsgruppentreffen der European Deafblind Union. (Platzhalter – echter Link folgt)"
     },
@@ -230,9 +222,7 @@
       "dateSlug": "2026-02",
       "date": "Februar 2026",
       "source": "Blog",
-      "tags": [
-        "Programmierung"
-      ],
+      "tags": ["Programmierung"],
       "title": "Programmieren mit Screenreader – ein Werkstattbericht",
       "desc": "Einblicke in meinen Alltag als Softwareentwickler mit Screenreader und Braillezeile. (Platzhalter – echter Link folgt)"
     }
