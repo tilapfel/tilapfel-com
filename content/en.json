@@ -161,6 +161,12 @@
       "type": "Podcast",
       "title": "Zwischentöne",
       "desc": "An interview series with activists from the disability rights movement."
+    },
+    {
+      "title": "Deafblind Space",
+      "type": "Book",
+      "desc": "Folgt",
+      "slug": ""
     }
   ],
   "press": [
@@ -186,7 +192,9 @@
       "dateSlug": "2026-06",
       "date": "June 2026",
       "source": "YouTube",
-      "tags": ["Talk"],
+      "tags": [
+        "Talk"
+      ],
       "title": "Clip: Digital Participation Today",
       "desc": "Short video clip from a recent talk on digital participation. (Placeholder – real link to follow)"
     },
@@ -195,7 +203,9 @@
       "dateSlug": "2026-05",
       "date": "May 2026",
       "source": "Blog",
-      "tags": ["Accessibility"],
+      "tags": [
+        "Accessibility"
+      ],
       "title": "Why Accessibility Isn't an Extra",
       "desc": "A blog post on why accessibility needs to be designed in from the start. (Placeholder – real link to follow)"
     },
@@ -204,7 +214,9 @@
       "dateSlug": "2026-04",
       "date": "April 2026",
       "source": "Podcast",
-      "tags": ["Interview"],
+      "tags": [
+        "Interview"
+      ],
       "title": "Guest on Zwischentöne",
       "desc": "Interview on deafblindness and digital participation on the Zwischentöne podcast. (Placeholder – real link to follow)"
     },
@@ -213,7 +225,9 @@
       "dateSlug": "2026-03",
       "date": "March 2026",
       "source": "LinkedIn",
-      "tags": ["Association"],
+      "tags": [
+        "Association"
+      ],
       "title": "Recap: EDBU Working Group Meeting",
       "desc": "A short recap of the latest European Deafblind Union working group meeting. (Placeholder – real link to follow)"
     },
@@ -222,7 +236,9 @@
       "dateSlug": "2026-02",
       "date": "February 2026",
       "source": "Blog",
-      "tags": ["Programming"],
+      "tags": [
+        "Programming"
+      ],
       "title": "Programming with a Screen Reader – A Workshop Report",
       "desc": "A look into my everyday work as a developer using a screen reader and braille display. (Placeholder – real link to follow)"
     }
