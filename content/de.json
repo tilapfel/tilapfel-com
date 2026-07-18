@@ -3,10 +3,10 @@
     {
       "tagSlug": "education",
       "dateSlug": "2010",
-      "date": "Seit 2010",
-      "category": "Ausbildung",
-      "location": "Platzhalter",
-      "title": "Studium & Ausbildung",
+      "date": "2017 bis 2025",
+      "category": "Studium",
+      "location": "Hamburg",
+      "title": "Studium Universität Hamburg",
       "short": "Grundlegende Ausbildung, auf der die heutige Arbeit aufbaut.",
       "full": "Details zu Studiengang und Ausbildungsstationen folgen hier in Kürze.",
       "approach": "(Platzhalter – wird ergänzt)"
@@ -67,7 +67,6 @@
       "approach": "Dieser Weg prägt bis heute, wie ich Software für andere taubblinde Nutzer:innen gestalte."
     }
   ],
-
   "termine": [
     {
       "tagSlug": "talk",
@@ -130,7 +129,6 @@
       "info": "Zielgruppe: QA und Entwicklung. Dauer: ganztägig."
     }
   ],
-
   "pastTermine": [
     {
       "date": "8. Mai 2025",
@@ -145,7 +143,6 @@
       "location": "Frankfurt am Main"
     }
   ],
-
   "library": [
     {
       "slug": "accessnav",
@@ -166,7 +163,6 @@
       "desc": "Interviewreihe mit Aktivist:innen aus der Behindertenbewegung."
     }
   ],
-
   "press": [
     {
       "outlet": "Deutschlandfunk",
@@ -178,16 +174,21 @@
       "date": "November 2024",
       "title": "Der Mann, der Barrieren programmiert"
     },
-    { "outlet": "taz", "date": "Februar 2026", "title": "Teilhabe ist keine Frage der Technik allein" }
+    {
+      "outlet": "taz",
+      "date": "Februar 2026",
+      "title": "Teilhabe ist keine Frage der Technik allein"
+    }
   ],
-
   "feedsPosts": [
     {
       "formatSlug": "youtube",
       "dateSlug": "2026-06",
       "date": "Juni 2026",
       "source": "YouTube",
-      "tags": ["Vortrag"],
+      "tags": [
+        "Vortrag"
+      ],
       "title": "Ausschnitt: Digitale Teilhabe heute",
       "desc": "Kurzer Videoausschnitt aus einem aktuellen Vortrag zu digitaler Teilhabe. (Platzhalter – echter Link folgt)"
     },
@@ -196,7 +197,9 @@
       "dateSlug": "2026-05",
       "date": "Mai 2026",
       "source": "Blog",
-      "tags": ["Barrierefreiheit"],
+      "tags": [
+        "Barrierefreiheit"
+      ],
       "title": "Warum Barrierefreiheit kein Extra ist",
       "desc": "Ein Blogbeitrag darüber, warum Barrierefreiheit von Anfang an mitgedacht werden muss. (Platzhalter – echter Link folgt)"
     },
@@ -205,7 +208,9 @@
       "dateSlug": "2026-04",
       "date": "April 2026",
       "source": "Podcast",
-      "tags": ["Interview"],
+      "tags": [
+        "Interview"
+      ],
       "title": "Zu Gast bei Zwischentöne",
       "desc": "Interview über Taubblindheit und digitale Teilhabe im Podcast Zwischentöne. (Platzhalter – echter Link folgt)"
     },
@@ -214,7 +219,9 @@
       "dateSlug": "2026-03",
       "date": "März 2026",
       "source": "LinkedIn",
-      "tags": ["Verband"],
+      "tags": [
+        "Verband"
+      ],
       "title": "Rückblick: EDBU Arbeitsgruppentreffen",
       "desc": "Kurzer Rückblick auf das letzte Arbeitsgruppentreffen der European Deafblind Union. (Platzhalter – echter Link folgt)"
     },
@@ -223,7 +230,9 @@
       "dateSlug": "2026-02",
       "date": "Februar 2026",
       "source": "Blog",
-      "tags": ["Programmierung"],
+      "tags": [
+        "Programmierung"
+      ],
       "title": "Programmieren mit Screenreader – ein Werkstattbericht",
       "desc": "Einblicke in meinen Alltag als Softwareentwickler mit Screenreader und Braillezeile. (Platzhalter – echter Link folgt)"
     }
