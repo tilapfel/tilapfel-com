@@ -6,7 +6,7 @@ Statische Website für Til Apfel (Selbstständigkeit als Dozent, Berater und Akt
 
 Inhalt, Struktur, Styling und Logik sind bewusst getrennt gehalten:
 
-- `content/` – **Inhalt.** Ein Modul pro Sprache (`de.js`, `en.js`, `dgs.js`), jedes mit identischem Schema (Übersetzungen, Portfolio, Events, Library, …). Eine neue Sprache = eine neue Datei nach diesem Schema + Eintrag in `app/data.js`. `dgs.js` ist ein Sonderfall: Deutsche Gebärdensprache hat keine Schriftform, daher reexportiert die Datei einfach den Inhalt von `de.js` – `app/router.js` blendet zusätzlich einen Video-Platzhalter-Hinweis ein (`components/dgs-notice.js`), solange es noch keine echten DGS-Videos gibt.
+- `content/` – **Inhalt.** Zwei Dateien pro Sprache: `de.js`/`en.js` (Übersetzungen, Rollen, rechtliche Texte, Nav – code-verwaltet) und `de.json`/`en.json` (die fünf wachsenden Listen – Projekte, Termine, Library, Presse, Feed-Beiträge – über das Admin-Dashboard editierbar, siehe unten). `app/state.js`s `loadLocale()` lädt und mergt beide pro Sprache. `dgs.js` ist ein Sonderfall: Deutsche Gebärdensprache hat keine Schriftform, daher reexportiert die Datei einfach den Inhalt von `de.js` (und nutzt auch `de.json` mit) – `app/router.js` blendet zusätzlich einen Video-Platzhalter-Hinweis ein (`components/dgs-notice.js`), solange es noch keine echten DGS-Videos gibt.
 - `pages/` – **Struktur.** Ein Renderer pro Route/Bildschirm (`home.js`, `about.js`, `portfolio.js`, …) plus `header.js`, `footer.js`, `onboarding.js`. Jede Datei exportiert eine `render*()`-Funktion, die Komponenten + Inhalt zu einer Seite zusammensetzt.
 - `components/` – **Wiederverwendbare Bausteine.** Karten, Pills, Modal-Grundgerüst, Icon-Root, Toggle-Buttons (Theme/Sprache/Leichte Sprache/Teilen), Suche. Jedes Muster existiert genau einmal und wird von mehreren Seiten aufgerufen.
 - `styles/` – **Styling.** `base.css` (Reset, Farbvariablen, Typografie), `layout.css` (Seitengerüst, Header/Footer/Nav), `components.css` (alle wiederkehrenden UI-Muster).
@@ -14,6 +14,7 @@ Inhalt, Struktur, Styling und Logik sind bewusst getrennt gehalten:
 - `assets/` – Bilder
 - `favicon.svg`
 - `vendor/` – Extern eingecheckte, unveränderte Bibliotheken (aktuell: `fuse.mjs`, siehe "Suche" unten). Kein npm-Runtime-Dependency, kein Bundler nötig – ganz normaler `<script type="module">`-Import wie jede andere Datei im Projekt.
+- `admin/` – Das Content-Verwaltungs-Dashboard, siehe unten.
 
 Jede Seite lädt nur die aktive Sprachdatei aus `content/` (dynamisches `import()`); weitere Sprachen werden erst bei Umschaltung nachgeladen.
 
@@ -50,6 +51,17 @@ netlify dev
 
 Die Seitensuche (`components/search.js`) läuft komplett clientseitig gegen eine aus dem jeweiligen Locale-Objekt aufgebaute Inhaltsliste, per Fuzzy-Matching mit [Fuse.js](https://fusejs.io) (Apache-2.0-Lizenz). Fuse.js wird nicht über npm/CDN eingebunden, sondern als ESM-Build lokal unter `vendor/fuse.mjs` eingecheckt (Quelle: `https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.mjs`) – damit bleibt die CSP (`script-src 'self'`) unverändert streng und es gibt keinen externen Laufzeit-Request. Im Suchmodal lässt sich zusätzlich die Sprache umschalten, gegen die gesucht wird (unabhängig von der aktuell angezeigten Seitensprache); DGS ist davon ausgenommen, da es keinen eigenen Fließtext hat (siehe oben).
 
+## Admin-Dashboard
+
+Unter `/admin` liegt ein selbstgebautes, schlankes Content-Verwaltungs-Dashboard (`admin/app.js`, `admin/collections.js`, `admin/admin.css`) – **kein** Decap/Netlify CMS. Grund: Decaps feste App-Struktur (Sidebar → Collection → Formular) ließ sich nicht auf das gewünschte Grid-Dashboard/Popup-Konzept ummünzen; das eigene Dashboard nutzt stattdessen direkt die vorhandenen Bausteine der Website (`components/modal.js` fürs Popup, `components/icons.js`, `styles/base.css`/`components.css`).
+
+- **Umfang:** Nur die fünf wachsenden Listen sind editierbar (Projekte, Termine, Library, Presse, Feed-Beiträge – `content/de.json`/`en.json`). Übersetzungen, Rollen, rechtliche Texte bleiben Code-verwaltet.
+- **Auth:** Eigener GitHub-OAuth-Flow (`netlify/functions/oauth-authorize.mjs` + `oauth-callback.mjs`), **nicht** Netlify Identity (abgekündigt). Der Callback liefert das Token per URL-Fragment (`/admin/#access_token=…`, geht nie an einen Server) zurück; `admin/app.js` liest es aus, merkt es sich nur in `sessionStorage` (nicht dauerhaft) und räumt die URL sofort auf.
+- **Speichern:** direkt über GitHubs Contents-API aus dem Browser (mit dem OAuth-Token im Header) – jede Änderung wird ein echter Commit auf `main`, Netlify baut danach automatisch neu.
+- **Wichtige Annahme:** `content/de.json` und `content/en.json` müssen pro Liste gleich lang und in gleicher Reihenfolge bleiben (ein Eintrag hängt sprachübergreifend am Array-Index zusammen). Das Dashboard fügt neue Einträge deshalb immer an beide Sprachen gleichzeitig an.
+- **Env vars:** `GITHUB_OAUTH_CLIENT_ID`/`GITHUB_OAUTH_CLIENT_SECRET` (Netlify-Dashboard, siehe `.env.example`) – gehören zur GitHub-OAuth-App unter github.com/settings/developers, Callback-URL `<netlify-url>/api/callback`.
+- **Lokal testen:** Dashboard/Liste lassen sich ohne Login ansehen (Lesen aus GitHubs Contents-API funktioniert bei öffentlichen Repos auch unauthentifiziert), Speichern/Löschen braucht ein echtes Token und funktioniert nur live.
+
 ## Code-Qualität (Dev-Tools)
 
 Prettier (Formatierung) und ESLint (Linting) sind als Dev-Dependencies eingerichtet – rein für die Entwicklung, ohne Einfluss auf das deployte Ergebnis:
@@ -76,7 +88,7 @@ Danach die eigene Domain `tilapfel.com` im jeweiligen Hosting-Dashboard als Cust
 - **Social-/Kontaktlinks:** YouTube/Instagram/Facebook/LinkedIn/GitHub-URLs sowie `stiftung.tilapfel.com` und `apps.tilapfel.com` (Bio-Seite) auf tatsächliche Ziele prüfen. Der RSS-Link (`app/data.js`, `BIO_SOCIAL_LINKS`) zeigt aktuell auf einen Platzhalter (`https://tilapfel.com/feed.xml`) – ein echter Feed muss noch eingerichtet werden.
 - Formulare (Kontakt, Kostenvoranschlag) öffnen beim Absenden den E-Mail-Client des Besuchers (`mailto:`) – es gibt bewusst kein Server-Backend für den eigentlichen Versand; die Netlify Functions davor prüfen nur auf Spam (siehe "Sicherheit" oben).
 - **Datenschutzerklärung** (`#/datenschutz`): Der Text ist ein generisches Muster (Hosting, Google Fonts, Spam-Schutz, Kontaktformulare, lokale Speicherung, Betroffenenrechte) und sollte vor Go-Live rechtlich geprüft und an den tatsächlichen Hosting-Anbieter angepasst werden.
-- **Feeds-Beiträge** (`#/focus`, `content/de.js`/`en.js`, `feedsPosts`): Die fünf Beiträge sind Platzhalter-Beispiele ohne echte Ziel-Links, um die neue Karten-/Tag-Filter-Funktion zu zeigen. Vor Go-Live durch echte Beiträge (mit `href`) ersetzen.
+- **Feeds-Beiträge** (`#/focus`, `content/de.json`/`en.json`, `feedsPosts`): Die fünf Beiträge sind Platzhalter-Beispiele ohne echte Ziel-Links, um die Karten-/Tag-Filter-Funktion zu zeigen. Vor Go-Live durch echte Beiträge ersetzen – am einfachsten über `/admin`.
 - **Newsletter**: Das Formular (`components/newsletter.js`) öffnet aktuell nur den E-Mail-Client des Besuchers mit der eingegebenen Adresse im Text (`mailto:`, wie die anderen Formulare) – es gibt keine echte Anmeldung/Automatisierung. Für einen funktionierenden Newsletter braucht es einen echten Anbieter (z. B. Mailchimp, Buttondown) und eine entsprechende Formular-Anbindung – ein API-Key dafür gehört dann in eine Netlify-Umgebungsvariable, niemals in den Code (siehe `.env.example`).
 - **DGS (Deutsche Gebärdensprache)**: Aktuell nur ein Platzhalter – `content/dgs.js` zeigt denselben Text wie Deutsch, ergänzt um einen Hinweis-Banner (`components/dgs-notice.js`), dass ein echtes Video folgt. Sobald echte DGS-Videos vorliegen, den Platzhalter durch ein `<iframe>` ersetzen (dafür muss die CSP in `netlify.toml` dann `frame-src` für den jeweiligen Video-Host ergänzen).
 - Reihenfolge/Auswahl der genannten Punkte (Datenschutzerklärung, RSS-Feed, Newsletter-Anbieter, DGS-Videos) wird laut Absprache mit dem Websitebetreiber später nachgeholt.

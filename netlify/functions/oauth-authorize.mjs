@@ -1,12 +1,11 @@
 const GITHUB_AUTHORIZE_URL = 'https://github.com/login/oauth/authorize';
 
 /**
- * Step 1 of Decap CMS's GitHub OAuth login (the `github` backend — not the
- * deprecated Netlify Identity/Git Gateway). The CMS admin UI opens this
- * endpoint in a popup; it redirects straight to GitHub's own authorize
- * screen. A random `state` value goes out as a short-lived cookie and comes
- * back as a query param on the callback, so decap-callback.mjs can confirm
- * the request wasn't forged.
+ * Step 1 of the admin dashboard's GitHub login. The "Mit GitHub einloggen"
+ * link in admin/app.js points straight here; this redirects on to GitHub's
+ * own authorize screen. A random `state` value goes out as a short-lived
+ * cookie and comes back as a query param on the callback, so
+ * oauth-callback.mjs can confirm the request wasn't forged.
  */
 export default async (req) => {
   const clientId = process.env.GITHUB_OAUTH_CLIENT_ID;
@@ -26,7 +25,7 @@ export default async (req) => {
     status: 302,
     headers: {
       Location: authorizeUrl.toString(),
-      'Set-Cookie': `decap_oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`,
+      'Set-Cookie': `oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`,
     },
   });
 };
