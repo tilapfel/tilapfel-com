@@ -1,6 +1,6 @@
 {
   "name": "tilapfel-com",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "private": true,
   "type": "module",
   "description": "Static site for tilapfel.com. No build step for deploying the site itself — Netlify Functions under netlify/functions/ provide the spam-check backend for the contact forms.",
